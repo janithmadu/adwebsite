@@ -25,7 +25,7 @@ async function CategoryBar(CurrentLocal: any) {
   const getCurentLocal = CurrentLocal.CurrentLocal;
 
   return (
-    <div className="  xl:min-w-[861px] min-h-[50px] flex items-center ">
+    <div className="min-h-[50px] flex items-center ">
       <div className="flex items-center rtl:gap-[24px]  space-x-[24px]">
         {/* Select category section */}
 
@@ -56,7 +56,7 @@ async function CategoryBar(CurrentLocal: any) {
 
         {/* Category Bar section */}
 
-        <div className="border-l  rtl:border-r rtl:border-l-0 rtl:gap-[24px]  xl:flex items-center space-x-[24px] px-[24px]">
+        <div className="border-l hidden   lg:flex-wrap  rtl:border-r rtl:border-l-0 rtl:gap-[24px]  xl:flex items-center space-x-[24px] px-[24px]">
           {getLimitedCate.length === 0 ? (
             <div className="text-grayscale600  text-heading04 hover:text-grayscale800 hover:font-bold">
               {" "}
