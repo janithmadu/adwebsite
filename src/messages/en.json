@@ -5,7 +5,8 @@
     "SearchBarPlaceHolder": "Ads tittle, keyword...",
     "CategoryPlaceHolder": "All Category",
     "LangugeChangePlaceHolder": "Change Language",
-    "HomePageCategortSectionHeading":"Discover Our Categories"
+    "HomePageCategortSectionHeading":"Discover Our Categories",
+    "HomePageProductSectionHeading":"Fresh recommended ads"
 
   }
 }

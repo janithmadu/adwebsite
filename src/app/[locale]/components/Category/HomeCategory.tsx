@@ -10,7 +10,7 @@ function HomeCategory(getCategory: any) {
   const t = useTranslations("TopNav");
 
   return (
-    <div className="container mx-auto px-5  lg:px-5 xl:px-20 md:px-10">
+    <div className="container mx-auto flex flex-col space-y-[50px] px-5  lg:px-5 xl:px-20 md:px-10">
       {/* Heading */}
       <div>
         <h1 className=" text-heading03 md:text-heading01 font-bold text-center">
