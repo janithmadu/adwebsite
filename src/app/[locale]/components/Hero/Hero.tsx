@@ -15,6 +15,8 @@ interface HeroImage {
   imageUrl: string;
 }
 
+export const revalidate = 1;
+
 export default function Hero(HeroImages: any) {
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay()]);
 

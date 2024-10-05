@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+export const revalidate = 1;
+
 function HomeCategory(getCategory: any) {
   const cookieStore = cookies();
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
