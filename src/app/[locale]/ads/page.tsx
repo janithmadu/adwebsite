@@ -1,14 +1,18 @@
 import AdsCategory from "../components/AdsPriview/AdsCategory/AdsCategory";
 
-import { getAllCategory, getCategoryAndSubcategory } from "../actions/getCategories";
+import {
+  getAllCategory,
+  getCategoryAndSubcategory,
+} from "../actions/getCategories";
 import { getAllSubCategories } from "../actions/getSubCategories";
 
-
-export default async function Home() {
-
-  const AllCategories = await  getAllCategory();
-  const subCategory = await getAllSubCategories()
-  const getSubCategoryAndCategory = await getCategoryAndSubcategory()
+export default async function Home({ searchParams }:any) {
+  const AllCategories = await getAllCategory();
+  const subCategory = await getAllSubCategories();
+  const getSubCategoryAndCategory = await getCategoryAndSubcategory();
+  const { subcategory } = searchParams;
+  console.log("Subcate"+subcategory);
+  
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
@@ -18,7 +22,7 @@ export default async function Home() {
         <aside className="w-[312px] bg-white rounded-lg p-4 shadow">
           {/* Category Section */}
           <div className="mb-6">
-            <AdsCategory  Categories={getSubCategoryAndCategory} />
+            <AdsCategory Categories={getSubCategoryAndCategory} />
           </div>
 
           {/* Seller Type */}
