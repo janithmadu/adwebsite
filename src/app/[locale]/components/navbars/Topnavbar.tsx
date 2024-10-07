@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import Logo from "../../public/fi_search.svg";
+import Logo from "../../../../../public/fi_search.svg";
 import Link from "next/link";
 import { PlusCircle } from "@phosphor-icons/react/dist/ssr";
 import CategoryBar from "./CategoryBar";

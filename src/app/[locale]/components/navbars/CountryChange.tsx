@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/select";
 import { useTranslations } from "next-intl";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import UKflag from "../../public/uk.png";
-import Arab from "../../public/arab.png";
+import UKflag from "../../../../../public/uk.png";
+import Arab from "../../../../../public/arab.png";
 import Link from "next/link";
 import Image from "next/image";
 

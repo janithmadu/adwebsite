@@ -6,6 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import {getMessages} from 'next-intl/server';
 import {NextIntlClientProvider} from 'next-intl';
 import { useRouter } from 'next/router';
+import Fotter from "./components/Fotter/Fotter";
 
 export const revalidate = 1
 const inter = Nunito_Sans({ subsets: ["latin"] });
@@ -22,7 +23,7 @@ export default async  function RootLayout({children,params: {locale}}: {children
   const messages = await getMessages();
   return (
     <html lang={locale} dir={dir}>
-      <body className={`${inter.className}`}> <NextIntlClientProvider messages={messages}><div className=""><Topnavbar/></div>{children}</NextIntlClientProvider></body>
+      <body className={`${inter.className}`}> <NextIntlClientProvider messages={messages}><div className=""><Topnavbar/></div>{children}<Fotter/></NextIntlClientProvider></body>
     </html>
   );
 }

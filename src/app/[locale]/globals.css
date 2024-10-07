@@ -75,3 +75,13 @@
   flex: 0 0 100%;
   min-width: 0;
 }
+
+.background {
+  background-image: url('/src/app/public/Fun_Fact.png');
+  background-size: cover;
+  background-position: center;
+  min-width: 100px;
+  min-height: 100px;
+  
+  
+}
