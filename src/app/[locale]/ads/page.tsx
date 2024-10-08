@@ -5,13 +5,18 @@ import {
   getCategoryAndSubcategory,
 } from "../actions/getCategories";
 import { getAllSubCategories } from "../actions/getSubCategories";
+import { getAdsBySub } from "../actions/getAds";
 
 export default async function Home({ searchParams }:any) {
   const AllCategories = await getAllCategory();
   const subCategory = await getAllSubCategories();
   const getSubCategoryAndCategory = await getCategoryAndSubcategory();
   const { subcategory } = searchParams;
-  console.log("Subcate"+subcategory);
+
+  console.log(subcategory);
+  
+ 
+  
   
 
   return (

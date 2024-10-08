@@ -9,13 +9,14 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import AddSubcategory from "./AddSubcategory";
 
-function AdsCategory(Categories: any) {
+function AdsCategory({Categories,subcateId}:any) {
   const cookieStore = cookies();
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
 
+  
   return (
     <>
-      {Categories.Categories.map((category: any, item: any) => {
+      {Categories.map((category: any, item: any) => {
         return (
           <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
@@ -31,7 +32,7 @@ function AdsCategory(Categories: any) {
               <AccordionContent>
                 <ul className="space-y-2">
                   {category.subcategories.map((subcate: any, index: any) => {
-                    console.log(subcate._id);
+                  
 
                     return (
                       <>
