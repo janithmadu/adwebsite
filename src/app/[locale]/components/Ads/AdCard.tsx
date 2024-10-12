@@ -1,16 +1,29 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import AdImage from "@/app/[locale]/public/Image.png";
 import Image from "next/image";
 import { MapPin } from "@phosphor-icons/react/dist/ssr";
 import { cookies } from "next/headers";
 import Link from "next/link";
 export const revalidate = 1;
+
+function getCookie(name: string) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift();
+}
+
 function AdCard(GetAds: any) {
-  const cookieStore = cookies();
-  const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
-  console.log(GetAds.GetAds._id);
+  const [locale, setLocale] = useState("en");
+  
+
+  useEffect(() => {
+    const cookieLocale = getCookie("NEXT_LOCALE") || "en";
+    setLocale(cookieLocale);
+  }, []);
+
   return (
-    <Link href={locale+"/"+"ads/"+GetAds.GetAds._id}>
+    <Link href={locale + "/" + "ads/" + GetAds.GetAds._id}>
       <div className=" min-w-[270px]  lg:min-w-[290px] xl:max-w-[200px] min-h-[392px]  bg-grayscalewhite drop-shadow rounded-[8px]">
         <div className=" min-w-[270px]  lg:min-w-[290px] xl:max-w-[200px] min-h-[250px] flex flex-col space-y-[16px]">
           <div>
@@ -43,7 +56,7 @@ function AdCard(GetAds: any) {
               </div>
               <div>
                 <h1 className="text-bodymedium text-danger500">
-                  {GetAds.GetAds.Currency} 80.00
+                  {GetAds.GetAds.Currency} {GetAds.GetAds.price}.00
                 </h1>
               </div>
             </div>
