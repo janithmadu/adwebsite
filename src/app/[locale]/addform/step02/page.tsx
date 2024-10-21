@@ -1,10 +1,14 @@
 import React from 'react'
+import StepTowForm from '../../components/Forms/StepTowForm'
+import { getOptionsByID } from '../../actions/getOptions'
 
-function page() {
+ async function page() {
+
+  
   return (
-    <div>
-      Step 02
-    </div>
+    <>
+      <StepTowForm  />
+    </>
   )
 }
 

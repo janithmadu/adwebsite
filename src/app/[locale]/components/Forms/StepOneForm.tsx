@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Input from "./Input";
-import Select from "./Select";
 import { useFormState } from "react-dom";
 import { FromErrors } from "@/lib/types";
 import { stepOpneFormAction } from "../../addform/step01/action";
@@ -52,7 +51,7 @@ function StepOneForm({ GetCategory }: any) {
         });
       }
     }
-  }, [serverErrorPre]);
+  }, [serverError]);
 
   useEffect(() => {
     const cookieLocale = getCookie("NEXT_LOCALE") || "en";
@@ -128,7 +127,7 @@ function StepOneForm({ GetCategory }: any) {
               onChange={handleInputChange}
               defaultValue={newAdd.category}
             >
-              <option>Select Category</option>
+              <option></option>
               {GetCategory?.map((selectData: any) => {
                 return (
                   <option key={selectData.id} value={selectData.id}>
@@ -148,7 +147,7 @@ function StepOneForm({ GetCategory }: any) {
               defaultValue={newAdd.category}
               onChange={handleInputChange}
             >
-              <option>Select Sub Category</option>
+              <option></option>
               {subCategories?.map((selectData: any) => {
                 return (
                   <option key={selectData.id} value={selectData._id}>
@@ -165,15 +164,15 @@ function StepOneForm({ GetCategory }: any) {
             <label className="text-grayscale900">Brands</label>
             <select
               className="min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
-              name="conditions"
-              id="conditions"
+              name="brand"
+              id="brand"
               defaultValue={newAdd.category}
               onChange={handleInputChange}
             >
-              <option>Select Brands</option>
+              <option></option>
               {subBrands?.map((selectData: any) => {
                 return (
-                  <option key={selectData.id} value={selectData.id}>
+                  <option key={selectData.id} value={selectData._id}>
                     {selectData?.title[locale]}
                   </option>
                 );
@@ -185,15 +184,15 @@ function StepOneForm({ GetCategory }: any) {
             <label className="text-grayscale900">Models</label>
             <select
               className="min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
-              name="conditions"
-              id="conditions"
+              name="model"
+              id="model"
               defaultValue={newAdd.category}
               onChange={handleInputChange}
             >
-              <option>Select Models</option>
+              <option></option>
               {Models?.map((selectData: any) => {
                 return (
-                  <option key={selectData.id} value={selectData.id}>
+                  <option key={selectData.id} value={selectData._id}>
                     {selectData?.title[locale]}
                   </option>
                 );
@@ -211,6 +210,7 @@ function StepOneForm({ GetCategory }: any) {
               id="conditions"
               onChange={handleInputChange}
             >
+              <option></option>
               {ConditionList?.map((selectData: any) => {
                 return (
                   <option key={selectData.id} value={selectData.id}>
@@ -230,6 +230,7 @@ function StepOneForm({ GetCategory }: any) {
                 id="Currency"
                 onChange={handleInputChange}
               >
+                <option></option>
                 {Currency?.map((selectData: any) => {
                   return (
                     <option key={selectData.id} value={selectData.id}>
@@ -253,10 +254,11 @@ function StepOneForm({ GetCategory }: any) {
             <label className="text-grayscale900">Authenticity</label>
             <select
               className="min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
-              name="Currency"
-              id="Currency"
+              name="Authenticity"
+              id="Authenticity"
               onChange={handleInputChange}
             >
+              <option></option>
               {Authenticity?.map((selectData: any) => {
                 return (
                   <option key={selectData.id} value={selectData.id}>
@@ -278,7 +280,7 @@ function StepOneForm({ GetCategory }: any) {
 
         <div className="min-w-full flex justify-end">
           <button
-            className="min-w-[193px] min-h-[58px] bg-primary500 text-white rounded-[6px] flex justify-center items-center gap-x-[12px]"
+            className={`min-w-[193px] min-h-[58px] bg-primary500 text-white rounded-[6px] flex justify-center items-center gap-x-[12px]}`}
             type="submit"
           >
             <span>Next Steps</span> <ArrowRight />
