@@ -1,25 +1,27 @@
 import { client } from "@/lib/sanity";
 
-export const getOptionsByID = async (subcategoryId: string) => {
-  const query = `*[_type == "option" && references($subcategoryId)] {
-  _id,
-  title,
-  slug,
-  values,
-  subcategories[]->{
+export const getOptionsByID = async (subcategoryId:any) => {
+  console.log("a"+subcategoryId);
+  
+  const query = `*[_type == "option" && $subcate in subcategories[]._ref] {
     _id,
-    title
-  }
-}`;
+    title,
+    slug,
+    values,
+    subcategories[]->{
+      _id,
+      title
+    }
+  }`;
 
   const params = {
-    subcategoryId: subcategoryId,
+    subcate: subcategoryId,
   };
 
   try {
     const options = await client.fetch(query, params);
-    console.log(options);
-
+   
+    
     return options;
   } catch (error) {
     console.error("Error fetching options:", error);
