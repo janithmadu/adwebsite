@@ -2,17 +2,24 @@ import Image from "next/image";
 import React from "react";
 import Logo from "../../../../../public/fi_search.svg";
 import Link from "next/link";
-import { PlusCircle } from "@phosphor-icons/react/dist/ssr";
+import { PlusCircle, UserCircle } from "@phosphor-icons/react/dist/ssr";
 import CategoryBar from "./CategoryBar";
 import CountryChange from "./CountryChange";
 export const revalidate = 1;
 import { cookies } from "next/headers";
 import { useTranslations } from "next-intl";
+import {
+  RegisterLink,
+  LoginLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import UserSetting from "./UserSetting";
 
-function Topnavbar() {
+function Topnavbar({ user }: any) {
   const cookieStore = cookies();
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const t = useTranslations("TopNav");
+
   return (
     <>
       <div className="min-w-full  flex flex-col  justify-start   border-b-[#EBEEF7] border">
@@ -46,12 +53,17 @@ function Topnavbar() {
           {/* Top Nav Buttion Section Start */}
 
           <div className="hidden md:flex min-w-[243px] space-x-[20px] rtl:gap-[20px] ">
-            <button className="min-w-[92px] min-h-[50px] rounded-[4px] bg-primary50 text-primary500 text-[16px] font-bold">
-              {t("SignIn")}
-            </button>
+            {user ? (
+              <UserSetting User={user} />
+            ) : (
+              <button className="min-w-[92px] min-h-[50px] rounded-[4px] bg-primary50 text-primary500 text-[16px] font-bold">
+                <LoginLink>{t("SignIn")}</LoginLink>
+              </button>
+            )}
+
             <Link
               className=" min-w-[139px] min-h-[5px] flex items-center justify-center bg-primary500 text-grayscalewhite font-bold rounded-[4px]"
-              href="#"
+              href={locale + "/addform/step01"}
             >
               <div className="flex space-x-[8px] rtl:gap-[8px]">
                 <PlusCircle className="min-w-[24px] min-h-[24px] " />

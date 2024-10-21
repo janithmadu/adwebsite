@@ -1,12 +1,12 @@
-import createNextIntlPlugin from 'next-intl/plugin';
+import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-        domains: ['cdn.sanity.io'], // Add this line
-      },
+  images: {
+    domains: ["cdn.sanity.io", "lh3.googleusercontent.com", "gravatar.com"], // Add this line
+  },
 };
 
 export default withNextIntl(nextConfig);

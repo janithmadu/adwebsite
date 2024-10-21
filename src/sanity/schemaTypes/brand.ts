@@ -1,13 +1,13 @@
 import { Rule } from "sanity";
 
 export default {
-  name: "model",
-  title: "Model",
+  name: "brand",
+  title: "Brand",
   type: "document",
   fields: [
     {
       name: "title",
-      title: "Model Title",
+      title: "Brand Title",
       type: "object",
       fields: [
         {
@@ -46,6 +46,15 @@ export default {
       title: "Description",
       type: "text",
       validation: (Rule: Rule) => Rule.max(200),
+    },
+    {
+      name: "logo",
+      title: "Brand Logo",
+      type: "image",
+      options: {
+        hotspot: true, // Enables image cropping
+      },
+      validation: (Rule: Rule) => Rule.required(),
     },
   ],
 };

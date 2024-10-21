@@ -7,12 +7,14 @@ import { getPostAds } from "./actions/getAds";
 import Details from "./components/Details/Details";
 import MobileApp from "./components/MobileApp/MobileApp";
 
+
 export const revalidate = 1;
 
 export default async function Home() {
   const HeroImages = await getHeroImages();
   const GetCategory = await getAllCategory();
-  const getPost = await getPostAds();
+  const getPost = await getPostAds(1,4);
+
 
   return (
     <main className="flex flex-col space-y-[40px]">
@@ -27,7 +29,7 @@ export default async function Home() {
 
       {/* Fresh recommended ads Section */}
       <section>
-        <HomePageAdds Ads={getPost} />
+        <HomePageAdds Ads={getPost.result} />
       </section>
 
       {/* Details Section */}

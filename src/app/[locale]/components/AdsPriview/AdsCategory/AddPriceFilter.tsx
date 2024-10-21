@@ -44,8 +44,9 @@ const AddPriceFilter = () => {
         onChange={(values) => setValues(values)}
         renderTrack={({ props, children }) => (
           <div
+            dir="ltr"
             {...props}
-            className="w-full h-1 bg-gray-300 rounded"
+            className="w-full h-1 bg-gray-300 rounded "
             style={{
               background: getTrackBackground({
                 values,

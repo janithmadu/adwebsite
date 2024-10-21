@@ -6,7 +6,8 @@ import hero from "./hero";
 import heroimages from "./heroimages";
 import ads from "./ads";
 import options from "./options";
+import brand from "./brand";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [category, subcategory, model,hero,heroimages,ads,options],
+  types: [category, subcategory, model,hero,heroimages,ads,options,brand],
 };

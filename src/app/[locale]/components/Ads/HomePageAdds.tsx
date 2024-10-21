@@ -36,7 +36,7 @@ function HomePageAdds(Ads: any) {
       {/* Main Grid End */}
       <div className="min-w-full flex justify-center items-center">
         <Link
-          href={locale + "/ads"}
+          href={locale + "/ads?page=1"}
           className="flex space-x-[8px] items-center min-w-[144px] min-h-[50px] bg-primary500 justify-center text-heading04 text-grayscalewhite rounded-[4px] rtl:flex-row-reverse"
         >
           <h1>View Alls</h1>

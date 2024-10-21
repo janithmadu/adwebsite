@@ -38,9 +38,8 @@ export default async function Home({ searchParams }: any) {
           <SheetTrigger>
             <HamburgerMenuIcon />
           </SheetTrigger>
-          <SheetContent className="overflow-scroll flex justify-start bg-red-400">
-            <SheetHeader>
-              
+          <SheetContent className="overflow-scroll flex min-w-[300px] ">
+            <SheetHeader className=" min-w-full">
               <div className="mb-6 ">
                 <AdsCategory Categories={getSubCategoryAndCategory} />
               </div>
@@ -55,7 +54,7 @@ export default async function Home({ searchParams }: any) {
           </SheetContent>
         </Sheet>
       </div>
-      <div className="container mx-auto flex px-5  lg:px-5 xl:px-20 md:px-10">
+      <div className="container mx-auto flex px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-10">
         {/* Sidebar */}
         <aside className="w-[312px] hidden lg:inline bg-white rounded-lg p-4 shadow">
           {/* Category Section */}
