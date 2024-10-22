@@ -127,7 +127,9 @@ function StepOneForm({ GetCategory }: any) {
               onChange={handleInputChange}
               defaultValue={newAdd.category}
             >
-              <option></option>
+              <option value="" disabled selected>
+                Select Category
+              </option>
               {GetCategory?.map((selectData: any) => {
                 return (
                   <option key={selectData.id} value={selectData.id}>
@@ -147,7 +149,9 @@ function StepOneForm({ GetCategory }: any) {
               defaultValue={newAdd.category}
               onChange={handleInputChange}
             >
-              <option></option>
+              <option value="" disabled selected>
+                Select Subcategory
+              </option>
               {subCategories?.map((selectData: any) => {
                 return (
                   <option key={selectData.id} value={selectData._id}>
@@ -169,7 +173,9 @@ function StepOneForm({ GetCategory }: any) {
               defaultValue={newAdd.category}
               onChange={handleInputChange}
             >
-              <option></option>
+              <option value="" disabled selected>
+                Select Brands
+              </option>
               {subBrands?.map((selectData: any) => {
                 return (
                   <option key={selectData.id} value={selectData._id}>
@@ -189,7 +195,9 @@ function StepOneForm({ GetCategory }: any) {
               defaultValue={newAdd.category}
               onChange={handleInputChange}
             >
-              <option></option>
+              <option value="" disabled selected>
+                Select Models
+              </option>
               {Models?.map((selectData: any) => {
                 return (
                   <option key={selectData.id} value={selectData._id}>
@@ -210,7 +218,9 @@ function StepOneForm({ GetCategory }: any) {
               id="conditions"
               onChange={handleInputChange}
             >
-              <option></option>
+              <option value="" disabled selected>
+                Select Conditions
+              </option>
               {ConditionList?.map((selectData: any) => {
                 return (
                   <option key={selectData.id} value={selectData.id}>
@@ -230,7 +240,9 @@ function StepOneForm({ GetCategory }: any) {
                 id="Currency"
                 onChange={handleInputChange}
               >
-                <option></option>
+                <option value="" disabled selected>
+                  LKR
+                </option>
                 {Currency?.map((selectData: any) => {
                   return (
                     <option key={selectData.id} value={selectData.id}>
@@ -258,7 +270,9 @@ function StepOneForm({ GetCategory }: any) {
               id="Authenticity"
               onChange={handleInputChange}
             >
-              <option></option>
+              <option value="" disabled selected>
+                Select an Authenticity
+              </option>
               {Authenticity?.map((selectData: any) => {
                 return (
                   <option key={selectData.id} value={selectData.id}>

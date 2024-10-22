@@ -79,17 +79,36 @@ function StepTowForm() {
   const { updateNewAdd, newAdd } = useNewAddContext();
   const [optionsNew, setoptionsNew] = useState<any>([]);
   const [optionsNewName, setoptionsNewName] = useState<any>([]);
-
+  const [optionsNewCheck, setoptionsNewCheck] = useState([]);
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     updateNewAdd({ ...newAdd, [e.target.name]: e.target.value });
   };
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const SelectArray = e.target.value;
-    const Name = e.target.name;
-    setoptionsNewName(e.target.name);
-    setoptionsNew([...optionsNew, { options: Name, value: SelectArray }]);
-    updateNewAdd({ ...newAdd, [e.target.name]: { optionsNew } });
+    const selectedValue = e.target.value; // Get selected value
+    const name = e.target.name; // Get name of the select
+    const storedOptions: any = newAdd?.options;
+
+    // Check if the option already exists in optionsNew
+    const optionIndex = storedOptions?.optionsNew?.findIndex(
+      (opt: any) => opt.options === name
+    );
+
+    // If option does not exist, add it
+    if (optionIndex === -1) {
+      // Update state to include new option
+      setoptionsNew([...optionsNew, { options: name, value: selectedValue }]);
+    } else {
+      // If option exists, update its value
+      const updatedOptionsNew = [...optionsNew];
+      updatedOptionsNew[optionIndex] = { options: name, value: selectedValue };
+
+      // Update the state
+      setoptionsNew(updatedOptionsNew);
+    }
+
+    // Update the newAdd object
+    updateNewAdd({ ...newAdd, [name]: { optionsNew } });
   };
 
   useEffect(() => {
@@ -128,8 +147,6 @@ function StepTowForm() {
     Promise.all(filePreviews).then((urls) => setPreviewUrls(urls));
   };
 
-  
-
   return (
     <div className="mt-[32px] flex flex-col gap-y-[20px] ">
       <form action={formAction}>
@@ -162,7 +179,9 @@ function StepTowForm() {
                     name={data?.title.en}
                     id="options"
                     onChange={handleSelectChange}
+                    
                   >
+                      <option value="" disabled selected>Select an option</option>
                     {data?.values?.map((values: any, index: any) => {
                       return (
                         <option key={index} value={values[locale]}>
@@ -192,7 +211,7 @@ function StepTowForm() {
           {/* Display previews for all selected images */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
             {previewUrls.map((url, index) => (
-              <div key={index}>
+              <div key={index} style={{ position: "relative" }}>
                 <img
                   src={url}
                   alt={`Selected Image ${index + 1}`}
