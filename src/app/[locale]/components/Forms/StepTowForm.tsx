@@ -80,6 +80,7 @@ function StepTowForm() {
   const [optionsNew, setoptionsNew] = useState<any>([]);
   const [optionsNewName, setoptionsNewName] = useState<any>([]);
   const [optionsNewCheck, setoptionsNewCheck] = useState([]);
+  const [Image,setImage] = useState<any>([])
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     updateNewAdd({ ...newAdd, [e.target.name]: e.target.value });
   };
@@ -120,7 +121,8 @@ function StepTowForm() {
   }, [optionsNew, optionsNewName]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files: any = Array.from(e.target.files || []);
+    setImage(e.target.files)
+    const files: any = Array.from(Image || []);
     const fileArray: File[] = Array.from(files);
 
     const jsonData: FileData[] = fileArray.map((file) => ({
@@ -146,6 +148,14 @@ function StepTowForm() {
 
     Promise.all(filePreviews).then((urls) => setPreviewUrls(urls));
   };
+
+  const removeImages = (index:any)=>{
+    const indexItem = Image.indexOf(index)
+    if(index !== -1 ){
+      Image.
+    }
+
+  }
 
   return (
     <div className="mt-[32px] flex flex-col gap-y-[20px] ">
