@@ -1,6 +1,4 @@
-import FormTopBar from "../components/Forms/FormTopBar";
 
-import { AddsContextProvider } from "../contexts/AddContext";
 
 export default function Layout({ children }: any) {
   return (
@@ -8,7 +6,7 @@ export default function Layout({ children }: any) {
       <main className="container mx-auto  px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-10 mb-3 ">
         {" "}
         <div className="bg-white shadow-xl py-6 px-[32px]">
-          <FormTopBar /> <AddsContextProvider>{children}</AddsContextProvider>
+         {children}
         </div>
       </main>
     </>

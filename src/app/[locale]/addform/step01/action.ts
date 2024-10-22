@@ -1,24 +1,36 @@
 "use server";
 
-import { stepOneSChema } from "@/lib/schemas";
-import { AddDealRoutes, FromErrors } from "@/lib/types";
-import { redirect } from "next/navigation";
+import { SchemaAdPostForm } from "@/lib/schemas";
 
-export const stepOpneFormAction: any = (
-  prevState: FromErrors | undefined,
-  formData: FormData
-): FromErrors | undefined => {
-  const data = Object.fromEntries(formData.entries());
-  const validate = stepOneSChema.safeParse(data);
+export const stepOpneFormAction: any = (prevState: any, formData: FormData) => {
+  const formDataObject = {
+    name: formData.get("name"),
+    category: formData.get("category"),
+    subcategory: formData.get("subcategory"),
+    price: formData.get("price"),
+    brand: formData.get("brand"),
+    model: formData.get("model"),
+    conditions: formData.get("conditions"),
+    authenticity: formData.get("authenticity"),
+    Currency: formData.get("Currency"),
+    description: formData.get("description"),
+    image: formData.getAll("image"),
+    options: formData.get("options"),
+  };
 
-  if (!validate.success) {
-    const errors: any = validate.error.issues.reduce((acc: any, issue) => {
-      acc[issue.path[0]] = issue.message;
-      return acc;
-    });
+ console.log(prevState);
+ 
+ 
+  
 
-    return { errors };
-  } else {
-    redirect(AddDealRoutes.DescriptionFeaturesImages);
+  const ZodValidations = SchemaAdPostForm.safeParse(formDataObject);
+
+  if (!ZodValidations.success) {
+    return {
+      ...prevState,
+      data: { ...prevState?.data, ...formDataObject },
+      zodErrors: ZodValidations.error.flatten().fieldErrors,
+      message: "Missing  required fields",
+    };
   }
 };
