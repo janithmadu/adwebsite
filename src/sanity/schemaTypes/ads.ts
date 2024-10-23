@@ -70,13 +70,6 @@ export default {
       },
     },
     {
-      name: "tags",
-      title: "Tags",
-      type: "array",
-      of: [{ type: "string" }],
-    },
-
-    {
       name: "options",
       title: "Options",
       type: "array",

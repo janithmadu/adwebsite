@@ -14,22 +14,26 @@ export const SchemaAdPostForm = z.object({
   model: z.string().min(1, "Provide the model for clarity."),
   conditions: z.string().min(1, "Describe the item's condition."),
   authenticity: z.string().min(1, "Confirm if your item is authentic."),
-  mobile: z.coerce.number().min(10, "Enter a contact number."),
+  mobile: z.string().min(10, "Enter a contact number."),
   Currency: z.string().min(1, "State the currency for payment."),
   description: z.string().min(1, "Description is required"),
-  image: z
-    .instanceof(File)
-    .refine(
-      (file) => {
-        const validTypes = ["image/jpeg", "image/png"];
-        return validTypes.includes(file.type);
-      },
-      {
-        message: "Only .jpg and .png files are allowed.",
-      }
-    )
-    .refine((file) => file.size <= 2 * 1024 * 1024, {
-      message: "File size must be less than 2MB.",
-    }),
-  options: z.string().optional(),
+  // image: z
+  //   .instanceof(File)
+  //   .refine(
+  //     (file) => {
+  //       const validTypes = ["image/jpeg", "image/png"];
+  //       return validTypes.includes(file.type);
+  //     },
+  //     {
+  //       message: "Only .jpg and .png files are allowed.",
+  //     }
+  //   )
+  //   .refine((file) => file.size <= 2 * 1024 * 1024, {
+  //     message: "File size must be less than 2MB.",
+  //   }),
+  options: z.array(z.string()).optional(),
+  country: z.string().min(1, "Slect Your Country."),
+  state: z.string().min(1, "Slect Your State."),
 });
+
+export type FormType = z.infer<typeof SchemaAdPostForm>;
