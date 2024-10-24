@@ -20,6 +20,10 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader } from "@googlemaps/js-api-loader";
+import LoadingImage from "../../../../../public/system-regular-715-spinner-horizontal-dashed-circle-loop-jab.gif";
+import Image from "next/image";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -44,7 +48,10 @@ function StepOneForm({ GetCategory }: any) {
       options: "",
     },
     messege: null,
+    status: false,
   });
+
+  console.log(formState?.zodErrors);
 
   const [CategoriesID, setCategoriesID] = useState<any | undefined>();
   const [subCategoriesID, setsubCategoriesID] = useState<any | undefined>();
@@ -54,14 +61,14 @@ function StepOneForm({ GetCategory }: any) {
   const [Models, setModels] = useState<any | undefined>();
   const [locale, setLocale] = useState<any>("en");
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-  const [Image, setImage] = useState<any>([]);
+  const [ImageGet, setImage] = useState<any>([]);
   const [Countries, setCountries] = useState<any>([]);
   const [selectedCountry, setSelectedCountry] = useState([]);
   const [State, setState] = useState<any>([]);
+  const [PageLoader, setPageLoader] = useState<any>(null);
+  const router = useRouter();
   //Get Category ID for retrive subcategories
   const handleInputChange = (e: any) => {
-    console.log(e);
-
     setCategoriesID(e);
   };
 
@@ -81,7 +88,6 @@ function StepOneForm({ GetCategory }: any) {
     const getSubCategory = async () => {
       if (CategoriesID) {
         const response = await getSubCategoriesByID(CategoriesID);
-        console.log(response);
 
         setsubCategories(response);
       }
@@ -185,11 +191,12 @@ function StepOneForm({ GetCategory }: any) {
     const updatedPreviewUrls = previewUrls.filter((_, i) => i !== index);
     setPreviewUrls(updatedPreviewUrls);
 
-    const updatedPreviewUrlss = Image.filter((_: any, i: any) => i !== index);
+    const updatedPreviewUrlss = ImageGet.filter(
+      (_: any, i: any) => i !== index
+    );
 
     setImage(updatedPreviewUrlss);
   };
-
 
   const MapRef = React.useRef<HTMLDivElement>(null);
 
@@ -220,22 +227,47 @@ function StepOneForm({ GetCategory }: any) {
         position: position,
       });
 
-      map.addListener('click', (event) => {
+      map.addListener("click", (event) => {
         const lat = event.latLng.lat();
         const lng = event.latLng.lng();
 
-        console.log('Latitude:', lat);
-        console.log('Longitude:', lng);
-
         // Get place details using Geocoder
-       
       });
     };
     mapInit();
   }, []);
 
+  useEffect(() => {
+    if (formState.status == false) {
+      setPageLoader("Error");
+    }
+
+    if (formState.status == true) {
+      setPageLoader("Loading Done");
+      Swal.fire({
+        title: "Congratulations!",
+        text: formState.message,
+        icon: "success",
+        confirmButtonText: "Go to Home",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.push("/"); // Redirect to homepage on confirm
+        }
+      });
+    }
+  }, [formState]);
+
+  const LoadingHandle = () => {
+    setPageLoader("Loading");
+  };
+
   return (
-    <div className="mt-[32px] flex flex-col gap-y-[20px] ">
+    <div className=" flex flex-col gap-y-[20px] ">
+      <div className="min-h-[100px] bg-primary500 rounded-xl">
+
+      </div>
       <form action={formAction} className="flex flex-col gap-y-[20px] ">
         {/* Name */}
 
@@ -529,6 +561,11 @@ function StepOneForm({ GetCategory }: any) {
                       })}
                     </SelectContent>
                   </Select>
+                  {formState?.zodErrors?.options && (
+                    <p className="text-red-600">
+                      {formState?.zodErrors?.options}
+                    </p>
+                  )}
                 </div>
               );
             })}
@@ -577,32 +614,46 @@ function StepOneForm({ GetCategory }: any) {
             )}{" "}
             {/* Show error for name */}
           </div>
-          <div className="flex  gap-x-4">
-            <Select name="country" onValueChange={(e) => setSelectedCountry(e)}>
-              <SelectTrigger className="max-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder={`Select Country`} />
-              </SelectTrigger>
-              <SelectContent>
-                {Countries.map((country: any) => (
-                  <SelectItem key={country.code} value={country.name}>
-                    {country.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="flex   gap-x-4">
+            <div className="flex flex-col">
+              <Select
+                name="country"
+                onValueChange={(e) => setSelectedCountry(e)}
+              >
+                <SelectTrigger className="min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
+                  <SelectValue placeholder={`Select Country`} />
+                </SelectTrigger>
+                <SelectContent>
+                  {Countries.map((country: any) => (
+                    <SelectItem key={country.code} value={country.name}>
+                      {country.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-            <Select name="state">
-              <SelectTrigger className="max-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder={`Select State`} />
-              </SelectTrigger>
-              <SelectContent>
-                {State?.map((state: any, index: any) => (
-                  <SelectItem key={index} value={state.name}>
-                    {state.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              {formState?.zodErrors?.country && (
+                <p className="text-red-600">{formState?.zodErrors?.country}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col">
+              <Select name="state">
+                <SelectTrigger className="min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
+                  <SelectValue placeholder={`Select State`} />
+                </SelectTrigger>
+                <SelectContent>
+                  {State?.map((state: any, index: any) => (
+                    <SelectItem key={index} value={state.name}>
+                      {state.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {formState?.zodErrors?.state && (
+                <p className="text-red-600">{formState?.zodErrors?.state}</p>
+              )}
+            </div>
 
             <div className="flex items-center gap-x-3">
               <Checkbox name="negotiable" id="terms1" />
@@ -612,16 +663,20 @@ function StepOneForm({ GetCategory }: any) {
               >
                 Negotiable
               </label>
+              {formState?.zodErrors?.state && (
+                <p className="text-red-600">
+                  {formState?.zodErrors?.negotiable}
+                </p>
+              )}
             </div>
-            
           </div>
           {/* <div className="min-w-full min-h-[348px] rounded-[8px]" ref={MapRef} /> */}
-          
         </div>
         <div className="min-w-full flex justify-end">
           <button
             className={`min-w-[193px] min-h-[58px] bg-primary500 text-white rounded-[6px] flex justify-center items-center gap-x-[12px]}`}
             type="submit"
+            onClick={LoadingHandle}
           >
             <span>Next Steps</span> <ArrowRight />
           </button>

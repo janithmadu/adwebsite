@@ -3,12 +3,12 @@
 import { client } from "@/lib/sanity";
 import { FormType, SchemaAdPostForm } from "@/lib/schemas";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { revalidate } from "../../layout";
 
 export const stepOpneFormAction: any = async (
   prevState: any,
   formData: FormData
 ) => {
-
   const { isAuthenticated } = getKindeServerSession();
   const isUserAuthenticated = await isAuthenticated();
 
@@ -17,7 +17,6 @@ export const stepOpneFormAction: any = async (
 
   console.log(user);
 
-
   const priceEntry = formData?.get("price");
   const price: number | null = priceEntry
     ? parseFloat(priceEntry as string)
@@ -25,19 +24,18 @@ export const stepOpneFormAction: any = async (
 
   const options = formData?.getAll("options");
   const parsedValuesArray = options.map((item) => {
-    if (typeof item === "string") {
-      return JSON.parse(item); // Parse each string entry
+    if (typeof item === "string" && item) {
+      return JSON?.parse(item); // Parse each string entry
     }
     return null; // Handle non-string entries (if any), or customize as needed
   });
 
-  const Negotiable = formData.get("negotiable")
-  let NegotiableValue
+  const Negotiable = formData.get("negotiable");
+  let NegotiableValue;
   if (Negotiable == "on") {
-    NegotiableValue = true
-  }
-  else {
-    NegotiableValue = false
+    NegotiableValue = true;
+  } else {
+    NegotiableValue = false;
   }
 
   const formDataObject: FormType = {
@@ -57,9 +55,8 @@ export const stepOpneFormAction: any = async (
     mobile: formData.get("mobile") as string,
     country: formData.get("country") as string,
     state: formData.get("state") as string,
-    negotiable: NegotiableValue as boolean
+    negotiable: NegotiableValue as boolean,
   };
-
 
   // Retrieve the files from formData
   const images = formData.getAll("image");
@@ -72,14 +69,20 @@ export const stepOpneFormAction: any = async (
     images: images, // Add uploaded images to the form data for validation
   });
 
+  console.log(ZodValidations.error);
+
   if (!ZodValidations.success) {
     return {
       ...prevState,
       data: { ...prevState.data, formDataObject },
       zodErrors: ZodValidations.error.flatten().fieldErrors,
       message: "Missing required fields",
+      status:false
     };
   }
+
+ 
+  
 
   const uploadedImages = await Promise.all(
     images.map(async (image: any) => {
@@ -137,7 +140,18 @@ export const stepOpneFormAction: any = async (
     };
 
     const response = await client.create(newAd);
-    console.log("New ad created:", response);
+    if(response){
+     
+      return {
+        ...prevState,
+        data: { ...prevState.data, formDataObject },
+        zodErrors: null,
+        message: "Congratulations! Your ad is now live.",
+        status:true
+      };
+      
+    }
+    
   } catch (error) {
     console.error("Error creating new ad:", error);
   }
