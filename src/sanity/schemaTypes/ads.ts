@@ -352,5 +352,13 @@ export default {
       title: "Map Location (optional)",
       type: "geopoint",
     },
+    {
+      name: "user",
+      title: "User",
+      type: "reference",
+      to: [{ type: "user" }],
+      validation: (Rule: Rule) => Rule.required(),
+    },
   ],
+  
 };

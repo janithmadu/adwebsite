@@ -31,8 +31,8 @@ function AdCard(GetAds: any) {
               alt="AdImage"
               width={200}
               height={0}
-              src={GetAds?.GetAds.photos[0].asset.url}
-              className="min-w-full max-h-[220px] rounded-t-[8px]"
+              src={GetAds?.GetAds?.photos[0]?.asset?.url}
+              className="min-w-full h-[220px] rounded-t-[8px]"
             />
           </div>
           <div className=" min-h-[124px]">

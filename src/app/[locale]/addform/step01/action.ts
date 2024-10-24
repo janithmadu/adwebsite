@@ -2,11 +2,22 @@
 
 import { client } from "@/lib/sanity";
 import { FormType, SchemaAdPostForm } from "@/lib/schemas";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 export const stepOpneFormAction: any = async (
   prevState: any,
   formData: FormData
 ) => {
+
+  const { isAuthenticated } = getKindeServerSession();
+  const isUserAuthenticated = await isAuthenticated();
+
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  console.log(user);
+
+
   const priceEntry = formData?.get("price");
   const price: number | null = priceEntry
     ? parseFloat(priceEntry as string)
@@ -20,7 +31,14 @@ export const stepOpneFormAction: any = async (
     return null; // Handle non-string entries (if any), or customize as needed
   });
 
-  console.log(formData);
+  const Negotiable = formData.get("negotiable")
+  let NegotiableValue
+  if (Negotiable == "on") {
+    NegotiableValue = true
+  }
+  else {
+    NegotiableValue = false
+  }
 
   const formDataObject: FormType = {
     name: formData?.get("name") as string,
@@ -39,7 +57,9 @@ export const stepOpneFormAction: any = async (
     mobile: formData.get("mobile") as string,
     country: formData.get("country") as string,
     state: formData.get("state") as string,
+    negotiable: NegotiableValue as boolean
   };
+
 
   // Retrieve the files from formData
   const images = formData.getAll("image");
@@ -96,6 +116,10 @@ export const stepOpneFormAction: any = async (
         _type: "reference",
         _ref: formDataObject.subcategory, // Replace with the actual subcategory document ID
       },
+      user: {
+        _type: "reference",
+        _ref: user.id, // Replace with the actual subcategory document ID
+      },
       brand: formDataObject.brand,
       model: formDataObject.model,
       condition: formDataObject.conditions,
@@ -103,7 +127,7 @@ export const stepOpneFormAction: any = async (
       authenticity: formDataObject.authenticity,
       options: parsedValuesArray,
       price: formDataObject.price,
-      negotiable: true,
+      negotiable: NegotiableValue,
       description: formDataObject.description,
       features: ["5G Support", "Fast Charging", "Water Resistant"],
       photos: uploadedImages,

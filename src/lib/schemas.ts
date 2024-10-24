@@ -34,6 +34,9 @@ export const SchemaAdPostForm = z.object({
   options: z.array(z.string()).optional(),
   country: z.string().min(1, "Slect Your Country."),
   state: z.string().min(1, "Slect Your State."),
+  negotiable:z.boolean({
+    required_error: "Negotiable Need",
+  })
 });
 
 export type FormType = z.infer<typeof SchemaAdPostForm>;

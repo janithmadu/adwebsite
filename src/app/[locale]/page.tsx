@@ -6,6 +6,7 @@ import HomePageAdds from "./components/Ads/HomePageAdds";
 import { getPostAds } from "./actions/getAds";
 import Details from "./components/Details/Details";
 import MobileApp from "./components/MobileApp/MobileApp";
+import { UserRegistration } from "./actions/usersAction";
 
 
 export const revalidate = 1;
@@ -14,6 +15,7 @@ export default async function Home() {
   const HeroImages = await getHeroImages();
   const GetCategory = await getAllCategory();
   const getPost = await getPostAds(1,4);
+  const UserReg = await UserRegistration()
 
 
   return (

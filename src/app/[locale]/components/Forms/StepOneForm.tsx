@@ -18,6 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Loader } from "@googlemaps/js-api-loader";
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -54,8 +56,8 @@ function StepOneForm({ GetCategory }: any) {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [Image, setImage] = useState<any>([]);
   const [Countries, setCountries] = useState<any>([]);
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [State, setState] = useState<any>("");
+  const [selectedCountry, setSelectedCountry] = useState([]);
+  const [State, setState] = useState<any>([]);
   //Get Category ID for retrive subcategories
   const handleInputChange = (e: any) => {
     console.log(e);
@@ -187,6 +189,50 @@ function StepOneForm({ GetCategory }: any) {
 
     setImage(updatedPreviewUrlss);
   };
+
+
+  const MapRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const mapInit = async () => {
+      const loader = new Loader({
+        apiKey: "AIzaSyDN3XsX4sCLXCrWNikpn_NTb2fY3AmgxMw",
+        version: "weekly",
+      });
+      const { Map } = await loader.importLibrary("maps");
+      const { Marker } = (await loader.importLibrary(
+        "marker"
+      )) as google.maps.MarkerLibrary;
+
+      const position = {
+        lat: 6.866042368324042,
+        lng: 80.01313805285554,
+      };
+      const MapOptions: google.maps.MapOptions = {
+        center: position,
+        zoom: 12,
+        mapId: "My_NEXTJS_MAPID",
+      };
+
+      const map = new Map(MapRef.current as HTMLDivElement, MapOptions);
+      const marker = new Marker({
+        map: map,
+        position: position,
+      });
+
+      map.addListener('click', (event) => {
+        const lat = event.latLng.lat();
+        const lng = event.latLng.lng();
+
+        console.log('Latitude:', lat);
+        console.log('Longitude:', lng);
+
+        // Get place details using Geocoder
+       
+      });
+    };
+    mapInit();
+  }, []);
 
   return (
     <div className="mt-[32px] flex flex-col gap-y-[20px] ">
@@ -557,7 +603,20 @@ function StepOneForm({ GetCategory }: any) {
                 ))}
               </SelectContent>
             </Select>
+
+            <div className="flex items-center gap-x-3">
+              <Checkbox name="negotiable" id="terms1" />
+              <label
+                htmlFor="terms1"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Negotiable
+              </label>
+            </div>
+            
           </div>
+          {/* <div className="min-w-full min-h-[348px] rounded-[8px]" ref={MapRef} /> */}
+          
         </div>
         <div className="min-w-full flex justify-end">
           <button
