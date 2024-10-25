@@ -3,19 +3,25 @@
 import { client } from "@/lib/sanity";
 import { FormType, SchemaAdPostForm } from "@/lib/schemas";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { revalidate } from "../../layout";
 
 export const stepOpneFormAction: any = async (
   prevState: any,
   formData: FormData
 ) => {
+
+  let CategoryID
+  if (formData.get("category")) {
+    CategoryID = JSON.parse(formData.get("category") as string)
+
+
+  }
+
+
   const { isAuthenticated } = getKindeServerSession();
   const isUserAuthenticated = await isAuthenticated();
 
   const { getUser } = getKindeServerSession();
   const user = await getUser();
-
-  console.log(user);
 
   const priceEntry = formData?.get("price");
   const price: number | null = priceEntry
@@ -30,6 +36,7 @@ export const stepOpneFormAction: any = async (
     return null; // Handle non-string entries (if any), or customize as needed
   });
 
+  const features = formData?.getAll("features");
   const Negotiable = formData.get("negotiable");
   let NegotiableValue;
   if (Negotiable == "on") {
@@ -40,7 +47,7 @@ export const stepOpneFormAction: any = async (
 
   const formDataObject: FormType = {
     name: formData?.get("name") as string,
-    category: formData.get("category") as string,
+    category: CategoryID.id,
     subcategory: formData.get("subcategory") as string,
     price: price as number,
     brand: formData.get("brand") as string,
@@ -56,7 +63,12 @@ export const stepOpneFormAction: any = async (
     country: formData.get("country") as string,
     state: formData.get("state") as string,
     negotiable: NegotiableValue as boolean,
+    features: features.filter(
+      (option): option is string => typeof option === "string"
+    ),
   };
+
+
 
   // Retrieve the files from formData
   const images = formData.getAll("image");
@@ -69,20 +81,15 @@ export const stepOpneFormAction: any = async (
     images: images, // Add uploaded images to the form data for validation
   });
 
-  console.log(ZodValidations.error);
-
   if (!ZodValidations.success) {
     return {
       ...prevState,
       data: { ...prevState.data, formDataObject },
       zodErrors: ZodValidations.error.flatten().fieldErrors,
       message: "Missing required fields",
-      status:false
+      status: false,
     };
   }
-
- 
-  
 
   const uploadedImages = await Promise.all(
     images.map(async (image: any) => {
@@ -132,7 +139,7 @@ export const stepOpneFormAction: any = async (
       price: formDataObject.price,
       negotiable: NegotiableValue,
       description: formDataObject.description,
-      features: ["5G Support", "Fast Charging", "Water Resistant"],
+      features: features,
       photos: uploadedImages,
       phoneNumber: formDataObject.mobile,
       country: formDataObject.country,
@@ -140,18 +147,16 @@ export const stepOpneFormAction: any = async (
     };
 
     const response = await client.create(newAd);
-    if(response){
-     
+    if (response) {
       return {
         ...prevState,
         data: { ...prevState.data, formDataObject },
         zodErrors: null,
-        message: "Congratulations! Your ad is now live.",
-        status:true
+        message: "Almost There! Confirm Your Payment to Go Live!",
+        status: true,
+        response: response
       };
-      
     }
-    
   } catch (error) {
     console.error("Error creating new ad:", error);
   }

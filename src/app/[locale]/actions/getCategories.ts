@@ -23,7 +23,8 @@ export async function getAllCategory() {
   description {
     en,
     ar
-  }
+  },
+  price
 }
 `;
   const data = await client.fetch(quary);

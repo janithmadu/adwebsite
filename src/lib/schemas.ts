@@ -32,6 +32,7 @@ export const SchemaAdPostForm = z.object({
   //     message: "File size must be less than 2MB.",
   //   }),
   options: z.array(z.string()).min(1, "Pleace Select Options"),
+  features: z.array(z.string()).optional(),
   country: z.string().min(1, "Slect Your Country."),
   state: z.string().min(1, "Slect Your State."),
   negotiable:z.boolean({

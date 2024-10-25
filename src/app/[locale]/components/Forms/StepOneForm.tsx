@@ -24,6 +24,7 @@ import LoadingImage from "../../../../../public/system-regular-715-spinner-horiz
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import FormHeader from "../../../../../public/AdForm.png";
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -51,8 +52,6 @@ function StepOneForm({ GetCategory }: any) {
     status: false,
   });
 
-  console.log(formState?.zodErrors);
-
   const [CategoriesID, setCategoriesID] = useState<any | undefined>();
   const [subCategoriesID, setsubCategoriesID] = useState<any | undefined>();
   const [subCategories, setsubCategories] = useState<any | undefined>();
@@ -67,9 +66,14 @@ function StepOneForm({ GetCategory }: any) {
   const [State, setState] = useState<any>([]);
   const [PageLoader, setPageLoader] = useState<any>(null);
   const router = useRouter();
+  const [features, setFeatures] = useState<string[]>([""]);
+  const [AdPrice, setAdPrice] = useState<number>();
+
   //Get Category ID for retrive subcategories
   const handleInputChange = (e: any) => {
-    setCategoriesID(e);
+    const { id, price } = JSON.parse(e);
+    setCategoriesID(id);
+    setAdPrice(price);
   };
 
   //Get SubCategory ID for retrive Models,Brands,Options
@@ -227,7 +231,7 @@ function StepOneForm({ GetCategory }: any) {
         position: position,
       });
 
-      map.addListener("click", (event) => {
+      map.addListener("click", (event: any) => {
         const lat = event.latLng.lat();
         const lng = event.latLng.lng();
 
@@ -248,14 +252,16 @@ function StepOneForm({ GetCategory }: any) {
         title: "Congratulations!",
         text: formState.message,
         icon: "success",
-        confirmButtonText: "Go to Home",
+        confirmButtonText: "Pay \t" + AdPrice + "\t USD",
         allowOutsideClick: false,
-        allowEscapeKey: false,
+        allowEscapeKey: true,
       }).then((result) => {
         if (result.isConfirmed) {
           router.push("/"); // Redirect to homepage on confirm
         }
       });
+      console.log(formState);
+      localStorage.setItem("AdID", formState.response._id);
     }
   }, [formState]);
 
@@ -263,11 +269,32 @@ function StepOneForm({ GetCategory }: any) {
     setPageLoader("Loading");
   };
 
+  const addFeature = () => {
+    setFeatures([...features, ""]);
+  };
+
+  // Function to handle feature change
+  const handleFeatureChange = (index: number, value: string) => {
+    const newFeatures = [...features];
+    newFeatures[index] = value;
+    setFeatures(newFeatures);
+  };
+
+  // Function to remove a feature section
+  const removeFeature = (index: number) => {
+    const newFeatures = features.filter((_, i) => i !== index);
+    setFeatures(newFeatures);
+  };
+
   return (
     <div className=" flex flex-col gap-y-[20px] ">
-      <div className="min-h-[100px] bg-primary500 rounded-xl">
-
+      <div className="min-h-[100px] bg-primary500 rounded-xl relative">
+        <Image alt="formHeader" src={FormHeader} className="rounded-xl" />
+        <div className="absolute inset-0 flex items-center justify-center text-white">
+          <h1 className="text-[32px]">Post Your Ad</h1>
+        </div>
       </div>
+
       <form action={formAction} className="flex flex-col gap-y-[20px] ">
         {/* Name */}
 
@@ -298,7 +325,13 @@ function StepOneForm({ GetCategory }: any) {
               <SelectContent>
                 {GetCategory?.map((selectData: any) => {
                   return (
-                    <SelectItem key={selectData.id} value={selectData.id}>
+                    <SelectItem
+                      key={selectData.id}
+                      value={JSON.stringify({
+                        id: selectData.id,
+                        price: selectData.price,
+                      })}
+                    >
                       {selectData?.title[locale]}
                     </SelectItem>
                   );
@@ -614,13 +647,13 @@ function StepOneForm({ GetCategory }: any) {
             )}{" "}
             {/* Show error for name */}
           </div>
-          <div className="flex   gap-x-4">
+          <div className="flex flex-col space-y-3 lg:space-y-0 lg:flex-row  gap-x-4">
             <div className="flex flex-col">
               <Select
                 name="country"
-                onValueChange={(e) => setSelectedCountry(e)}
+                onValueChange={(e: any) => setSelectedCountry(e)}
               >
-                <SelectTrigger className="min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
+                <SelectTrigger className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
                   <SelectValue placeholder={`Select Country`} />
                 </SelectTrigger>
                 <SelectContent>
@@ -639,7 +672,7 @@ function StepOneForm({ GetCategory }: any) {
 
             <div className="flex flex-col">
               <Select name="state">
-                <SelectTrigger className="min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
+                <SelectTrigger className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
                   <SelectValue placeholder={`Select State`} />
                 </SelectTrigger>
                 <SelectContent>
@@ -672,16 +705,58 @@ function StepOneForm({ GetCategory }: any) {
           </div>
           {/* <div className="min-w-full min-h-[348px] rounded-[8px]" ref={MapRef} /> */}
         </div>
+        <div>
+          <label className="text-grayscale900">Ad Features</label>
+
+          {/* Render feature input fields */}
+          {features.map((feature, index) => (
+            <div key={index} className="mb-4 flex gap-x-5 items-center">
+              <Input
+                type="text"
+                value={feature}
+                onChange={(e) => handleFeatureChange(index, e.target.value)}
+                placeholder={`Feature ${index + 1}`}
+                className="min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+                name="features"
+              />
+              <button
+                onClick={() => removeFeature(index)}
+                className="bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+
+          {/* Button to add a new feature */}
+          <button
+            onClick={addFeature}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Add Feature
+          </button>
+        </div>
         <div className="min-w-full flex justify-end">
           <button
             className={`min-w-[193px] min-h-[58px] bg-primary500 text-white rounded-[6px] flex justify-center items-center gap-x-[12px]}`}
             type="submit"
             onClick={LoadingHandle}
           >
-            <span>Next Steps</span> <ArrowRight />
+            <span>Submit Ad</span>
           </button>
         </div>
       </form>
+      <>
+        {PageLoader === "Loading" ? (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="text-center">
+              <Image alt="loader" src={LoadingImage} />
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
+      </>
     </div>
   );
 }

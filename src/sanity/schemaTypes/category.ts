@@ -43,5 +43,11 @@ export default {
       ],
       validation: (Rule: Rule) => Rule.max(200),
     },
+    {
+      name: 'price',
+      title: 'Price',
+      type: 'number',
+      validation: (Rule: Rule) => Rule.required().min(0),
+    },
   ],
 };

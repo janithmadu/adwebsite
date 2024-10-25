@@ -23,7 +23,7 @@ export const UserRegistration = async () => {
         const userCheck = await client.fetch(query, params);
 
 
-        console.log(userCheck);
+
 
 
         if (userCheck) {
