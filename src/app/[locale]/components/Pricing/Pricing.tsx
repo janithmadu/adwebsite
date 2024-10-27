@@ -1,10 +1,12 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { convertToSub } from "@/lib/ConvertToSub";
 import Checkout from "@/app/[locale]/components/Pricing/Checkout";
+import { getAdById } from "../../actions/getAds";
+import { redirect } from "next/navigation";
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
   throw new Error("NEXT_PUBLIC_STRIPE_PUBLIC_KEY not define");
@@ -13,19 +15,45 @@ if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
 const stripePromis = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 const Pricing = () => {
-  const amount: number = 400;
+  const [AdPrice, setAdPrice] = useState<number>(0);
+  const [AdDetails, setAdDetails] = useState();
+
+  useEffect(() => {
+    const AdID = localStorage.getItem("AdID");
+    if (!AdID) {
+      redirect("/");
+    }
+
+    const GetAd = async () => {
+      const GetAdd = await getAdById(AdID as string);
+
+      if (!GetAdd) {
+        setAdPrice(0);
+      } else {
+        setAdPrice(GetAdd[0]?.category?.price);
+        setAdDetails(GetAdd);
+      }
+    };
+
+    GetAd();
+  }, []);
+
   return (
-    <div>
-      <Elements
-        stripe={stripePromis}
-        options={{
-          mode: "payment",
-          amount: convertToSub(amount),
-          currency: "usd",
-        }}
-      >
-        <Checkout amounts={amount} />
-      </Elements>
+    <div className="min-w-full">
+      {AdPrice > 0 ? (
+        <Elements
+          stripe={stripePromis}
+          options={{
+            mode: "payment",
+            amount: convertToSub(AdPrice),
+            currency: "usd",
+          }}
+        >
+          {AdPrice > 0 && <Checkout amount={AdPrice} Ad={AdDetails} />}
+        </Elements>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

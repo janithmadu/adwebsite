@@ -8,15 +8,13 @@ import Details from "./components/Details/Details";
 import MobileApp from "./components/MobileApp/MobileApp";
 import { UserRegistration } from "./actions/usersAction";
 
-
 export const revalidate = 1;
 
 export default async function Home() {
   const HeroImages = await getHeroImages();
   const GetCategory = await getAllCategory();
-  const getPost = await getPostAds(1,4);
-  const UserReg = await UserRegistration()
-
+  const getPost = await getPostAds(1, 4);
+  const UserReg = await UserRegistration();
 
   return (
     <main className="flex flex-col space-y-[40px]">
@@ -36,13 +34,12 @@ export default async function Home() {
 
       {/* Details Section */}
       <section>
-        <Details/>  
+        <Details />
       </section>
 
-
-       {/* Mobile App Section */}
-       <section>
-        <MobileApp/>  
+      {/* Mobile App Section */}
+      <section>
+        <MobileApp />
       </section>
     </main>
   );

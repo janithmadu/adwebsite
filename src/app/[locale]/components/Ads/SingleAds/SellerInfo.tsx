@@ -8,21 +8,23 @@ import {
   MapPinLine,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
-function SellerInfo() {
+function SellerInfo({Username,UserEmail,UserAvatar}:any) {
   return (
     <div className="">
       <div className="flex gap-y-[24px] flex-col">
         <div className="flex justify-between min-h-[56px]  min-w-full items-center">
           <div className="flex gap-x-[16px] items-center">
             <Image
-              src={selerImage}
+              src={UserAvatar}
+              width={52}
+              height={52}
               alt=""
               className="rounded-full bg-red-500 bg-cover"
             />
             <div className="flex flex-col gap-y-[6px] ">
               <h1 className="text-grayscale500 text-bodysmall">Add by:</h1>
               <h1 className="text-grayscale900 text-bodymedium flex gap-x-[4px] items-center">
-                <span> Kevin Gilbert</span>
+                <span> {Username}</span>
                 <CircleWavyCheck
                   width={20}
                   height={20}
@@ -45,28 +47,8 @@ function SellerInfo() {
               className="text-primary500"
             />{" "}
             <h1 className="text-grayscale600 text-bodymedium">
-              kevin.gilbert@gmail.com
+              {UserEmail}
             </h1>{" "}
-          </span>
-          <span className="flex gap-x-[12px] items-center">
-            {" "}
-            <MapPinLine
-              widths={24}
-              height={24}
-              className="text-primary500"
-            />{" "}
-            <h1 className="text-grayscale600 text-bodymedium">
-              4517 New York. Manchester, Kentucky 394
-            </h1>{" "}
-          </span>
-          <span className="flex gap-x-[12px] items-center">
-            {" "}
-            <GlobeHemisphereEast
-              widths={24}
-              height={24}
-              className="text-primary500"
-            />{" "}
-            <h1 className="text-grayscale600 text-bodymedium">www.kevin.com</h1>{" "}
           </span>
         </div>
       </div>

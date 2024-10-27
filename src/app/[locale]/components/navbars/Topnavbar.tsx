@@ -63,7 +63,8 @@ function Topnavbar({ user }: any) {
 
             <Link
               className=" min-w-[139px] min-h-[5px] flex items-center justify-center bg-primary500 text-grayscalewhite font-bold rounded-[4px]"
-              href={locale + "/addform/step01"}
+              href={"addform/step01"}
+              replace
             >
               <div className="flex space-x-[8px] rtl:gap-[8px]">
                 <PlusCircle className="min-w-[24px] min-h-[24px] " />

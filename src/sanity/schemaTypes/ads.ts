@@ -359,6 +359,11 @@ export default {
       to: [{ type: "user" }],
       validation: (Rule: Rule) => Rule.required(),
     },
+    {
+      name: "payment",
+      title: "payment",
+      type: "boolean",
+    }
   ],
   
 };

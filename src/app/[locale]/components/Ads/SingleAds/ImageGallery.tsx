@@ -30,7 +30,7 @@ function ImageGallery(Images: any) {
             width={80}
             height={80}
             className="cursor-pointer  h-20 object-cover"
-            onClick={() => setSelectedImage(image.asset?.url)}
+            onClick={() => setSelectedImage(image?.asset?.url)}
           />
         ))}
       </div>

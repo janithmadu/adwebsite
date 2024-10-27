@@ -25,6 +25,7 @@ import Image from "next/image";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import FormHeader from "../../../../../public/AdForm.png";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -68,6 +69,8 @@ function StepOneForm({ GetCategory }: any) {
   const router = useRouter();
   const [features, setFeatures] = useState<string[]>([""]);
   const [AdPrice, setAdPrice] = useState<number>();
+  const { user, getUser } = useKindeBrowserClient();
+  const alsoUser = getUser();
 
   //Get Category ID for retrive subcategories
   const handleInputChange = (e: any) => {
@@ -257,7 +260,7 @@ function StepOneForm({ GetCategory }: any) {
         allowEscapeKey: true,
       }).then((result) => {
         if (result.isConfirmed) {
-          router.push("/"); // Redirect to homepage on confirm
+          router.push("/" + locale + "/payments"); // Redirect to homepage on confirm
         }
       });
       console.log(formState);
@@ -732,6 +735,7 @@ function StepOneForm({ GetCategory }: any) {
           <button
             onClick={addFeature}
             className="bg-blue-500 text-white px-4 py-2 rounded"
+            type="button"
           >
             Add Feature
           </button>

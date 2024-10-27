@@ -7,8 +7,21 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import React from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-function ContactSection() {
+function ContactSection({ PhoneNumber }: any) {
+  const HidePhone = PhoneNumber.slice(0, 4);
+
   return (
     <div className="space-y-2 mb-6">
       <div>
@@ -16,10 +29,24 @@ function ContactSection() {
           <h1 className="flex gap-x-[12px] items-center">
             <PhoneCall width={32} height={32} className="text-primary500" />
             <span className="text-grayscale900 text-bodylarge">
-              (808) 5XX-XXXX
+              {HidePhone} XX-XXXX
             </span>
           </h1>
-          <Link href="#">Click here to reveal phone number.</Link>
+
+          <AlertDialog>
+            <AlertDialogTrigger>
+              Click here to reveal phone number.
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Owner Phone Number</AlertDialogTitle>
+                <AlertDialogDescription>{PhoneNumber}</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
 

@@ -144,6 +144,7 @@ export const stepOpneFormAction: any = async (
       phoneNumber: formDataObject.mobile,
       country: formDataObject.country,
       state: formDataObject.state,
+      payment:false
     };
 
     const response = await client.create(newAd);

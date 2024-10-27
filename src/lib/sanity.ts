@@ -2,11 +2,11 @@ import imageUrlBuilder from "@sanity/image-url";
 import { createClient } from "next-sanity";
 
 export const client = createClient({
-  projectId: "hkxjit8b",
-  dataset: "test",
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
   apiVersion: "2022-03-25",
   useCdn: true,
-  token:"sk5HZSfdPAJepVFVeXVV2rFElxkDOCdp6J8cbiNB9BXHqoTuv8CgYG6acmgLEQUT3QB05HuoV4Fqt45Zp8BwXchYEy1z4s7jE1CicOEqF9IUJu3izSGJ9JO5vSzOPR2jzOo7yvQQ3s2GO3mwLOTt9rYEmjAMiBw9SKCjLFosw88GfzsNFnFQ",
+  token: process.env.NEXT_PUBLIC_SANITY_USER_ADDER_TOKEN,
 });
 
 const imageUrl = imageUrlBuilder(client);
