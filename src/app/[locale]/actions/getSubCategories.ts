@@ -6,6 +6,7 @@ export const getAllSubCategories = async () => {
   const query = `*[_type == "subcategory"]{
     title,
     slug,
+    _id,
     "category": category->{
       title,
       slug,

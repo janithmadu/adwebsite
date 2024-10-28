@@ -6,8 +6,6 @@ import React, { useState } from "react";
 export const revalidate = 1;
 
 function ImageGallery(Images: any) {
-  console.log();
-
   const [selectedImage, setSelectedImage] = useState("");
 
   return (
@@ -15,9 +13,9 @@ function ImageGallery(Images: any) {
       <Image
         src={selectedImage || Images?.Images[0]?.asset?.url}
         alt="Main Product Image"
-        width={600}
-        height={600}
-        className="rounded-lg shadow-lg mb-4 "
+        width={200}
+        height={200}
+        className="rounded-lg shadow-lg mb-4 min-w-[370px] object-cover"
       />
 
       {/* Thumbnails */}

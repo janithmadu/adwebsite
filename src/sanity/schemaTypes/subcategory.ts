@@ -50,13 +50,13 @@ export default {
       ],
       validation: (Rule: Rule) => Rule.max(200),
     },
-    {
-      name: 'options',
-      title: 'Subcategory Options',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'option' }] }],
-      description: 'Select specific options related to this subcategory.',
-      validation: (Rule: Rule) => Rule.required(),
-    },
+    // {
+    //   name: 'options',
+    //   title: 'Subcategory Options',
+    //   type: 'array',
+    //   of: [{ type: 'reference', to: [{ type: 'option' }] }],
+    //   description: 'Select specific options related to this subcategory.',
+    //   validation: (Rule: Rule) => Rule.required(),
+    // },
   ],
 };

@@ -367,7 +367,8 @@ export async function getAdById(id: any) {
       adName,
       category->{
         _id,
-        title
+        title,
+        price
       },
       subcategory->{
         _id,
@@ -415,3 +416,60 @@ export async function getAdById(id: any) {
   const result = await client.fetch(query, params);
   return result;
 }
+export async function getAdByIdForPayment(id: any) {
+  const query = `
+    *[_type == "postAd" && payment == false && _id == $id][0] {
+      _id,
+      adName,
+      category->{
+        _id,
+        title,
+        price
+      },
+      subcategory->{
+        _id,
+        title
+      },
+      brand,
+      model,
+      condition,
+      authenticity,
+      tags,
+      price,
+      negotiable,
+      description,
+      features,
+      photos[] {
+        asset->{
+          _id,
+          url
+        }
+      },
+      phoneNumber,
+      backupPhoneNumber,
+      email,
+      website,
+      country,
+      city,
+      state,
+      location,
+      mapLocation,
+      Currency,
+      _createdAt,
+      options,
+      user->{
+        externalId,
+        name,
+        avatarUrl,
+        email
+
+      },
+    }
+  `;
+
+  const params = { id };
+
+  const result = await client.fetch(query, params);
+  return result;
+}
+

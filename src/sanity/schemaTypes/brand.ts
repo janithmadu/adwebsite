@@ -54,7 +54,7 @@ export default {
       options: {
         hotspot: true, // Enables image cropping
       },
-      validation: (Rule: Rule) => Rule.required(),
+      
     },
   ],
 };

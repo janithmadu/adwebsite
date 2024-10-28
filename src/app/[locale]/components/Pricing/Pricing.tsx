@@ -5,7 +5,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { convertToSub } from "@/lib/ConvertToSub";
 import Checkout from "@/app/[locale]/components/Pricing/Checkout";
-import { getAdById } from "../../actions/getAds";
+import { getAdById, getAdByIdForPayment } from "../../actions/getAds";
 import { redirect } from "next/navigation";
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
@@ -25,12 +25,14 @@ const Pricing = () => {
     }
 
     const GetAd = async () => {
-      const GetAdd = await getAdById(AdID as string);
+      const GetAdd = await getAdByIdForPayment(AdID as string);
+      console.log();
+      
 
       if (!GetAdd) {
         setAdPrice(0);
       } else {
-        setAdPrice(GetAdd[0]?.category?.price);
+        setAdPrice(GetAdd?.category?.price);
         setAdDetails(GetAdd);
       }
     };

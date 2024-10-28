@@ -1,14 +1,14 @@
-import { type SchemaTypeDefinition } from "sanity";
-import category from "./category";
-import subcategory from "./subcategory";
-import model from "./model";
-import hero from "./hero";
-import heroimages from "./heroimages";
-import ads from "./ads";
-import options from "./options";
-import brand from "./brand";
-import users from "./users";
+import { type SchemaTypeDefinition } from 'sanity'
+import ads from './ads'
+import brand from './brand'
+import category from './category'
+import hero from './hero'
+import heroimages from './heroimages'
+import model from './model'
+import options from './options'
+import subcategory from './subcategory'
+import users from './users'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [category, subcategory, model,hero,heroimages,ads,options,brand,users],
-};
+  types: [ads,brand,category,hero,heroimages,model,options,subcategory,users],
+}

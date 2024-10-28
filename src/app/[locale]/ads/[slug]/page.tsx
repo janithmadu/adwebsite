@@ -28,7 +28,8 @@ export default async function AdDetailsPage({ params }: { params: { slug: string
   const UserEmail = GetAdByID?.user.email;
   const UserAvatar = GetAdByID?.user.avatarUrl;
   const PhoneNumber = GetAdByID?.phoneNumber;
-
+  console.log();
+  
   return (
     <div className="container mx-auto  px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-10 flex ">
       <div className="flex-1 min-w-[872px] flex flex-col gap-x-[36px] ">
