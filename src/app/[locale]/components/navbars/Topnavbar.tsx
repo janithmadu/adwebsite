@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import Logo from "../../../../../public/fi_search.svg";
 import Link from "next/link";
-import { PlusCircle, UserCircle } from "@phosphor-icons/react/dist/ssr";
+import { PlusCircle } from "@phosphor-icons/react/dist/ssr";
 import CategoryBar from "./CategoryBar";
 import CountryChange from "./CountryChange";
 export const revalidate = 1;
@@ -12,7 +12,6 @@ import {
   RegisterLink,
   LoginLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UserSetting from "./UserSetting";
 
 function Topnavbar({ user }: any) {
@@ -22,37 +21,31 @@ function Topnavbar({ user }: any) {
 
   return (
     <>
-      <div className="min-w-full  flex flex-col  justify-start   border-b-[#EBEEF7] border">
-        {/* Top Nav Start  */}
-        <div className="  relative container mx-auto  px-5 lg:px-5 xl:px-20 md:px-10  min-h-[100px]  flex gap-10 items-center flex-nowrap  justify-between">
+      <div className="min-w-full flex flex-col justify-start border-b-[#EBEEF7] border">
+        {/* Top Nav Start */}
+        <div className="relative container mx-auto px-5 lg:px-5 xl:px-20 md:px-10 min-h-[100px] flex gap-10 items-center justify-between">
           {/* Logo */}
-          <h1 className="text-heading02 font-bold">
+          <Link href="/">
+           <h1 className="text-heading02 font-bold">
             <span className="text-primary600">G</span>oshop
-          </h1>
+          </h1></Link>
 
           {/* Search Box */}
-
           <div className="relative">
-            {/* Search Icon Image */}
             <Image
               alt="Search Icon"
               src={Logo}
-              className=" absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 "
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
             />
-            {/* Search Icon Image End*/}
-
-            {/* Search Bar */}
             <input
               type="text"
-              className=" hidden md:inline px-10 xl:min-w-[536px] lg:min-w-[536px]  min-h-[52px] border-[#EBEEF7] border rounded-[5px]"
+              className="hidden md:inline px-10 xl:min-w-[536px] lg:min-w-[536px] min-h-[52px] border-[#EBEEF7] border rounded-[5px]"
               placeholder={t("SearchBarPlaceHolder")}
             />
-            {/* Search Bar End */}
           </div>
 
-          {/* Top Nav Buttion Section Start */}
-
-          <div className="hidden md:flex min-w-[243px] space-x-[20px] rtl:gap-[20px] ">
+          {/* Top Nav Button Section */}
+          <div className="hidden md:flex min-w-[243px] space-x-[20px] rtl:gap-[20px]">
             {user ? (
               <UserSetting User={user} />
             ) : (
@@ -62,28 +55,23 @@ function Topnavbar({ user }: any) {
             )}
 
             <Link
-              className=" min-w-[139px] min-h-[5px] flex items-center justify-center bg-primary500 text-grayscalewhite font-bold rounded-[4px]"
-              href={locale+"/addform/step01"}
-              replace
+              className="min-w-[139px] min-h-[5px] flex items-center justify-center bg-primary500 text-grayscalewhite font-bold rounded-[4px]"
+              href={`/${locale}/addform/step01`}
             >
               <div className="flex space-x-[8px] rtl:gap-[8px]">
-                <PlusCircle className="min-w-[24px] min-h-[24px] " />
+                <PlusCircle className="min-w-[24px] min-h-[24px]" />
                 <h1>{t("PostAds")}</h1>
               </div>
             </Link>
           </div>
-
-          {/* Top Nav Buttion Section End */}
         </div>
       </div>
-      {/* Top Nav End  */}
+      {/* Top Nav End */}
 
       <div className="container mx-auto lg:px-5 px-5 xl:px-20 md:px-10">
-        <div className="min-w-full min-h-[78px]  flex items-center  justify-between">
+        <div className="min-w-full min-h-[78px] flex items-center justify-between">
           <CategoryBar CurrentLocal={locale} />
-          <div>
-            <CountryChange />
-          </div>
+          <CountryChange />
         </div>
       </div>
     </>

@@ -30,13 +30,15 @@ function HomePageAdds(Ads: any) {
       {/* Main Grid */}
       <div className="   lg:max-w-[920px]  xl:min-w-[1120px] grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4  2xl:grid-cols-4 md:gap-x-16  lg:gap-x-20  xl:gap-x-24 2xl:gap-x-[234px]  gap-y-3  place-items-center   ">
         {Ads.Ads.map((item: any, index: number) => (
-          <AdCard GetAds={item} />
+          <div key={index}>
+            <AdCard GetAds={item} />
+          </div>
         ))}
       </div>
       {/* Main Grid End */}
       <div className="min-w-full flex justify-center items-center">
         <Link
-          href={locale + "/ads?page=1"}
+          href={`${locale}/ads?page=1`}
           className="flex space-x-[8px] items-center min-w-[144px] min-h-[50px] bg-primary500 justify-center text-heading04 text-grayscalewhite rounded-[4px] rtl:flex-row-reverse"
         >
           <h1>View Alls</h1>
@@ -46,5 +48,6 @@ function HomePageAdds(Ads: any) {
     </div>
   );
 }
+
 
 export default HomePageAdds;

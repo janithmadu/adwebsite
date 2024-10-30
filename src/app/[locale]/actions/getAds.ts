@@ -53,7 +53,14 @@ export async function getPostAds(page: any, limit: any) {
 }
 
 export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
+  console.log(subcategoryId.subcategories);
+
   const start = (page - 1) * limit;
+
+  console.log();
+  if (subcategoryId.subcategories && subcategoryId.category) {
+    console.log("Done");
+  }
 
   let query = ``;
   let params: any = {};
@@ -63,18 +70,20 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
     subcategoryId.minPrice &&
     subcategoryId.maxPrice &&
     subcategoryId.subOptions &&
-    subcategoryId.subcategories
+    subcategoryId.subcategories &&
+    subcategoryId.category // Add this check for category slug
   ) {
     const parsedMinPrice = parseInt(subcategoryId.minPrice, 10) || 0;
     const parsedMaxPrice =
       parseInt(subcategoryId.maxPrice, 10) || Number.MAX_SAFE_INTEGER;
 
-    query = `*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && $options in options[].value && price >= $minPrice && price <= $maxPrice] | order(_createdAt desc) [${start}...${start + limit}] {
+    query = `*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && category->slug.current == $categorySlug && $options in options[].value && price >= $minPrice && price <= $maxPrice] | order(_createdAt desc) [${start}...${start + limit}] {
       _id,
       adName,
       category->{
         _id,
-        title
+        title,
+        slug
       },
       subcategory->{
         _id,
@@ -107,13 +116,155 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
       Currency
     }`;
 
-    queryCount = `count(*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && $options in options[].value && price >= $minPrice && price <= $maxPrice])`;
+    queryCount = `count(*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && category->slug.current == $categorySlug && $options in options[].value && price >= $minPrice && price <= $maxPrice])`;
 
     params = {
       subcategoryId: subcategoryId.subcategories,
       options: subcategoryId.subOptions,
       minPrice: parsedMinPrice,
       maxPrice: parsedMaxPrice,
+      categorySlug: subcategoryId.category, // Add the slug parameter here
+    };
+  } else if (subcategoryId.subcategories && subcategoryId.category) {
+    console.log("This is Done Also");
+
+    query = `*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && category->slug.current == $categorySlug] | order(_createdAt desc) [${start}...${start + limit}] {
+      _id,
+      adName,
+      category->{
+        _id,
+        title,
+        slug
+      },
+      subcategory->{
+        _id,
+        title
+      },
+      brand,
+      model,
+      condition,
+      authenticity,
+      tags,
+      price,
+      negotiable,
+      description,
+      features,
+      photos[] {
+        asset->{
+          _id,
+          url
+        }
+      },
+      phoneNumber,
+      backupPhoneNumber,
+      email,
+      website,
+      country,
+      city,
+      state,
+      location,
+      mapLocation,
+      Currency
+    }`;
+
+    queryCount = `count(*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && category->slug.current == $categorySlug])`;
+
+    params = {
+      subcategoryId: subcategoryId.subcategories,
+      categorySlug: subcategoryId.category, // Add the slug parameter here
+    };
+  } else if (subcategoryId.subOptions && subcategoryId.category) {
+    query = `*[_type == "postAd" && payment == true && category->slug.current == $categorySlug && $options in options[].value] | order(_createdAt desc) [${start}...${start + limit}] {
+      _id,
+      adName,
+      category->{
+        _id,
+        title,
+        slug
+      },
+      subcategory->{
+        _id,
+        title
+      },
+      brand,
+      model,
+      condition,
+      authenticity,
+      tags,
+      price,
+      negotiable,
+      description,
+      features,
+      photos[] {
+        asset->{
+          _id,
+          url
+        }
+      },
+      phoneNumber,
+      backupPhoneNumber,
+      email,
+      website,
+      country,
+      city,
+      state,
+      location,
+      mapLocation,
+      Currency
+    }`;
+
+    queryCount = `count(*[_type == "postAd" && payment == true && category->slug.current == $categorySlug && $options in options[].value])`;
+
+    params = {
+      categorySlug: subcategoryId.category,
+      options: subcategoryId.subOptions,
+    };
+  } else if (subcategoryId.category) {
+    console.log("This is Done");
+
+    query = `*[_type == "postAd" && payment == true && category->slug.current == $categorySlug] | order(_createdAt desc) [${start}...${start + limit}] {
+      _id,
+      adName,
+      category->{
+        _id,
+        title,
+        slug
+      },
+      subcategory->{
+        _id,
+        title
+      },
+      brand,
+      model,
+      condition,
+      authenticity,
+      tags,
+      price,
+      negotiable,
+      description,
+      features,
+      photos[] {
+        asset->{
+          _id,
+          url
+        }
+      },
+      phoneNumber,
+      backupPhoneNumber,
+      email,
+      website,
+      country,
+      city,
+      state,
+      location,
+      mapLocation,
+      Currency
+    }`;
+
+    queryCount = `count(*[_type == "postAd" && payment == true && category->slug.current == $categorySlug])`;
+
+    params = {
+      categorySlug: subcategoryId.category, // Only slug parameter
     };
   } else if (subcategoryId.subOptions && subcategoryId.subcategories) {
     query = `*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && $options in options[].value] | order(_createdAt desc) [${start}...${start + limit}] {
@@ -472,4 +623,3 @@ export async function getAdByIdForPayment(id: any) {
   const result = await client.fetch(query, params);
   return result;
 }
-

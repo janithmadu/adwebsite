@@ -29,7 +29,7 @@ function HomeCategory(getCategory: any) {
           return (
             <Link
               key={index}
-              href={locale + "/category/" + data?.slug?.current}
+              href={`${locale}/ads?page=1&category=${data?.slug?.current}`}
             >
               <div className="min-w-[170px] min-h-[170px] bg-[#f7f8fa] rounded-lg flex justify-center items-center flex-col space-y-3 ">
                 <Image

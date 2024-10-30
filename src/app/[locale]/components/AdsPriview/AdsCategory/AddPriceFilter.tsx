@@ -1,5 +1,4 @@
 "use client";
-// components/PriceSlider.tsx
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Range, getTrackBackground } from "react-range";
@@ -13,29 +12,21 @@ const AddPriceFilter = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Update query params for price range when Apply Filter is clicked
   const applyFilter = () => {
     const currentParams = new URLSearchParams(searchParams.toString());
-
-    // Set the new price range parameters
     currentParams.set("minPrice", values[0].toString());
     currentParams.set("maxPrice", values[1].toString());
-
-    // Push the updated query params without replacing the existing ones
     router.push(`?${currentParams.toString()}`);
   };
 
   return (
     <div className="w-full px-4 py-4">
       <div className="text-xl font-semibold mb-2">Price Range</div>
-
-      {/* Display current price range */}
       <div className="flex justify-between mb-4">
         <span>${values[0]}</span>
         <span>${values[1]}</span>
       </div>
 
-      {/* Slider */}
       <Range
         values={values}
         step={STEP}
@@ -45,8 +36,8 @@ const AddPriceFilter = () => {
         renderTrack={({ props, children }) => (
           <div
             dir="ltr"
-            {...props}
-            className="w-full h-1 bg-gray-300 rounded "
+            {...{ ...props, key: "track" }}
+            className="w-full h-1 bg-gray-300 rounded"
             style={{
               background: getTrackBackground({
                 values,
@@ -61,7 +52,7 @@ const AddPriceFilter = () => {
         )}
         renderThumb={({ props, isDragged }) => (
           <div
-            {...props}
+            {...{ ...props, key: "thumb" }}
             className={`w-5 h-5 bg-blue-500 rounded-full shadow-md cursor-pointer ${
               isDragged ? "shadow-lg" : ""
             }`}
@@ -69,7 +60,6 @@ const AddPriceFilter = () => {
         )}
       />
 
-      {/* Apply Filter Button */}
       <div className="mt-6">
         <button
           onClick={applyFilter}

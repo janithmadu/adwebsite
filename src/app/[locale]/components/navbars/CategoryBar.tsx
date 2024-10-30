@@ -39,9 +39,9 @@ async function CategoryBar(CurrentLocal: any) {
             ) : (
               getallCategory.map((item: any, index: any) => {
                 return (
-                  <SelectItem key={index} value="art">
+                  <SelectItem key={index} value={index}>
                     <Link
-                      href={getCurentLocal + "/category/" + item?.slug?.current}
+                      href={`${getCurentLocal}/ads?page=1&category=${item?.slug?.current}`}
                     >
                       {item.title?.[getCurentLocal]}
                     </Link>
@@ -67,7 +67,7 @@ async function CategoryBar(CurrentLocal: any) {
               return (
                 <Link
                   key={index}
-                  href={getCurentLocal + "/category/" + item?.slug?.current}
+                  href={`${getCurentLocal}/ads?page=1&category=${item?.slug?.current}`}
                   className="text-grayscale600  text-heading04 hover:text-grayscale800 hover:font-bold"
                 >
                   {item.title?.[getCurentLocal]}

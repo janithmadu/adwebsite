@@ -35,8 +35,10 @@ export default async function Home({ searchParams }: any) {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
+      
       {/* Main container */}
       <div className="inline lg:hidden">
+      
         <Sheet>
           <SheetTrigger>
             <HamburgerMenuIcon />

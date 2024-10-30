@@ -67,22 +67,24 @@ const AdsSubOptions = ({ Options }: any) => {
     <>
       {Options.map((option: any, index: number) => {
         return (
-          <Accordion key={index} type="single" collapsible>
+          <div key={index}>
+
+          <Accordion  type="single" collapsible>
             <AccordionItem value={`item-${index}`}>
               <AccordionTrigger>{option.title?.[locale]}</AccordionTrigger>
               <AccordionContent>
                 {option?.values?.map((value: any, valIndex: number) => {
                   const optionValue = value[locale];
                   return (
-                    <ul className="no-bullets">
-                    <li key={valIndex}>
+                    <ul key={value[locale]} className="no-bullets">
+                    <li>
                       <label className="inline-flex items-center ">
                         <input
                           type="checkbox"
                           className="form-checkbox"
                           checked={selectedSubOptions.includes(optionValue)}
                           onChange={(e) => handleOptionChange(e, optionValue)}
-                        />
+                          />
                         <span className="ml-2">{optionValue}</span>
                       </label>
                     </li>
@@ -92,6 +94,7 @@ const AdsSubOptions = ({ Options }: any) => {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+                </div>
         );
       })}
     </>
