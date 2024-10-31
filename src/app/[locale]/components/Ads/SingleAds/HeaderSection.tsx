@@ -1,8 +1,6 @@
 import {
   Clock,
   Eye,
-  IdentificationBadge,
-  MapPin,
 } from "@phosphor-icons/react/dist/ssr";
 import React from "react";
 

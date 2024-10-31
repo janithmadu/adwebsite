@@ -2,7 +2,6 @@ import {
   Handshake,
   MapPinLine,
   Package,
-  User,
   Users,
 } from "@phosphor-icons/react/dist/ssr";
 import React from "react";

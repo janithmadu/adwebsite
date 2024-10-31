@@ -1,15 +1,13 @@
 import {
-  ChatCircle,
+
   ChatCircleDots,
   Envelope,
   PhoneCall,
   WhatsappLogo,
 } from "@phosphor-icons/react/dist/ssr";
-import Link from "next/link";
 import React from "react";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,

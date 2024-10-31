@@ -1,9 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import AdImage from "@/app/[locale]/public/Image.png";
 import Image from "next/image";
 import { MapPin } from "@phosphor-icons/react/dist/ssr";
-import { cookies } from "next/headers";
 import Link from "next/link";
 export const revalidate = 1;
 
@@ -23,7 +21,7 @@ function AdCard(GetAds: any) {
   }, []);
 
   return (
-    <Link href={`${locale}/ads/${GetAds.GetAds._id}`} >
+    <Link href={`${locale ? `/${locale}` : ''}/ads/${GetAds.GetAds._id}`}>
       <div className=" min-w-[270px]  lg:min-w-[290px] xl:max-w-[200px] min-h-[392px]  bg-grayscalewhite drop-shadow rounded-[8px]">
         <div className=" min-w-[270px]  lg:min-w-[290px] xl:max-w-[200px] min-h-[250px] flex flex-col space-y-[16px]">
           <div>

@@ -1,6 +1,6 @@
 import { client } from "@/lib/sanity";
 
-export async function getbrandsById(subcategoryId: any) {
+export async function getbrandsById(subcategoryId: string) {
  
     
   const query = `*[_type == "brand" && subcategory._ref == $categoryId] `;

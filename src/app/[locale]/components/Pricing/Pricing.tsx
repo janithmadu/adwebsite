@@ -5,7 +5,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { convertToSub } from "@/lib/ConvertToSub";
 import Checkout from "@/app/[locale]/components/Pricing/Checkout";
-import { getAdById, getAdByIdForPayment } from "../../actions/getAds";
+import {  getAdByIdForPayment } from "../../actions/getAds";
 import { redirect } from "next/navigation";
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {

@@ -17,8 +17,6 @@ export const stepOpneFormAction: any = async (
   }
 
 
-  const { isAuthenticated } = getKindeServerSession();
-  const isUserAuthenticated = await isAuthenticated();
 
   const { getUser } = getKindeServerSession();
   const user = await getUser();
@@ -144,7 +142,7 @@ export const stepOpneFormAction: any = async (
       phoneNumber: formDataObject.mobile,
       country: formDataObject.country,
       state: formDataObject.state,
-      payment:false
+      payment: false
     };
 
     const response = await client.create(newAd);

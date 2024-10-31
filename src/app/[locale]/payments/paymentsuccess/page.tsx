@@ -3,11 +3,11 @@ import React, { useEffect } from "react";
 import complete from "../../../../../public/system-regular-31-check-hover-check (1).gif";
 import Image from "next/image";
 import Link from "next/link";
-import { getPostAds, UpadtePayment } from "../../actions/getAds";
 import { useRouter } from "next/navigation";
 
-function page() {
+function Page() {  // Change 'page' to 'Page'
   const router = useRouter();
+
   useEffect(() => {
     const getAds = async () => {
       const AdID = localStorage.getItem("AdID");
@@ -22,7 +22,7 @@ function page() {
         body: JSON.stringify({ AdID }),
       });
       const responses = await response.json();
-      if (response.status == 401) {
+      if (response.status === 401) {
         router.push("/");
         return;
       }
@@ -31,8 +31,9 @@ function page() {
         localStorage.removeItem("AdID");
       }
     };
+
     getAds();
-  }, []);
+  }, [router]); // Adding router as a dependency to avoid exhaustive-deps warning
 
   return (
     <div className="min-w-full min-h-[60dvh] flex justify-center items-center flex-col">
@@ -49,4 +50,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;  // Ensure the export matches the component name

@@ -66,12 +66,12 @@ async function CategoryBar(CurrentLocal: any) {
             getLimitedCate.map((item: any, index: any) => {
               return (
                 <Link
-                  key={index}
-                  href={`${getCurentLocal}/ads?page=1&category=${item?.slug?.current}`}
-                  className="text-grayscale600  text-heading04 hover:text-grayscale800 hover:font-bold"
-                >
-                  {item.title?.[getCurentLocal]}
-                </Link>
+                key={index}
+                href={`${getCurentLocal ? `/${getCurentLocal}` : ''}/ads?page=1&category=${item?.slug?.current}`}
+                className="text-grayscale600 text-heading04 hover:text-grayscale800 hover:font-bold"
+              >
+                {item.title?.[getCurentLocal]}
+              </Link>
               );
             })
           )}

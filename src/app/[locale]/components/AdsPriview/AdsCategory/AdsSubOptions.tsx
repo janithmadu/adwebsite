@@ -73,7 +73,7 @@ const AdsSubOptions = ({ Options }: any) => {
             <AccordionItem value={`item-${index}`}>
               <AccordionTrigger>{option.title?.[locale]}</AccordionTrigger>
               <AccordionContent>
-                {option?.values?.map((value: any, valIndex: number) => {
+                {option?.values?.map((value: any) => {
                   const optionValue = value[locale];
                   return (
                     <ul key={value[locale]} className="no-bullets">

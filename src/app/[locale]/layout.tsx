@@ -1,13 +1,9 @@
-import { KindeProvider } from "@kinde-oss/kinde-auth-nextjs";
-
 import type { Metadata } from "next";
 import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import Topnavbar from "./components/navbars/Topnavbar";
-import { I18nextProvider } from "react-i18next";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import { useRouter } from "next/router";
 import Fotter from "./components/Fotter/Fotter";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Toaster } from "@/components/ui/toaster"

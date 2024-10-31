@@ -1,13 +1,11 @@
-import Image from "next/image";
+
 import HeaderSection from "../../components/Ads/SingleAds/HeaderSection";
 import ImageGallery from "../../components/Ads/SingleAds/ImageGallery";
 import ContactSection from "../../components/Ads/SingleAds/ContactSection";
 import SellerInfo from "../../components/Ads/SingleAds/SellerInfo";
 import Map from "../../components/Ads/SingleAds/Map";
 import DescriptionAds from "../../components/Ads/SingleAds/DescriptionAds";
-import Reletedads from "../../components/Ads/SingleAds/Reletedads";
 import { getAdById } from "../../actions/getAds";
-import { Heart, IdentificationBadge } from "@phosphor-icons/react/dist/ssr";
 import PriceSection from "../../components/Ads/SingleAds/PriceSection";
 
 export const revalidate = 1;

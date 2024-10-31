@@ -1,11 +1,8 @@
 import Image from "next/image";
 import React from "react";
-import selerImage from "../../../../../../public/Images (2).png";
 import {
   CircleWavyCheck,
   Envelope,
-  GlobeHemisphereEast,
-  MapPinLine,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 function SellerInfo({Username,UserEmail,UserAvatar}:any) {

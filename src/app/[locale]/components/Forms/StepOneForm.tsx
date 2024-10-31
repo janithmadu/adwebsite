@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { stepOpneFormAction } from "../../addform/step01/action";
 import { Authenticity, ConditionList, Currency } from "@/lib/statics";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { getSubCategoriesByID } from "../../actions/getSubCategories";
 import { getModelsById } from "../../actions/getModels";
 import { getbrandsById } from "../../actions/getBrands";
@@ -19,21 +18,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader } from "@googlemaps/js-api-loader";
 import LoadingImage from "../../../../../public/system-regular-715-spinner-horizontal-dashed-circle-loop-jab.gif";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import FormHeader from "../../../../../public/AdForm.png";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import {
+  Brand,
+  Category,
+  FormStateNew,
+  Model,
+  Option,
+  Subcategory,
+} from "@/lib/categoryInterface";
+
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop()?.split(";").shift();
 }
-function StepOneForm({ GetCategory }: any) {
-  const [formState, formAction] = useFormState<any>(stepOpneFormAction, {
+function StepOneForm({ GetCategory }: Category) {
+  const [formState, formAction] = useFormState<FormStateNew>(stepOpneFormAction, {
     ZodError: null,
     data: {
       name: "",
@@ -49,28 +55,46 @@ function StepOneForm({ GetCategory }: any) {
       image: "",
       options: "",
     },
-    messege: null,
+    message: null,
     status: false,
+    response: {
+      Currency: "",
+      _createdAt: "",
+      _id: "",
+      _rev: "",
+      _type: "",
+    }, // Initialize response with empty values as needed
+    zodErrors: {
+      name: [], // Initialize with any required fields
+    },
   });
+  
+  
 
-  const [CategoriesID, setCategoriesID] = useState<any | undefined>();
-  const [subCategoriesID, setsubCategoriesID] = useState<any | undefined>();
-  const [subCategories, setsubCategories] = useState<any | undefined>();
-  const [subBrands, setsubBrands] = useState<any | undefined>();
-  const [Options, setOptions] = useState<any | undefined>();
-  const [Models, setModels] = useState<any | undefined>();
-  const [locale, setLocale] = useState<any>("en");
+
+  
+
+  const [CategoriesID, setCategoriesID] = useState<string | undefined>();
+  const [subCategoriesID, setsubCategoriesID] = useState<string | undefined>();
+  const [subCategories, setsubCategories] = useState<
+    Subcategory[] | undefined
+  >();
+  const [subBrands, setsubBrands] = useState<Brand[] | undefined>();
+  const [Options, setOptions] = useState<Option[] | undefined>();
+  const [Models, setModels] = useState<Model[] | undefined>();
+  const [locale, setLocale] = useState<string>("en");
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [ImageGet, setImage] = useState<any>([]);
   const [Countries, setCountries] = useState<any>([]);
   const [selectedCountry, setSelectedCountry] = useState([]);
   const [State, setState] = useState<any>([]);
-  const [PageLoader, setPageLoader] = useState<any>(null);
+  const [PageLoader, setPageLoader] = useState<string | null>(null);
   const router = useRouter();
   const [features, setFeatures] = useState<string[]>([""]);
   const [AdPrice, setAdPrice] = useState<number>();
-  const { user, getUser } = useKindeBrowserClient();
-  const alsoUser = getUser();
+
+
+  
 
   //Get Category ID for retrive subcategories
   const handleInputChange = (e: any) => {
@@ -196,6 +220,8 @@ function StepOneForm({ GetCategory }: any) {
   //Remove Uploaded Image
   const handleDeleteImage = (index: number) => {
     const updatedPreviewUrls = previewUrls.filter((_, i) => i !== index);
+   
+    
     setPreviewUrls(updatedPreviewUrls);
 
     const updatedPreviewUrlss = ImageGet.filter(
@@ -204,45 +230,6 @@ function StepOneForm({ GetCategory }: any) {
 
     setImage(updatedPreviewUrlss);
   };
-
-  const MapRef = React.useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const mapInit = async () => {
-      const loader = new Loader({
-        apiKey: "AIzaSyDN3XsX4sCLXCrWNikpn_NTb2fY3AmgxMw",
-        version: "weekly",
-      });
-      const { Map } = await loader.importLibrary("maps");
-      const { Marker } = (await loader.importLibrary(
-        "marker"
-      )) as google.maps.MarkerLibrary;
-
-      const position = {
-        lat: 6.866042368324042,
-        lng: 80.01313805285554,
-      };
-      const MapOptions: google.maps.MapOptions = {
-        center: position,
-        zoom: 12,
-        mapId: "My_NEXTJS_MAPID",
-      };
-
-      const map = new Map(MapRef.current as HTMLDivElement, MapOptions);
-      const marker = new Marker({
-        map: map,
-        position: position,
-      });
-
-      map.addListener("click", (event: any) => {
-        const lat = event.latLng.lat();
-        const lng = event.latLng.lng();
-
-        // Get place details using Geocoder
-      });
-    };
-    mapInit();
-  }, []);
 
   useEffect(() => {
     if (formState.status == false) {
@@ -253,17 +240,18 @@ function StepOneForm({ GetCategory }: any) {
       setPageLoader("Loading Done");
       Swal.fire({
         title: "Congratulations!",
-        text: formState.message,
+        text: formState.message ?? "", // Provide a fallback to an empty string if message is null
         icon: "success",
-        confirmButtonText: "Pay \t" + AdPrice + "\t USD",
+        confirmButtonText: `Pay ${AdPrice} USD`,
         allowOutsideClick: false,
         allowEscapeKey: true,
       }).then((result) => {
         if (result.isConfirmed) {
-          router.push("/" + locale + "/payments"); // Redirect to homepage on confirm
+          router.push(`/${locale}/payments`); // Redirect to payments page on confirm
         }
       });
-      console.log(formState);
+      
+      
       localStorage.setItem("AdID", formState.response._id);
     }
   }, [formState]);
@@ -580,7 +568,7 @@ function StepOneForm({ GetCategory }: any) {
                     </SelectTrigger>
                     <SelectContent>
                       {option.values?.map((value: any, index: any) => {
-                        console.log(value.en);
+                      
 
                         return (
                           <SelectItem

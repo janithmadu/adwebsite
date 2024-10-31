@@ -17,7 +17,7 @@ function DescriptionAds({ Options,Description }: any) {
         <ul className="grid grid-cols-2 gap-y-[16px] text-grayscale700 text-bodymedium">
           {Options?.map((GetOption: any, index: any) => {
             return (
-              <li className="flex gap-x-[12px] items-center">
+              <li key={index} className="flex gap-x-[12px] items-center">
                 {" "}
                 <Check
                   width={24}

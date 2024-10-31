@@ -9,7 +9,6 @@ export const revalidate = 1;
 import { cookies } from "next/headers";
 import { useTranslations } from "next-intl";
 import {
-  RegisterLink,
   LoginLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import UserSetting from "./UserSetting";

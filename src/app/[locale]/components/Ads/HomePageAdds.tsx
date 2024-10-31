@@ -1,12 +1,7 @@
 import React from "react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
-import AdImage from "@/app/[locale]/public/Image.png";
-import {
-  ArrowRight,
-  LockLaminatedOpen,
-  MapPin,
-} from "@phosphor-icons/react/dist/ssr";
+
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import AdCard from "./AdCard";
 import Link from "next/link";
 import { cookies } from "next/headers";
@@ -48,6 +43,5 @@ function HomePageAdds(Ads: any) {
     </div>
   );
 }
-
 
 export default HomePageAdds;

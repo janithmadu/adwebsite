@@ -1,0 +1,10 @@
+[lcl-host]
+realm-apid = 'localhost'
+
+[org]
+apid = 'janithmadu'
+
+[service]
+apid = 'adwebsite'
+category = 'javascript'
+cert-style = 'acme'

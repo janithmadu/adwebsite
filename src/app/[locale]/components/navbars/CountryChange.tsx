@@ -8,7 +8,6 @@ import Arab from "../../../../../public/arab.png";
 import Image from "next/image";
 
 function CountryChange() {
-  const t = useTranslations("TopNav");
   const router = useRouter(); // Provides programmatic navigation
   const pathname = usePathname(); // Get the current path (e.g., /en/ads)
   const searchParams = useSearchParams(); // Get the current query parameters (e.g., ?id=1)

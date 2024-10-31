@@ -27,7 +27,7 @@ function Map() {
       };
 
       const map = new Map(MapRef.current as HTMLDivElement, MapOptions);
-      const marker = new Marker({
+       new Marker({
         map: map,
         position: position,
       });

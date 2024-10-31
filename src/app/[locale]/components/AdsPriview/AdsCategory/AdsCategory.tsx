@@ -9,16 +9,16 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import AddSubcategory from "./AddSubcategory";
 
-function AdsCategory({Categories,subcateId}:any) {
+function AdsCategory({Categories}:any) {
   const cookieStore = cookies();
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
 
   
   return (
     <>
-      {Categories.map((category: any, item: any) => {
+      {Categories.map((category: any,index:any) => {
         return (
-          <Accordion type="single" collapsible>
+          <Accordion key={index} type="single" collapsible>
             <AccordionItem value="item-1">
               <AccordionTrigger>
                 <Image
@@ -35,12 +35,12 @@ function AdsCategory({Categories,subcateId}:any) {
                   
 
                     return (
-                      <>
+                      <div key={index}>
                         <AddSubcategory
                           subcatotitle={subcate.title[locale]}
                           subcatoId={subcate._id}
                         />
-                      </>
+                      </div>
                     );
                   })}
                 </ul>

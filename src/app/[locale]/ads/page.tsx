@@ -1,37 +1,28 @@
 import AdsCategory from "../components/AdsPriview/AdsCategory/AdsCategory";
 
 import {
-  getAllCategory,
   getCategoryAndSubcategory,
 } from "../actions/getCategories";
 import {
-  getAllSubCategories,
   getSubCategoryOptions,
 } from "../actions/getSubCategories";
-import { getAdsBySub } from "../actions/getAds";
+
 import FilterBySubs from "../components/AdsPriview/GetAds/FilterBySubs";
 import AdsSubOptions from "../components/AdsPriview/AdsCategory/AdsSubOptions";
 import AddPriceFilter from "../components/AdsPriview/AdsCategory/AddPriceFilter";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "../../../components/ui/sheet";
-import { Hamburger } from "@phosphor-icons/react/dist/ssr";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { BulukUpload } from "../actions/BulkUpload";
 
-export default async function Home({ searchParams }: any) {
-  const AllCategories = await getAllCategory();
-  const subCategory = await getAllSubCategories();
+export default async function Home() {
   const getSubCategoryAndCategory = await getCategoryAndSubcategory();
-  const { subcategory } = searchParams;
   const getOptions = await getSubCategoryOptions();
 
-  // const bulk = await BulukUpload()
+  
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
