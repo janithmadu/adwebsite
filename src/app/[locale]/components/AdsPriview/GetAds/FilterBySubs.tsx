@@ -8,13 +8,19 @@ import AdCard from "../../Ads/AdCard";
 import PaginationComponent from "../PaginationComponet/PaginationComponet";
 import LoadingImage from "../../../../../../public/system-regular-715-spinner-horizontal-dashed-circle-loop-jab.gif";
 import NoItem from "../../../../../../public/rb_127823.png"
+import { PostAd } from "@/lib/categoryInterface";
+import { ProfileAdCard } from "../../ProfileComponets/ProfileAdCard";
 
 export default function FilterBySubs() {
-  const [ads, setAds] = useState<any>([]);
-  const [adsCount, setAdsCounts] = useState<any>();
-  const [adsLoader, setAdsLoader] = useState(false);
+  const [ads, setAds] = useState<PostAd[]>([]);
+  const [adsCount, setAdsCounts] = useState<number>();
+  const [adsLoader, setAdsLoader] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const PageSize = 50;
+
+  
+  console.log(ads);
+  
 
   useEffect(() => {
     const queryObject = Object.fromEntries(searchParams.entries());
@@ -37,7 +43,7 @@ export default function FilterBySubs() {
 
       setAds(subads?.result || []);
       setAdsCounts(subads?.resultcount);
-      setAdsLoader(false); // Stop loader
+      setAdsLoader(false); 
     };
 
     fetchAds();
@@ -52,10 +58,11 @@ export default function FilterBySubs() {
           </div>
         </div>
       ) : ads?.length > 0 ? (
-        <div className="grid grid-cols-1 xl:ml-14 md:gap-x-36 gap-x-32 gap-y-6 lg:grid-cols-2 xl:grid-cols-3 sm:grid-cols-2 xl:gap-x-32 place-items-center place-content-center">
-          {ads.map((ad: any, index: number) => (
+        <div className="grid grid-cols-1 xl:ml-14 md:gap-x-36 gap-x-32 gap-y-6 lg:grid-cols-2 xl:grid-cols-2 sm:grid-cols-2 xl:gap-x-32 place-items-center place-content-center">
+          {ads.map((ad: PostAd, index: number) => (
             <div key={index}>
-              <AdCard GetAds={ad} />
+              {/* <AdCard GetAds={ad} /> */}
+              <ProfileAdCard title={ad.adName} category={ad.categoryTitle} image={ad?.photos[0]?.asset?.url} price={ad.price} timestamp={ad._createdAt} id={ad._id} />
             </div>
           ))}
         </div>

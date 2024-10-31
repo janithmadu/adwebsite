@@ -1,11 +1,7 @@
 import AdsCategory from "../components/AdsPriview/AdsCategory/AdsCategory";
 
-import {
-  getCategoryAndSubcategory,
-} from "../actions/getCategories";
-import {
-  getSubCategoryOptions,
-} from "../actions/getSubCategories";
+import { getCategoryAndSubcategory } from "../actions/getCategories";
+import { getSubCategoryOptions } from "../actions/getSubCategories";
 
 import FilterBySubs from "../components/AdsPriview/GetAds/FilterBySubs";
 import AdsSubOptions from "../components/AdsPriview/AdsCategory/AdsSubOptions";
@@ -22,14 +18,10 @@ export default async function Home() {
   const getSubCategoryAndCategory = await getCategoryAndSubcategory();
   const getOptions = await getSubCategoryOptions();
 
-  
-
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      
       {/* Main container */}
       <div className="inline lg:hidden">
-      
         <Sheet>
           <SheetTrigger>
             <HamburgerMenuIcon />

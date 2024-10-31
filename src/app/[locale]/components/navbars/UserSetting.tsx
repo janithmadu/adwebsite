@@ -10,6 +10,7 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import Link from "next/link";
 
 function UserSetting({ User }: any) {
 
@@ -29,9 +30,8 @@ function UserSetting({ User }: any) {
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Subscription</DropdownMenuItem>
+        <DropdownMenuItem><Link href="profile">Profile</Link></DropdownMenuItem>
+
         <DropdownMenuItem>
           <LogoutLink>Log out</LogoutLink>
         </DropdownMenuItem>

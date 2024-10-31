@@ -9,21 +9,21 @@ function ImageGallery(Images: any) {
   const [selectedImage, setSelectedImage] = useState("");
 
   return (
-    <div className="">
-      <Image
-        src={selectedImage || Images?.Images[0]?.asset?.url}
-        alt="Main Product Image"
-        width={200}
-        height={200}
-        className="rounded-lg shadow-lg mb-4 min-w-[370px] object-cover"
-      />
+    <div className=" flex flex-col space-y-5">
+      <div className="bg-grayscale20 flex justify-center items-center  min-w-full max-w-full max-h-[600px] rounded-lg overflow-hidden gap-y-10 ">
+        <img
+          src={selectedImage || Images?.Images[0]?.asset?.url}
+          alt="Main Product Image"
+          className="rounded-lg shadow-lg  min-w-10 max-h-[600px]"
+        />
+      </div>
 
       {/* Thumbnails */}
       <div className="flex gap-x-2 ">
-        {Images?.Images.map((image: any, index: any) => (
+        {Images?.Images?.map((image: any, index: any) => (
           <Image
             key={index}
-            src={image.asset?.url}
+            src={image?.asset?.url}
             alt={`Thumbnail ${index + 1}`}
             width={80}
             height={80}

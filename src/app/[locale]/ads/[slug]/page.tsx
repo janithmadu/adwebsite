@@ -1,4 +1,3 @@
-
 import HeaderSection from "../../components/Ads/SingleAds/HeaderSection";
 import ImageGallery from "../../components/Ads/SingleAds/ImageGallery";
 import ContactSection from "../../components/Ads/SingleAds/ContactSection";
@@ -7,14 +6,18 @@ import Map from "../../components/Ads/SingleAds/Map";
 import DescriptionAds from "../../components/Ads/SingleAds/DescriptionAds";
 import { getAdById } from "../../actions/getAds";
 import PriceSection from "../../components/Ads/SingleAds/PriceSection";
+import ProductOverwiew from "../../components/Ads/SingleAds/ProductOverwiew";
 
 export const revalidate = 1;
 
-export default async function AdDetailsPage({ params }: { params: { slug: string } }) {
-
-
+export default async function AdDetailsPage({
+  params,
+}: {
+  params: { slug: string }; 
+}) {
   const GetAdByID = await getAdById(params.slug);
 
+  console.log(GetAdByID);
 
   const adTitile = GetAdByID?.adName;
   const AddCratedDate = GetAdByID?._createdAt;
@@ -26,21 +29,45 @@ export default async function AdDetailsPage({ params }: { params: { slug: string
   const UserEmail = GetAdByID?.user.email;
   const UserAvatar = GetAdByID?.user.avatarUrl;
   const PhoneNumber = GetAdByID?.phoneNumber;
-  console.log();
-  
+  const Features = GetAdByID?.features;
+  const Negotiable = GetAdByID?.negotiable;
+  const Model = GetAdByID?.model;
+  const Condition = GetAdByID?.condition;
+  const Brand = GetAdByID?.brand;
+  const Authenticity = GetAdByID?.authenticity;
+  const State = GetAdByID?.state;
+  const VerifiedSeller =  GetAdByID?.user.verifiedSeller;
+  const Member =  GetAdByID?.user.member;
+
+
   return (
-    <div className="container mx-auto  px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-10 flex ">
+    <div className="container mx-auto  px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-10 flex space-x-6 ">
       <div className="flex-1 min-w-[872px] flex flex-col gap-x-[36px] ">
-        <HeaderSection Titile={adTitile} CreatedDate={AddCratedDate} />
+        <HeaderSection Titile={adTitile} CreatedDate={AddCratedDate} VerifiedSeller={VerifiedSeller} Member={Member} />
 
         <ImageGallery Images={GetAdByID?.photos} />
-      
-        <DescriptionAds Options={Options} Description={Description} />
+
+        <DescriptionAds
+          Options={Options}
+          Description={Description}
+          Features={Features}
+        />
       </div>
 
       <div className="flex-1  min-w-[424px]">
         <div className="w-[424px]  border  py-[36px] rounded-[12px]">
-          <PriceSection Price={Price} Currency={currency} />
+          <PriceSection
+            Price={Price}
+            Currency={currency}
+            Negotiable={Negotiable}
+          />
+          <ProductOverwiew
+            Model={Model}
+            State={State}
+            Condition={Condition}
+            Brand={Brand}
+            Authenticity={Authenticity}
+          />
           <div className="px-[32px] mt-[32px]">
             {/* Contact Buttons */}
             <ContactSection PhoneNumber={PhoneNumber} />

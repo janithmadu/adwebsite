@@ -39,7 +39,8 @@ export async function getPostAds(page: any, limit: any) {
       state,
       location,
       mapLocation,
-      Currency
+      Currency,
+      _createdAt
     }
   `;
   const queryCount = `count(*[_type == "postAd" && payment == true])`;
@@ -113,7 +114,8 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
       state,
       location,
       mapLocation,
-      Currency
+      Currency,
+      _createdAt
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && category->slug.current == $categorySlug && $options in options[].value && price >= $minPrice && price <= $maxPrice])`;
@@ -126,7 +128,7 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
       categorySlug: subcategoryId.category, // Add the slug parameter here
     };
   } else if (subcategoryId.subcategories && subcategoryId.category) {
-    console.log("This is Done Also");
+    
 
     query = `*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && category->slug.current == $categorySlug] | order(_createdAt desc) [${start}...${start + limit}] {
       _id,
@@ -164,7 +166,8 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
       state,
       location,
       mapLocation,
-      Currency
+      Currency,
+       _createdAt
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && category->slug.current == $categorySlug])`;
@@ -210,7 +213,8 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
       state,
       location,
       mapLocation,
-      Currency
+      Currency,
+       _createdAt
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && category->slug.current == $categorySlug && $options in options[].value])`;
@@ -258,7 +262,8 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
       state,
       location,
       mapLocation,
-      Currency
+      Currency,
+       _createdAt
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && category->slug.current == $categorySlug])`;
@@ -302,7 +307,8 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
       state,
       location,
       mapLocation,
-      Currency
+      Currency,
+       _createdAt
     }`;
     queryCount = `count(*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && $options in options[].value])`;
 
@@ -354,7 +360,8 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
       state,
       location,
       mapLocation,
-      Currency
+      Currency,
+       _createdAt
     }`;
     queryCount = `count(*[_type == "postAd" && payment == true && $options in options[].value && price >= $minPrice && price <= $maxPrice])`;
 
@@ -399,7 +406,8 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
       state,
       location,
       mapLocation,
-      Currency
+      Currency,
+       _createdAt
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId] )`;
@@ -443,7 +451,8 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
       state,
       location,
       mapLocation,
-      Currency
+      Currency,
+       _createdAt
     }`;
     queryCount = `count(*[_type == "postAd" && payment == true && $options in options[].value])`;
 
@@ -490,7 +499,8 @@ export async function getAdsBySub(subcategoryId: any, page: any, limit: any) {
       state,
       location,
       mapLocation,
-      Currency
+      Currency,
+       _createdAt
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && price >= $minPrice && price <= $maxPrice])`;
@@ -556,7 +566,9 @@ export async function getAdById(id: any) {
         externalId,
         name,
         avatarUrl,
-        email
+        email,
+        verifiedSeller,
+        member
 
       },
     }
@@ -621,5 +633,53 @@ export async function getAdByIdForPayment(id: any) {
   const params = { id };
 
   const result = await client.fetch(query, params);
+  return result;
+}
+
+export async function GetAdByUser(userID: string) {
+  const query = `*[_type == "postAd" &&  payment == true && user->externalId == $userExternalId]  | order(_createdAt desc) {
+   _id,
+      adName,
+      category->{
+        _id,
+        title,
+        slug
+      },
+      subcategory->{
+        _id,
+        title
+      },
+      brand,
+      model,
+      condition,
+      authenticity,
+      tags,
+      price,
+      negotiable,
+      description,
+      features,
+      photos[] {
+        asset->{
+          _id,
+          url
+        }
+      },
+      phoneNumber,
+      backupPhoneNumber,
+      email,
+      website,
+      country,
+      city,
+      state,
+      location,
+      mapLocation,
+      Currency,
+      _createdAt
+  }`;
+
+  const params = { userExternalId: userID };
+
+  const result = await client.fetch(query, params);
+
   return result;
 }

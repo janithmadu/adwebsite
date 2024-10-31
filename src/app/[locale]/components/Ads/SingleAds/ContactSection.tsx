@@ -1,5 +1,4 @@
 import {
-
   ChatCircleDots,
   Envelope,
   PhoneCall,
@@ -48,10 +47,10 @@ function ContactSection({ PhoneNumber }: any) {
         </div>
       </div>
 
-      <div className="rounded-[4px] bg-primary500 flex items-center justify-center gap-x-[8px] py-[13px]">
+      {/* <div className="rounded-[4px] bg-primary500 flex items-center justify-center gap-x-[8px] py-[13px]">
         <ChatCircleDots width={24} height={24} className="text-white" />
         <h1 className="text-grayscalewhite text-heading04">Send Message</h1>
-      </div>
+      </div> */}
       <div className="rounded-[4px] bg-[#2DD54B] flex items-center justify-center gap-x-[8px] py-[13px]">
         <WhatsappLogo width={24} height={24} className="text-white" />
         <h1 className="text-grayscalewhite text-heading04">
