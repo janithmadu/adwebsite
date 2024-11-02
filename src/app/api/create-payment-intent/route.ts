@@ -6,9 +6,9 @@ if (!stripeSecretKey) {
     throw new Error("Stripe secret key is not set.");
 }
 
-
+// Use the required apiVersion
 const stripe = new Stripe(stripeSecretKey, {
-     apiVersion: '2024-09-30.acacia'
+     apiVersion: '2024-10-28.acacia'
 });
 
 interface PaymentRequestBody {
