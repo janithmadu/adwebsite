@@ -12,16 +12,17 @@ import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import UserSetting from "./UserSetting";
 
 export interface User {
-  user:{
-    id?: string;
-  email?: string;
-  family_name?: string;
-  given_name?: string;
-  picture: string;
-  username?: string;
-  phone_number?: string;
-  }
+  user: {
+    id: string; // Make this non-optional if you're guaranteed to have an id
+    email: string; // Non-optional
+    family_name: string; // Non-optional
+    given_name: string; // Non-optional
+    picture: string; // Non-optional
+    username?: string; // Optional
+    phone_number?: string; // Optional
+  } | null; // Allow the entire user to be null
 }
+
 
 const Topnavbar: React.FC<User> = ({user}) => {
 

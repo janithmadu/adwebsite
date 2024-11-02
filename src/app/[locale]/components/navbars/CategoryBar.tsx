@@ -11,7 +11,6 @@ import {
   getlimitedCategory,
 } from "@/app/[locale]/actions/getCategories";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 
 export const revalidate = 1;
 
@@ -28,8 +27,6 @@ interface Category {
 }
 
 const CategoryBar: React.FC<CurrentLocal> = async ({ CurrentLocal }) => {
-  const t = useTranslations("TopNav");
-
   //get category that limit to 7
   const getLimitedCate = await getlimitedCategory();
   //get all category
@@ -43,20 +40,19 @@ const CategoryBar: React.FC<CurrentLocal> = async ({ CurrentLocal }) => {
 
         <Select>
           <SelectTrigger className="w-[173px] font-bold border-none bg-grayscale20 text-grayscale700">
-            <SelectValue placeholder={t("CategoryPlaceHolder")} />
+            <SelectValue placeholder={"No Cate"} />
           </SelectTrigger>
           <SelectContent>
             {getallCategory.length === 0 ? (
               <SelectItem value="art">You have no category</SelectItem>
             ) : (
               getallCategory.map((item: Category, index: number) => {
-              
                 return (
                   <SelectItem key={index} value={item?.id as string}>
                     <Link
                       href={`${getCurentLocal}/ads?page=1&category=${item?.slug?.current}`}
                     >
-                      {item.title?.[(getCurentLocal as "en" || "ar") ]}
+                      {item.title?.[(getCurentLocal as "en") || "ar"]}
                     </Link>
                   </SelectItem>
                 );
@@ -83,7 +79,7 @@ const CategoryBar: React.FC<CurrentLocal> = async ({ CurrentLocal }) => {
                   href={`${getCurentLocal ? `/${getCurentLocal}` : ""}/ads?page=1&category=${item?.slug?.current}`}
                   className="text-grayscale600 text-heading04 hover:text-grayscale800 hover:font-bold"
                 >
-                   {item.title?.[(getCurentLocal as "en" || "ar") ]}
+                  {item.title?.[(getCurentLocal as "en") || "ar"]}
                 </Link>
               );
             })

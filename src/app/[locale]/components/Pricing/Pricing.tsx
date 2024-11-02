@@ -5,8 +5,9 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { convertToSub } from "@/lib/ConvertToSub";
 import Checkout from "@/app/[locale]/components/Pricing/Checkout";
-import {  getAdByIdForPayment } from "../../actions/getAds";
+import { getAdByIdForPayment } from "../../actions/getAds";
 import { redirect } from "next/navigation";
+import { PostAd } from "@/lib/categoryInterface";
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
   throw new Error("NEXT_PUBLIC_STRIPE_PUBLIC_KEY not define");
@@ -16,7 +17,7 @@ const stripePromis = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 const Pricing = () => {
   const [AdPrice, setAdPrice] = useState<number>(0);
-  const [AdDetails, setAdDetails] = useState();
+  const [AdDetails, setAdDetails] = useState<PostAd[]>([]);
 
   useEffect(() => {
     const AdID = localStorage.getItem("AdID");
@@ -26,8 +27,6 @@ const Pricing = () => {
 
     const GetAd = async () => {
       const GetAdd = await getAdByIdForPayment(AdID as string);
-
-      
 
       if (!GetAdd) {
         setAdPrice(0);
@@ -51,7 +50,7 @@ const Pricing = () => {
             currency: "usd",
           }}
         >
-          {AdPrice > 0 && <Checkout amount={AdPrice} Ad={AdDetails} />}
+          {AdPrice > 0 && <Checkout amount={AdPrice} Ad={AdDetails[0]} />}
         </Elements>
       ) : (
         <></>

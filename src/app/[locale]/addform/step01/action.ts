@@ -1,11 +1,13 @@
 "use server";
 
+import { AdFormState, PostAd } from "@/lib/categoryInterface";
 import { client } from "@/lib/sanity";
 import { FormType, SchemaAdPostForm } from "@/lib/schemas";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-
+import { parseWithZod } from "@conform-to/zod";
+import { SubmissionResult } from "@conform-to/react";
 export type ApiResponse = {
-  ZodError: null ; // Adjust as necessary for the actual error type
+  ZodError: null; // Adjust as necessary for the actual error type
   data: {
     name: string;
     category: string;
@@ -34,7 +36,7 @@ export type ApiResponse = {
       country: string;
       state: string;
       negotiable: boolean;
-      features:string[]; // Adjust type as needed
+      features: string[]; // Adjust type as needed
     };
   };
   message: string;
@@ -51,21 +53,55 @@ export type ApiResponse = {
   };
 };
 
+export interface AdResponse {
+  currency: string; // Example: "LKR"
+  adName: string; // Example: "sdfsdf"
+  authenticity: string; // Example: "original"
+  brand: string; // Example: "Apple"
+  category: {
+    _ref: string; // Example: '391061fe-50f0-4ba7-84bd-8ed9d579f1ac'
+    _type: string; // Example: 'reference'
+  };
+  condition: string; // Example: "new"
+  country: string; // Example: "Sri Lanka"
+  description: string; // Example: "dfsdf"
+  features: string[]; // Example: ['']
+  model: string; // Example: "Huawei Mate X3"
+  negotiable: boolean; // Example: true
+  options: Array<object>; // Adjust type based on the structure of the objects in options
+  payment: boolean; // Example: false
+  phoneNumber: string; // Example: "0701780146"
+  photos: Array<object>; // Adjust type based on the structure of the photo objects
+  price: number; // Example: 333
+  state: string; // Example: "Anuradhapura District"
+  subcategory: {
+    _ref: string; // Example: 'e33e9820-c65a-4de2-9244-f33dc4f6f27f'
+    _type: string; // Example: 'reference'
+  };
+  user: {
+    _ref: string; // Example: 'kp_52d41e1c41ef4fc7bd070e4791a9810a'
+    _type: string; // Example: 'reference'
+  };
+  _createdAt: string; // Example: "2024-11-02T17:57:44Z"
+  _id: string; // Example: "8gU1OR3RiIHTk90NnPDUsa"
+  _rev: string; // Example: "8gU1OR3RiIHTk90NnPDUqP"
+  _type: string; // Example: "postAd"
+  _updatedAt: string; // Example: "2024-11-02T17:57:44Z"
+}
+
 
 export const stepOpneFormAction = async (
-  prevState: ApiResponse | undefined,
+  prevSatte:undefined,
+
   formData: FormData
-) => {
+)=>{
+  const submisstions = parseWithZod(formData, {
+    schema: SchemaAdPostForm,
+  });
 
-
-  let CategoryID
-  if (formData.get("category")) {
-    CategoryID = JSON.parse(formData.get("category") as string)
-
-
+  if (submisstions.status !== "success") {
+    return submisstions.reply();
   }
-
-
 
   const { getUser } = getKindeServerSession();
   const user = await getUser();
@@ -92,6 +128,12 @@ export const stepOpneFormAction = async (
     NegotiableValue = false;
   }
 
+  let CategoryID;
+
+  if (formData.get("category")) {
+    CategoryID = JSON.parse(formData.get("category") as string);
+  }
+
   const formDataObject: FormType = {
     name: formData?.get("name") as string,
     category: CategoryID?.id,
@@ -115,33 +157,10 @@ export const stepOpneFormAction = async (
     ),
   };
 
-
-
-  // Retrieve the files from formData
   const images = formData.getAll("image");
-
-  // Upload images asynchronously using Promise.all
-
-  // Validate form data using Zod
-  const ZodValidations = SchemaAdPostForm.safeParse({
-    ...formDataObject,
-    images: images, // Add uploaded images to the form data for validation
-  });
-
-  if (!ZodValidations.success) {
-    return {
-      ...prevState,
-      data: { ...prevState?.data, formDataObject },
-      zodErrors: ZodValidations.error.flatten().fieldErrors,
-      message: "Missing required fields",
-      status: false,
-    };
-  }
 
   const uploadedImages = await Promise.all(
     images.map(async (image: FormDataEntryValue) => {
-   
-      
       if (image instanceof File) {
         try {
           const imageData = await client.assets.upload("image", image, {
@@ -193,20 +212,13 @@ export const stepOpneFormAction = async (
       phoneNumber: formDataObject.mobile,
       country: formDataObject.country,
       state: formDataObject.state,
-      payment: false
+      payment: false,
     };
 
     const response = await client.create(newAd);
-    if (response) {
-      return {
-        ...prevState,
-        data: { ...prevState?.data, formDataObject },
-        zodErrors: null,
-        message: "Almost There! Confirm Your Payment to Go Live!",
-        status: true,
-        response: response
-      };
-    }
+    return {...prevSatte as any}
+   
+    
   } catch (error) {
     console.error("Error creating new ad:", error);
   }

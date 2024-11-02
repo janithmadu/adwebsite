@@ -21,7 +21,7 @@ const Favorites: React.FC<MainProfileProps> = ({ UserAds }) => {
                 category={ad?.categoryTitle}
                 subcategory="Mobile Phones"
                 price={ad?.price}
-                image={ad?.photos[0]?.asset?.url}
+                image={ad?.photos[0]?.asset?.url || "/"}
                 timestamp={ad?._createdAt}
                 paymentPending={false}
                 id={ad?._id}

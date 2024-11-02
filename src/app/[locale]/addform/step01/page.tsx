@@ -11,7 +11,7 @@ async function page() {
 
   return (
     <>
-      <StepOneForm GetCategory={GetCategory} />
+      <StepOneForm categories={GetCategory} />
     </>
   );
 }

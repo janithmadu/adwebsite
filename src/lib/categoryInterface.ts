@@ -1,5 +1,5 @@
 export interface Category {
-  id:string;
+  id: string;
   title: {
     en: string; // English title
     ar: string; // Arabic title
@@ -7,7 +7,7 @@ export interface Category {
   slug: {
     current: string; // Current slug string
   };
-  imageUrl?:string;
+  imageUrl?: string;
   description?: {
     en: string; // English description
     ar: string; // Arabic description
@@ -16,26 +16,23 @@ export interface Category {
 
   // Optional: Define GetCategory method if needed
 
-  subcategories:Array<{
-    _id:string;
-    title:Array<string>
-    slug:Array<string>
-
-  }>
-
+  subcategories: Array<{
+    _id: string;
+    title: Array<string>;
+    slug: Array<string>;
+  }>;
 }
 
 export interface SubcategoryNew {
   _id: string;
-  title:{
-    en:string
-    ar:string
-  }
-  
+  title: {
+    en: string;
+    ar: string;
+  };
 }
 
 export interface Subcategory {
-  id?:string;
+  id?: string;
   _id: string; // Document ID
   _type?: "subcategory"; // Type of the document
   title: {
@@ -107,7 +104,7 @@ export interface Option {
 }
 
 export interface Model {
-  id:string
+  id: string;
   title: {
     en: string; // English title with a length between 2 and 50 characters
     ar: string; // Arabic title with a length between 2 and 50 characters
@@ -138,6 +135,23 @@ export interface FormStateNew {
     description: string;
     image?: string;
     options: string[];
+    formDataObject: {
+      name: "";
+      subcategory: "";
+      price: 0;
+      brand: "";
+      model: "";
+      conditions: "";
+      authenticity: "";
+      Currency: "";
+      description: "";
+      options: [];
+      mobile: "";
+      country: "";
+      state: "";
+      negotiable: "";
+      features: [];
+    };
   };
   message: string | null;
   status: boolean;
@@ -156,41 +170,55 @@ export interface FormStateNew {
 
 export interface PostAd {
   currency: string;
-    adName: string;
-    authenticity: string;
-    backupPhoneNumber: string | null;
-    brand: string;
-    categoryId: string;  // Use category ID directly
-    categoryTitle: string; // Add title directly
-    categorySlug: string; // Add slug directly
-    city: string | null;
-    category: {
-      _type: "reference"; // Type indicating it's a reference
-      _ref: string; // Reference ID for subcategory
-      price:number;
-      title: {
-        en: string;
-        ar: string;
-      };
-      
-    };
-    condition: string;
-    country: string;
-    description: string;
-    email: string | null;
-    features: string[];
-    location: string | null;
-    mapLocation: string | null;
-    model: string;
-    negotiable: boolean;
-    phoneNumber: string;
-    photos: Array<{ asset?: { _id?: string; url?: string }; alt?: string }> ; // Adjusted photos structure
+  adName: string;
+  authenticity: string;
+  backupPhoneNumber: string | null;
+  brand: string;
+  categoryId: string; // Use category ID directly
+  categoryTitle: string; // Add title directly
+  categorySlug: string; // Add slug directly
+  city: string | null;
+  category: {
+    _type: "reference"; // Type indicating it's a reference
+    _ref: string; // Reference ID for subcategory
     price: number;
-    state: string;
-    subcategoryId: string; // Use subcategory ID directly
-    subcategoryTitle: string; // Add title directly
-    tags: string | null;
-    website: string | null;
-    _id: string;
-    _createdAt:string
+    title: {
+      en: string;
+      ar: string;
+    };
+  };
+  condition: string;
+  country: string;
+  description: string;
+  email: string | null;
+  features: string[];
+  location: string | null;
+  mapLocation: string | null;
+  model: string;
+  negotiable: boolean;
+  phoneNumber: string;
+  photos: Array<{ asset?: { _id?: string; url?: string }; alt?: string }>; // Adjusted photos structure
+  price: number;
+  state: string;
+  subcategoryId: string; // Use subcategory ID directly
+  subcategoryTitle: string; // Add title directly
+  tags: string | null;
+  website: string | null;
+  _id: string;
+  _createdAt: string;
 }
+
+export interface AdFormState<T> {
+  errors?: StringMap;
+  successMsg?: string;
+  data?:T
+  blurs?:StringToBoolMap
+}
+
+export interface StringMap {
+  [key: string]: string;
+}
+export interface StringToBoolMap {
+  [key: string]: boolean;
+}
+

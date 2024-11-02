@@ -15,9 +15,15 @@ interface Result {
   resultCount: number;
 }
 
+const isResult = (data: any): data is Result => {
+  return (
+    data && Array.isArray(data.result) && typeof data.resultCount === "number"
+  );
+};
+
 export default function FilterBySubs() {
   const [ads, setAds] = useState<PostAd[]>([]);
-  const [adsCount, setAdsCounts] = useState<number>();
+  const [adsCount, setAdsCounts] = useState<number>(0);
   const [adsLoader, setAdsLoader] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const PageSize = 50;
@@ -25,22 +31,21 @@ export default function FilterBySubs() {
   useEffect(() => {
     const queryObject = Object.fromEntries(searchParams.entries());
 
-    
-
     const fetchAds = async () => {
       setAdsLoader(true); // Start loader
 
       const subcategoryId = {
         subcategories: queryObject.subcategories as string,
         subOptions: queryObject.subOptions as string,
-        minPrice: parseInt(queryObject.minPrice, 10) as number,
-        maxPrice: parseInt(queryObject.maxPrice, 10) as number,
+        minPrice: parseInt(queryObject.minPrice, 10) || 0,
+        maxPrice: parseInt(queryObject.maxPrice, 10) || 0,
         category: queryObject.category as string,
-        page: parseInt(queryObject.page, 10) | 1,
-        limit: PageSize as number,
+        page: parseInt(queryObject.page, 10) || 1,
+        limit: PageSize,
       };
 
-      let subads: Result;
+      let subads: Result = { result: [], resultCount: 0 }; // Default value
+
       if (
         queryObject.subcategories ||
         queryObject.subOptions ||
@@ -48,19 +53,19 @@ export default function FilterBySubs() {
         queryObject.maxPrice ||
         queryObject.category
       ) {
-        subads = (await getAdsBySub({ subcategoryId })) || {
-          result: [],
-          resultCount: 0,
-        };
+        const data = await getAdsBySub({ subcategoryId });
+        if (isResult(data)) {
+          subads = data;
+        }
       } else {
-        subads = (await getPostAds({ subcategoryId })) || {
-          result: [],
-          resultCount: 0,
-        };
+        const data = await getPostAds({ subcategoryId });
+        if (isResult(data)) {
+          subads = data;
+        }
       }
 
-      setAds(subads?.result || []);
-      setAdsCounts(subads?.resultCount);
+      setAds(subads.result);
+      setAdsCounts(subads.resultCount);
       setAdsLoader(false);
     };
 
@@ -75,11 +80,10 @@ export default function FilterBySubs() {
             <Image alt="Loading" src={LoadingImage} width={70} height={70} />
           </div>
         </div>
-      ) : ads?.length > 0 ? (
+      ) : ads.length > 0 ? (
         <div className="grid grid-cols-1 xl:ml-14 md:gap-x-36 gap-x-32 gap-y-6 lg:grid-cols-2 xl:grid-cols-2 sm:grid-cols-2 xl:gap-x-32 place-items-center place-content-center">
           {ads.map((ad: PostAd, index: number) => (
             <div key={index}>
-              {/* <AdCard GetAds={ad} /> */}
               <ProfileAdCard
                 title={ad.adName}
                 category={ad.categoryTitle}
@@ -103,9 +107,9 @@ export default function FilterBySubs() {
         </div>
       )}
 
-      {ads?.length > 0 && (
+      {ads.length > 0 && (
         <div className="min-w-full flex justify-center mt-6">
-          <PaginationComponent TotoleCount={adsCount as number} PageSisze={PageSize as number} />
+          <PaginationComponent TotoleCount={adsCount} PageSisze={PageSize} />
         </div>
       )}
     </>

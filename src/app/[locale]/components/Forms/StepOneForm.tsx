@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useActionState, useEffect, useState } from "react";
 
 import { useFormState } from "react-dom";
-import { ApiResponse, stepOpneFormAction } from "../../addform/step01/action";
+import { AdResponse, stepOpneFormAction } from "../../addform/step01/action";
 import { Authenticity, ConditionList, Currency } from "@/lib/statics";
 import { getSubCategoriesByID } from "../../actions/getSubCategories";
 import { getModelsById } from "../../actions/getModels";
@@ -23,25 +23,18 @@ import Image from "next/image";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import FormHeader from "../../../../../public/AdForm.png";
-import {
-  Brand,
-  FormStateNew,
-  Model,
-  Option,
-  Subcategory,
-} from "@/lib/categoryInterface";
+import { FormStateNew, Option, Subcategory } from "@/lib/categoryInterface";
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { SchemaAdPostForm } from "@/lib/schemas";
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop()?.split(";").shift();
-
- 
 }
 interface CategoryNew {
-  
- GetCategory:{
-  id:string;
+  id: string;
   title: {
     en: string; // English title
     ar: string; // Arabic title
@@ -49,7 +42,7 @@ interface CategoryNew {
   slug: {
     current: string; // Current slug string
   };
-  imageUrl?:string;
+  imageUrl?: string;
   description?: {
     en: string; // English description
     ar: string; // Arabic description
@@ -58,83 +51,151 @@ interface CategoryNew {
 
   // Optional: Define GetCategory method if needed
 
-  subcategories:Array<{
-    _id:string;
-    title:Array<string>
-    slug:Array<string>
+  subcategories: Array<{
+    _id: string;
+    title: Array<string>;
+    slug: Array<string>;
+  }>;
+}
 
-  }>
- }
- }
-
-
-
-const initionlState = {
-  
-    ZodError: null,
-    data: {
+const initionlState: FormStateNew = {
+  ZodError: null,
+  data: {
+    name: "",
+    category: "",
+    subcategory: "",
+    price: 0,
+    brand: "",
+    model: "",
+    conditions: "",
+    authenticity: "",
+    mobile: "",
+    description: "",
+    image: "",
+    options: [],
+    formDataObject: {
       name: "",
-      category: "",
       subcategory: "",
       price: 0,
       brand: "",
       model: "",
       conditions: "",
       authenticity: "",
-      mobile: "",
-      description: "",
-      image: "",
-      options: [],
-      formDataObject: {
-        name:"",
-        subcategory: "",
-        price:"",
-        brand:"",
-        model: "",
-        conditions: "",
-        authenticity: "",
-        Currency: "",
-        description: "",
-        options: "",
-        mobile: "",
-        country: "",
-        state: "",
-        negotiable: "",
-        features:[],
-      }
-    },
-    message: null,
-    status: false,
-    response: {
       Currency: "",
-      _createdAt: "",
-      _id: "",
-      _rev: "",
-      _type: "",
-    }, // Initialize response with empty values as needed
-    zodErrors: {
-      name: [], // Initialize with any required fields
+      description: "",
+      options: [],
+      mobile: "",
+      country: "",
+      state: "",
+      negotiable: "",
+      features: [],
     },
-  
-}
+  },
+  message: null,
+  status: false,
+  response: {
+    Currency: "",
+    _createdAt: "",
+    _id: "",
+    _rev: "",
+    _type: "",
+  }, // Initialize response with empty values as needed
+  zodErrors: {
+    name: [], // Initialize with any required fields
+  },
+};
 
-interface Countries{
+interface Countries {
   name?: string;
-  code?:string
+  code?: string;
 }
-const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
-
- 
-  
-  const formActionWrapper = async (prevState: ApiResponse, formData: FormData) => {
-    // Call your existing action and pass the parameters
-    return await stepOpneFormAction(prevState, formData);
+interface CountriesGet {
+  name: {
+    common: string;
   };
+  cca2?: string;
+}
 
-  const [formState, formAction] = useFormState<FormStateNew>(
-    stepOpneFormAction,
-    initionlState,
-  );
+interface StepOneFormProps {
+  categories: CategoryNew[]; // Expecting an array of CategoryNew
+}
+
+interface State {
+  name: string;
+}
+
+interface SubCategory {
+  _id?: string;
+  title: {
+    en: string | undefined;
+    ar: string | undefined;
+  };
+}
+
+interface Model {
+  _id?: string;
+  title: {
+    en: string | undefined;
+    ar: string | undefined;
+  };
+  value: {
+    en: string | undefined;
+    ar: string | undefined;
+  };
+}
+
+interface Options {
+  _id?: string;
+  slug: {
+    current: string;
+    _type: string;
+  };
+  subcategories: {
+    [key: string]: unknown;
+  }[];
+  title: {
+    en: string;
+    ar: string;
+  };
+  values: {
+    [key: string]: unknown; // Replace `any` with the specific structure of each value if known
+  }[];
+}
+
+interface OptionValues {
+  ar?: string;
+  en?: string;
+  _key?: string;
+  _type?: string;
+}
+
+interface Currency {
+  title: {
+    en: string | undefined;
+    ar: string | undefined;
+  };
+  value: {
+    en: string | undefined;
+    ar: string | undefined;
+  };
+}
+
+interface Brand {
+  _id?: string;
+  title: {
+    en: string;
+    ar: string;
+  };
+  values: {
+    [key: string]: unknown; // Replace `any` with the specific structure of each value if known
+  }[];
+}
+
+const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
+  // const [formState, formAction] = useFormState<FormStateNew>(
+  //   stepOpneFormAction,
+  //   initionlState
+  // );
 
   const [CategoriesID, setCategoriesID] = useState<string | undefined>();
   const [subCategoriesID, setsubCategoriesID] = useState<string | undefined>();
@@ -148,25 +209,24 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [ImageGet, setImage] = useState<string[]>([]);
   const [Countries, setCountries] = useState<Countries[]>([]);
-  const [selectedCountry, setSelectedCountry] = useState([]);
-  const [State, setState] = useState<any>([]);
+  const [selectedCountry, setSelectedCountry] = useState<string | undefined>(
+    undefined
+  );
+  const [State, setState] = useState<State[]>([]);
   const [PageLoader, setPageLoader] = useState<string | null>(null);
   const router = useRouter();
   const [features, setFeatures] = useState<string[]>([""]);
   const [AdPrice, setAdPrice] = useState<number>();
 
-
-
-
   //Get Category ID for retrive subcategories
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: string) => {
     const { id, price } = JSON.parse(e);
     setCategoriesID(id);
     setAdPrice(price);
   };
 
   //Get SubCategory ID for retrive Models,Brands,Options
-  const handleSubCategoryChange = (e: any) => {
+  const handleSubCategoryChange = (e: string) => {
     setsubCategoriesID(e);
   };
 
@@ -226,8 +286,8 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
     const getCountries = async () => {
       const response = await fetch("https://restcountries.com/v3.1/all");
       const countries = await response.json();
-      const countryList = countries.map((country: any) => ({
-        name: country.name.common,
+      const countryList = countries.map((country: CountriesGet) => ({
+        name: country?.name.common,
         code: country.cca2, // Country code (2-letter)
       }));
 
@@ -251,7 +311,7 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
         }
       );
       const data = await response?.json();
-      const states = data?.data?.states?.map((state: any) => ({
+      const states = data?.data?.states?.map((state: State) => ({
         name: state.name,
       }));
 
@@ -263,9 +323,9 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
 
   //Upload Image show it
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files: any = Array.from(e.target.files || []);
+    const files = Array.from(e.target.files || []);
 
-    const filePreviews = files.map((file: any) => {
+    const filePreviews = files.map((file: File) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
 
@@ -286,35 +346,35 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
     setPreviewUrls(updatedPreviewUrls);
 
     const updatedPreviewUrlss = ImageGet.filter(
-      (_: any, i: any) => i !== index
+      (_: string, i: number) => i !== index
     );
 
     setImage(updatedPreviewUrlss);
   };
 
-  useEffect(() => {
-    if (formState.status == false) {
-      setPageLoader("Error");
-    }
+  // useEffect(() => {
+  //   if (formState.status == false) {
+  //     setPageLoader("Error");
+  //   }
 
-    if (formState.status == true) {
-      setPageLoader("Loading Done");
-      Swal.fire({
-        title: "Congratulations!",
-        text: formState.message ?? "", // Provide a fallback to an empty string if message is null
-        icon: "success",
-        confirmButtonText: `Pay ${AdPrice} USD`,
-        allowOutsideClick: false,
-        allowEscapeKey: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          router.push(`/${locale}/payments`); // Redirect to payments page on confirm
-        }
-      });
+  //   if (formState.status == true) {
+  //     setPageLoader("Loading Done");
+  //     Swal.fire({
+  //       title: "Congratulations!",
+  //       text: formState.message ?? "", // Provide a fallback to an empty string if message is null
+  //       icon: "success",
+  //       confirmButtonText: `Pay ${AdPrice} USD`,
+  //       allowOutsideClick: false,
+  //       allowEscapeKey: true,
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         router.push(`/${locale}/payments`); // Redirect to payments page on confirm
+  //       }
+  //     });
 
-      localStorage.setItem("AdID", formState.response._id);
-    }
-  }, [formState]);
+  //     localStorage.setItem("AdID", formState.response._id);
+  //   }
+  // }, [formState]);
 
   const LoadingHandle = () => {
     setPageLoader("Loading");
@@ -337,7 +397,20 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
     setFeatures(newFeatures);
   };
 
-  console.log(Countries);
+  const [lastResult, action] = useFormState(stepOpneFormAction, undefined);
+
+  const [form, fields] = useForm({
+    lastResult,
+    onValidate({ formData }) {
+      return parseWithZod(formData, {
+        schema: SchemaAdPostForm,
+      });
+    },
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
+  });
+
+  console.log(lastResult);
   
 
   return (
@@ -349,20 +422,27 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
         </div>
       </div>
 
-      <form action={formAction} className="flex flex-col gap-y-[20px] ">
+      <form
+        id={form.id}
+        onSubmit={form.onSubmit}
+        action={action}
+        className="flex flex-col gap-y-[20px] "
+      >
         {/* Name */}
 
         <div className="flex flex-col">
           <label className="text-grayscale900">Ad Name</label>
           <Input
             type="text"
-            name="name"
-            placeholder="Ad name"
+            name={fields.name.name}
+            defaultValue={fields.name.initialValue}
+            key={fields.name.key}
             className={`min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] `}
+            placeholder="Ad name"
           ></Input>
-          {formState?.zodErrors?.name && (
-            <p className="text-red-600">{formState?.zodErrors?.name}</p>
-          )}{" "}
+
+          <p className="text-red-600">{fields.name.errors}</p>
+
           {/* Show error for name */}
         </div>
 
@@ -372,30 +452,34 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
         <div className="flex  flex-col lg:flex-row justify-between">
           <div className="flex flex-col ">
             <label className="text-grayscale900">Category</label>
-            <Select onValueChange={(e) => handleInputChange(e)} name="category">
+            <Select
+              onValueChange={(e) => handleInputChange(e)}
+              name={fields.category.name}
+              defaultValue={fields.category.initialValue}
+              key={fields.category.key}
+            >
               <SelectTrigger className="  sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
                 <SelectValue placeholder="Select Category" />
               </SelectTrigger>
               <SelectContent>
-                {GetCategory?.map((selectData: CategoryNew) => {
+                {categories?.map((selectData) => {
                   return (
                     <SelectItem
-                      key={selectData.GetCategory.id}
+                      key={selectData?.id}
                       value={JSON.stringify({
-                        id: selectData.GetCategory.id,
-                        price: selectData.GetCategory.price,
+                        id: selectData?.id,
+                        price: selectData?.price,
                       })}
                     >
-                      {selectData?.GetCategory.title[locale as "en"  | "ar"]}
-
+                      {selectData?.title[locale as "en" | "ar"]}
                     </SelectItem>
                   );
                 })}
               </SelectContent>
             </Select>
-            {formState?.zodErrors?.category && (
-              <p className="text-red-600">{formState?.zodErrors?.category}</p>
-            )}{" "}
+
+            <p className="text-red-600">{fields.category.errors}</p>
+
             {/* Show error for name */}
           </div>
 
@@ -403,26 +487,27 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
             <label className="text-grayscale900">Subcategory</label>
             <Select
               onValueChange={(e) => handleSubCategoryChange(e)}
-              name="subcategory"
+              name={fields.subcategory.name}
+              defaultValue={fields.subcategory.initialValue}
+              key={fields.subcategory.key}
             >
               <SelectTrigger className="  sm:min-w-[451px]  min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
                 <SelectValue placeholder="Select Subcategory" />
               </SelectTrigger>
               <SelectContent>
-                {subCategories?.map((selectData: any) => {
+                {subCategories?.map((selectData: SubCategory) => {
                   return (
-                    <SelectItem key={selectData.id} value={selectData._id}>
-                      {selectData?.title[locale]}
+                    <SelectItem
+                      key={selectData._id}
+                      value={selectData._id as string}
+                    >
+                      {selectData?.title[locale as "en" | "ar"]}
                     </SelectItem>
                   );
                 })}
               </SelectContent>
             </Select>
-            {formState?.zodErrors?.subcategory && (
-              <p className="text-red-600">
-                {formState?.zodErrors?.subcategory}
-              </p>
-            )}{" "}
+            <p className="text-red-600">{fields.subcategory.errors}</p>
             {/* Show error for name */}
           </div>
         </div>
@@ -432,52 +517,56 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
         <div className="flex  flex-col lg:flex-row justify-between ">
           <div className="flex flex-col">
             <label className="text-grayscale900">Brands</label>
-            <Select name="brand">
+            <Select
+              name={fields.brand.name}
+              defaultValue={fields.brand.initialValue}
+              key={fields.brand.key}
+            >
               <SelectTrigger className=" sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
                 <SelectValue placeholder="Select Brands" />
               </SelectTrigger>
               <SelectContent>
-                {subBrands?.map((selectData: any) => {
+                {subBrands?.map((selectData: Brand) => {
                   return (
                     <SelectItem
-                      key={selectData.id}
-                      value={selectData?.title[locale]}
+                      key={selectData._id}
+                      value={selectData?.title[locale as "en" | "ar"]}
                     >
-                      {selectData?.title[locale]}
+                      {selectData?.title[locale as "en" | "ar"]}
                     </SelectItem>
                   );
                 })}
               </SelectContent>
             </Select>
-            {formState?.zodErrors?.brand && (
-              <p className="text-red-600">{formState?.zodErrors?.brand}</p>
-            )}{" "}
+            <p className="text-red-600">{fields.brand.errors}</p>
             {/* Show error for name */}
           </div>
 
           <div className="flex flex-col">
             <label className="text-grayscale900">Models</label>
-            <Select name="model">
+            <Select
+              name={fields.model.name}
+              defaultValue={fields.model.initialValue}
+              key={fields.model.key}
+            >
               <SelectTrigger className=" sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
                 <SelectValue placeholder="Select Models" />
               </SelectTrigger>
 
               <SelectContent>
-                {Models?.map((selectData: any) => {
+                {Models?.map((selectData: Model) => {
                   return (
                     <SelectItem
-                      key={selectData.id}
-                      value={selectData?.title[locale]}
+                      key={selectData._id}
+                      value={selectData?.title[locale as "en" | "ar"] as string}
                     >
-                      {selectData?.title[locale]}
+                      {selectData?.title[locale as "en" | "ar"]}
                     </SelectItem>
                   );
                 })}
               </SelectContent>
             </Select>
-            {formState?.zodErrors?.model && (
-              <p className="text-red-600">{formState?.zodErrors?.model}</p>
-            )}{" "}
+            <p className="text-red-600">{fields.model.errors}</p>
             {/* Show error for name */}
           </div>
         </div>
@@ -488,50 +577,59 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
         <div className="flex  flex-col lg:flex-row justify-between">
           <div className="flex flex-col">
             <label className="text-grayscale900">Conditions</label>
-            <Select name="conditions">
+            <Select
+              name={fields.conditions.name}
+              defaultValue={fields.conditions.initialValue}
+              key={fields.conditions.key}
+            >
               <SelectTrigger className=" sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
                 <SelectValue placeholder="Select Conditions" />
               </SelectTrigger>
               <SelectContent>
-                {ConditionList?.map((selectData: any) => {
+                {ConditionList?.map((selectData: Model) => {
                   return (
                     <SelectItem
-                      key={selectData?.title[locale]}
-                      value={selectData?.value[locale]}
+                      key={selectData?.title[locale as "en" | "ar"]}
+                      value={selectData?.value[locale as "en" | "ar"] as string}
                     >
-                      {selectData?.title[locale]}
+                      {selectData?.title[locale as "en" | "ar"]}
                     </SelectItem>
                   );
                 })}
               </SelectContent>
             </Select>
-            {formState?.zodErrors?.conditions && (
-              <p className="text-red-600">{formState?.zodErrors?.conditions}</p>
-            )}{" "}
+            <p className="text-red-600">{fields.conditions.errors}</p>
             {/* Show error for name */}
           </div>
 
           <div className="flex gap-x-1">
             <div className="flex flex-col">
               <label className="text-grayscale900">Currency</label>
-              <Select name="Currency">
+              <Select
+                name={fields.Currency.name}
+                defaultValue={fields.Currency.initialValue}
+                key={fields.Currency.key}
+              >
                 <SelectTrigger className="max-w-[151px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
                   <SelectValue placeholder="Currency" />
                 </SelectTrigger>
 
                 <SelectContent>
-                  {Currency?.map((selectData: any) => {
+                  {Currency?.map((selectData: Currency) => {
                     return (
                       <SelectItem
-                        key={selectData?.title[locale]}
-                        value={selectData?.title[locale]}
+                        key={selectData?.title[locale as "en" | "ar"]}
+                        value={
+                          selectData?.title[locale as "en" | "ar"] as string
+                        }
                       >
-                        {selectData?.title[locale]}
+                        {selectData?.title[locale as "en" | "ar"]}
                       </SelectItem>
                     );
                   })}
                 </SelectContent>
               </Select>
+              <p className="text-red-600">{fields.Currency.errors}</p>
             </div>
 
             <div className="flex flex-col">
@@ -552,7 +650,9 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
           <div className="flex flex-col">
             <label className="text-grayscale900">Authenticity</label>
             <Select
-              name="authenticity"
+              name={fields.authenticity.name}
+              defaultValue={fields.authenticity.initialValue}
+              key={fields.authenticity.key}
 
               // //
             >
@@ -561,23 +661,19 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
               </SelectTrigger>
 
               <SelectContent>
-                {Authenticity?.map((selectData: any) => {
+                {Authenticity?.map((selectData: Model) => {
                   return (
                     <SelectItem
-                      key={selectData?.title[locale]}
-                      value={selectData?.value[locale]}
+                      key={selectData?.title[locale as "en" | "ar"]}
+                      value={selectData?.value[locale as "en" | "ar"] as string}
                     >
-                      {selectData?.title[locale]}
+                      {selectData?.title[locale as "en" | "ar"]}
                     </SelectItem>
                   );
                 })}
               </SelectContent>
             </Select>
-            {formState?.zodErrors?.authenticity && (
-              <p className="text-red-600">
-                {formState?.zodErrors?.authenticity}
-              </p>
-            )}{" "}
+            <p className="text-red-600">{fields.authenticity.errors}</p>
             {/* Show error for name */}
           </div>
           <div className="flex justify-between">
@@ -585,13 +681,13 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
               <label className="text-grayscale900">Mobile Numbe</label>
               <Input
                 type="text"
-                name="mobile"
+                name={fields.mobile.name}
+                defaultValue={fields.mobile.initialValue}
+                key={fields.mobile.key}
                 placeholder="Ex: +96*********"
                 className={`min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] sm:min-w-[451px]`}
               ></Input>
-              {formState?.zodErrors?.mobile && (
-                <p className="text-red-600">{formState?.zodErrors?.mobile}</p>
-              )}{" "}
+              <p className="text-red-600">{fields.mobile.errors}</p>
               {/* Show error for name */}
             </div>
           </div>
@@ -603,62 +699,57 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
           <label className="text-grayscale900">Description</label>
           <textarea
             id="description"
-            name="description"
+            name={fields.description.name}
+            defaultValue={fields.description.initialValue}
+            key={fields.description.key}
             rows={5}
             cols={50}
             placeholder="Ad description"
             className="border border-grayscale50 px-[18px] py-[12px] rounded-[5px]"
           />
-          {formState?.zodErrors?.description && (
-            <p className="text-red-600">{formState?.zodErrors?.description}</p>
-          )}{" "}
+          <p className="text-red-600">{fields.description.errors}</p>
           {/* Show error for name */}
         </div>
 
         <div className="flex flex-col gap-y-[8px]">
           <label className="text-grayscale900">Options</label>
           <div className="flex gap-x-[20px] flex-wrap min-w-full">
-            {Options?.map((option: any, index: any) => {
+            {Options?.map((option: Options, index: number) => {
               return (
                 <div className="flex flex-col" key={index}>
                   <label className="text-grayscale900">
-                    {option.title[locale]}
+                    {option.title[locale as "en" | "ar"]}
                   </label>
-                  <Select name="options">
+                  <Select name={fields.options.name} key={fields.options.key}>
                     <SelectTrigger className="min-w-[351px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
                       <SelectValue
-                        placeholder={`Select ${option.title[locale]}`}
+                        placeholder={`Select ${option.title[locale as "en" | "ar"]}`}
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {option.values?.map((value: any, index: any) => {
-                        return (
-                          <SelectItem
-                            key={index}
-                            value={JSON.stringify({
-                              _key: value.en,
-                              key: option.title[locale],
-                              value: value.en,
-                            })}
-                          >
-                            {value[locale]}
-                          </SelectItem>
-                        );
-                      })}
+                      {option.values?.map(
+                        (value: OptionValues, index: number) => {
+                          return (
+                            <SelectItem
+                              key={index}
+                              value={JSON.stringify({
+                                _key: value.en,
+                                key: option.title[locale as "en" | "ar"],
+                                value: value.en,
+                              })}
+                            >
+                              {value[locale as "en" | "ar"]}
+                            </SelectItem>
+                          );
+                        }
+                      )}
                     </SelectContent>
                   </Select>
-                  {formState?.zodErrors?.options && (
-                    <p className="text-red-600">
-                      {formState?.zodErrors?.options}
-                    </p>
-                  )}
                 </div>
               );
             })}
           </div>
-          {formState?.zodErrors?.options && (
-            <p className="text-red-600">{formState?.zodErrors?.options}</p>
-          )}{" "}
+          <p className="text-red-600">{fields.options.errors}</p>
           {/* Show error for name */}
         </div>
 
@@ -695,65 +786,75 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
                 </button>
               </div>
             ))}
-            {formState?.zodErrors?.image && (
+            {/* {formState?.zodErrors?.image && (
               <p className="text-red-600">{formState?.zodErrors?.image}</p>
-            )}{" "}
+            )}{" "} */}
             {/* Show error for name */}
           </div>
           <div className="flex flex-col space-y-3 lg:space-y-0 lg:flex-row  gap-x-4">
             <div className="flex flex-col">
               <Select
-                name="country"
-                onValueChange={(e: any) => setSelectedCountry(e)}
+                name={fields.country.name}
+                defaultValue={fields.country.initialValue}
+                key={fields.country.key}
+                onValueChange={(e: string | undefined) => {
+                  if (e !== undefined) {
+                    setSelectedCountry(e);
+                  }
+                }}
               >
                 <SelectTrigger className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
                   <SelectValue placeholder={`Select Country`} />
                 </SelectTrigger>
                 <SelectContent>
-                  {Countries.map((country: any) => (
-                    <SelectItem key={country.code} value={country.name}>
+                  {Countries.map((country: Countries) => (
+                    <SelectItem
+                      key={country.code}
+                      value={country.name as string}
+                    >
                       {country.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
 
-              {formState?.zodErrors?.country && (
-                <p className="text-red-600">{formState?.zodErrors?.country}</p>
-              )}
+              <p className="text-red-600">{fields.country.errors}</p>
             </div>
 
             <div className="flex flex-col">
-              <Select name="state">
+              <Select
+                name={fields.state.name}
+                defaultValue={fields.state.initialValue}
+                key={fields.state.key}
+              >
                 <SelectTrigger className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
                   <SelectValue placeholder={`Select State`} />
                 </SelectTrigger>
                 <SelectContent>
-                  {State?.map((state: any, index: any) => (
+                  {State?.map((state: State, index: number) => (
                     <SelectItem key={index} value={state.name}>
                       {state.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              {formState?.zodErrors?.state && (
-                <p className="text-red-600">{formState?.zodErrors?.state}</p>
-              )}
+              <p className="text-red-600">{fields.state.errors}</p>
             </div>
 
             <div className="flex items-center gap-x-3">
-              <Checkbox name="negotiable" id="terms1" />
+              <Checkbox
+                name={fields.negotiable.name}
+                defaultValue={fields.negotiable.initialValue}
+                key={fields.negotiable.key}
+                id="terms1"
+              />
               <label
                 htmlFor="terms1"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 Negotiable
               </label>
-              {formState?.zodErrors?.state && (
-                <p className="text-red-600">
-                  {formState?.zodErrors?.negotiable}
-                </p>
-              )}
+              <p className="text-red-600">{fields.negotiable.errors}</p>
             </div>
           </div>
           {/* <div className="min-w-full min-h-[348px] rounded-[8px]" ref={MapRef} /> */}
@@ -801,18 +902,10 @@ const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
         </div>
       </form>
       <>
-        {PageLoader === "Loading" ? (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="text-center">
-              <Image alt="loader" src={LoadingImage} />
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
+      
       </>
     </div>
   );
-}
+};
 
 export default StepOneForm;
