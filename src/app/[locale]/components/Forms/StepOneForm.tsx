@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useFormState } from "react-dom";
-import { stepOpneFormAction } from "../../addform/step01/action";
+import { ApiResponse, stepOpneFormAction } from "../../addform/step01/action";
 import { Authenticity, ConditionList, Currency } from "@/lib/statics";
 import { getSubCategoriesByID } from "../../actions/getSubCategories";
 import { getModelsById } from "../../actions/getModels";
@@ -25,27 +25,58 @@ import { useRouter } from "next/navigation";
 import FormHeader from "../../../../../public/AdForm.png";
 import {
   Brand,
-  Category,
   FormStateNew,
   Model,
   Option,
   Subcategory,
 } from "@/lib/categoryInterface";
 
-
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop()?.split(";").shift();
+
+ 
 }
-function StepOneForm({ GetCategory }: Category) {
-  const [formState, formAction] = useFormState<FormStateNew>(stepOpneFormAction, {
+interface CategoryNew {
+  
+ GetCategory:{
+  id:string;
+  title: {
+    en: string; // English title
+    ar: string; // Arabic title
+  };
+  slug: {
+    current: string; // Current slug string
+  };
+  imageUrl?:string;
+  description?: {
+    en: string; // English description
+    ar: string; // Arabic description
+  };
+  price: number; // Price of the category
+
+  // Optional: Define GetCategory method if needed
+
+  subcategories:Array<{
+    _id:string;
+    title:Array<string>
+    slug:Array<string>
+
+  }>
+ }
+ }
+
+
+
+const initionlState = {
+  
     ZodError: null,
     data: {
       name: "",
       category: "",
       subcategory: "",
-      price: "",
+      price: 0,
       brand: "",
       model: "",
       conditions: "",
@@ -53,7 +84,24 @@ function StepOneForm({ GetCategory }: Category) {
       mobile: "",
       description: "",
       image: "",
-      options: "",
+      options: [],
+      formDataObject: {
+        name:"",
+        subcategory: "",
+        price:"",
+        brand:"",
+        model: "",
+        conditions: "",
+        authenticity: "",
+        Currency: "",
+        description: "",
+        options: "",
+        mobile: "",
+        country: "",
+        state: "",
+        negotiable: "",
+        features:[],
+      }
     },
     message: null,
     status: false,
@@ -67,12 +115,26 @@ function StepOneForm({ GetCategory }: Category) {
     zodErrors: {
       name: [], // Initialize with any required fields
     },
-  });
   
-  
+}
 
+interface Countries{
+  name?: string;
+  code?:string
+}
+const  StepOneForm:React.FC<CategoryNew> = ( {GetCategory} )=>{
 
+ 
   
+  const formActionWrapper = async (prevState: ApiResponse, formData: FormData) => {
+    // Call your existing action and pass the parameters
+    return await stepOpneFormAction(prevState, formData);
+  };
+
+  const [formState, formAction] = useFormState<FormStateNew>(
+    stepOpneFormAction,
+    initionlState,
+  );
 
   const [CategoriesID, setCategoriesID] = useState<string | undefined>();
   const [subCategoriesID, setsubCategoriesID] = useState<string | undefined>();
@@ -84,8 +146,8 @@ function StepOneForm({ GetCategory }: Category) {
   const [Models, setModels] = useState<Model[] | undefined>();
   const [locale, setLocale] = useState<string>("en");
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-  const [ImageGet, setImage] = useState<any>([]);
-  const [Countries, setCountries] = useState<any>([]);
+  const [ImageGet, setImage] = useState<string[]>([]);
+  const [Countries, setCountries] = useState<Countries[]>([]);
   const [selectedCountry, setSelectedCountry] = useState([]);
   const [State, setState] = useState<any>([]);
   const [PageLoader, setPageLoader] = useState<string | null>(null);
@@ -94,7 +156,7 @@ function StepOneForm({ GetCategory }: Category) {
   const [AdPrice, setAdPrice] = useState<number>();
 
 
-  
+
 
   //Get Category ID for retrive subcategories
   const handleInputChange = (e: any) => {
@@ -220,8 +282,7 @@ function StepOneForm({ GetCategory }: Category) {
   //Remove Uploaded Image
   const handleDeleteImage = (index: number) => {
     const updatedPreviewUrls = previewUrls.filter((_, i) => i !== index);
-   
-    
+
     setPreviewUrls(updatedPreviewUrls);
 
     const updatedPreviewUrlss = ImageGet.filter(
@@ -250,8 +311,7 @@ function StepOneForm({ GetCategory }: Category) {
           router.push(`/${locale}/payments`); // Redirect to payments page on confirm
         }
       });
-      
-      
+
       localStorage.setItem("AdID", formState.response._id);
     }
   }, [formState]);
@@ -276,6 +336,9 @@ function StepOneForm({ GetCategory }: Category) {
     const newFeatures = features.filter((_, i) => i !== index);
     setFeatures(newFeatures);
   };
+
+  console.log(Countries);
+  
 
   return (
     <div className=" flex flex-col gap-y-[20px] ">
@@ -314,16 +377,17 @@ function StepOneForm({ GetCategory }: Category) {
                 <SelectValue placeholder="Select Category" />
               </SelectTrigger>
               <SelectContent>
-                {GetCategory?.map((selectData: any) => {
+                {GetCategory?.map((selectData: CategoryNew) => {
                   return (
                     <SelectItem
-                      key={selectData.id}
+                      key={selectData.GetCategory.id}
                       value={JSON.stringify({
-                        id: selectData.id,
-                        price: selectData.price,
+                        id: selectData.GetCategory.id,
+                        price: selectData.GetCategory.price,
                       })}
                     >
-                      {selectData?.title[locale]}
+                      {selectData?.GetCategory.title[locale as "en"  | "ar"]}
+
                     </SelectItem>
                   );
                 })}
@@ -568,8 +632,6 @@ function StepOneForm({ GetCategory }: Category) {
                     </SelectTrigger>
                     <SelectContent>
                       {option.values?.map((value: any, index: any) => {
-                      
-
                         return (
                           <SelectItem
                             key={index}

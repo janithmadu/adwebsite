@@ -1,12 +1,20 @@
 import React from "react";
 
-function ProductOverwiew({
+interface ProductOverwiew {
+  Model: string;
+  Condition: string;
+  Brand: string;
+  Authenticity: string;
+  State: string;
+}
+
+const ProductOverwiew: React.FC<ProductOverwiew> = ({
   Model,
   Condition,
   Brand,
   Authenticity,
   State,
-}: any) {
+}) => {
   return (
     <div className="min-w-full border-b px-[32px] py-5">
       <div className="flex gap-x-3">
@@ -28,6 +36,6 @@ function ProductOverwiew({
       </div>
     </div>
   );
-}
+};
 
 export default ProductOverwiew;

@@ -18,7 +18,7 @@ interface PaymentRequestBody {
 export async function POST(request: NextRequest) {
     try {
         const { amount }: PaymentRequestBody = await request.json();
-        console.log(amount);
+       
         
         const paymentIntent = await stripe.paymentIntents.create({
             amount: amount,
@@ -28,10 +28,10 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ clientSecret: paymentIntent.client_secret });
         
-    } catch (error:any) {
-        console.error(error);
+    } catch (error:Error | unknown) {
+        
         return NextResponse.json(
-            { error: `Error creating payment intent: ${error.message}` }, // Use error.message for better error handling
+            { error: `Error creating payment intent: ${error}` }, // Use error.message for better error handling
             { status: 500 }
         );
     }

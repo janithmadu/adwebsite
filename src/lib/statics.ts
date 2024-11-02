@@ -1,8 +1,8 @@
-export const ConditionList: any = [
+export const ConditionList = [
   { title: { ar: "جديد", en: "New" }, value: { ar: "New", en: "new" } },
   { title: { ar: "مستخدم", en: "Used" }, value: { ar: "Used", en: "used" } },
 ];
-export const Currency: any = [
+export const Currency= [
   {
     title: { ar: "ليرة لبنانية", en: "LKR" },
     value: { ar: "ليرة لبنانية", en: "New" },
@@ -12,7 +12,7 @@ export const Currency: any = [
     value: { ar: "دولار أمريكي", en: "USD" },
   },
 ];
-export const Authenticity: any = [
+export const Authenticity = [
   {
     title: { ar: "إبداعي", en: "Original" },
     value: { ar: "إبداعي", en: "original" },

@@ -2,7 +2,14 @@
 import { Clock, Eye } from "@phosphor-icons/react/dist/ssr";
 import React, { useEffect } from "react";
 
-function HeaderSection({ Titile, CreatedDate, VerifiedSeller, Member }: any) {
+interface HeaderSection {
+  Titile:string
+  CreatedDate:string
+  VerifiedSeller:boolean
+  Member:boolean
+}
+
+const HeaderSection:React.FC<HeaderSection> = ({ Titile, CreatedDate, VerifiedSeller, Member })=>{
   const [isVerified, setisVerified] = React.useState<string>();
   const [isMember, setisMember] = React.useState<string>();
 

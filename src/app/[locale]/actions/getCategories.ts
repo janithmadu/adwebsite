@@ -3,14 +3,14 @@ import { client } from "@/sanity/lib/client";
 export const revalidate = 1;
 
 export async function getlimitedCategory() {
-  const quary: any = `*[_type == "category"][0...7]`;
+  const quary = `*[_type == "category"][0...7]`;
   const data = await client.fetch(quary);
 
   return data;
 }
 
 export async function getAllCategory() {
-  const quary: any = `*[_type == "category"] {
+  const quary = `*[_type == "category"] {
   "id": _id,
   title {
     en,
@@ -34,7 +34,7 @@ export async function getAllCategory() {
 
 export const getCategoryAndSubcategory =  async()=>{
 
-  const quary: any = `*[_type == "category"] {
+  const quary = `*[_type == "category"] {
   title, 
   slug, 
   "imageUrl": image.asset->url, // Directly gets the image URL

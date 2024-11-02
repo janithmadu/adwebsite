@@ -12,25 +12,37 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import Link from "next/link";
 
-function UserSetting({ User }: any) {
 
+export interface UserSetting {
+  id?: string;
+  email?: string;
+  family_name?: string;
+  given_name?: string;
+  picture: string;
+  username?: string;
+  phone_number?: string;
+}
+
+const UserSetting: React.FC<UserSetting> = ({ given_name, picture }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        {User.picture ? (
+        {picture ? (
           <Avatar>
-            <AvatarImage src={User.picture} />
+            <AvatarImage src={picture} />
           </Avatar>
         ) : (
           <Avatar>
-            <AvatarFallback>{User.given_name[1]}</AvatarFallback>
+            <AvatarFallback>{given_name}</AvatarFallback>
           </Avatar>
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem><Link href="profile">Profile</Link></DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="profile">Profile</Link>
+        </DropdownMenuItem>
 
         <DropdownMenuItem>
           <LogoutLink>Log out</LogoutLink>
@@ -38,6 +50,6 @@ function UserSetting({ User }: any) {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};
 
 export default UserSetting;

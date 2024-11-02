@@ -1,6 +1,6 @@
 import { client } from "@/lib/sanity";
 
-export const getOptionsByID = async (subcategoryId:any) => {
+export const getOptionsByID = async (subcategoryId:string) => {
 
   const query = `*[_type == "option" && $subcate in subcategories[]._ref] {
     _id,

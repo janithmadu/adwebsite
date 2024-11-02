@@ -1,11 +1,18 @@
 import Image from "next/image";
 import React from "react";
-import {
-  CircleWavyCheck,
-  Envelope,
-} from "@phosphor-icons/react/dist/ssr";
+import { CircleWavyCheck, Envelope } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
-function SellerInfo({Username,UserEmail,UserAvatar}:any) {
+
+interface SellerInfo {
+  Username: string;
+  UserEmail: string;
+  UserAvatar: string;
+}
+const SellerInfo: React.FC<SellerInfo> = ({
+  Username,
+  UserEmail,
+  UserAvatar,
+}) => {
   return (
     <div className="">
       <div className="flex gap-y-[24px] flex-col">
@@ -43,14 +50,12 @@ function SellerInfo({Username,UserEmail,UserAvatar}:any) {
               height={24}
               className="text-primary500"
             />{" "}
-            <h1 className="text-grayscale600 text-bodymedium">
-              {UserEmail}
-            </h1>{" "}
+            <h1 className="text-grayscale600 text-bodymedium">{UserEmail}</h1>{" "}
           </span>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default SellerInfo;

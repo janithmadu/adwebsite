@@ -4,12 +4,16 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getAdsBySub, getPostAds } from "@/app/[locale]/actions/getAds";
 import Image from "next/image";
-import AdCard from "../../Ads/AdCard";
 import PaginationComponent from "../PaginationComponet/PaginationComponet";
 import LoadingImage from "../../../../../../public/system-regular-715-spinner-horizontal-dashed-circle-loop-jab.gif";
-import NoItem from "../../../../../../public/rb_127823.png"
+import NoItem from "../../../../../../public/rb_127823.png";
 import { PostAd } from "@/lib/categoryInterface";
 import { ProfileAdCard } from "../../ProfileComponets/ProfileAdCard";
+
+interface Result {
+  result: PostAd[];
+  resultCount: number;
+}
 
 export default function FilterBySubs() {
   const [ads, setAds] = useState<PostAd[]>([]);
@@ -18,17 +22,25 @@ export default function FilterBySubs() {
   const searchParams = useSearchParams();
   const PageSize = 50;
 
-  
-  console.log(ads);
-  
-
   useEffect(() => {
     const queryObject = Object.fromEntries(searchParams.entries());
+
+    
 
     const fetchAds = async () => {
       setAdsLoader(true); // Start loader
 
-      let subads;
+      const subcategoryId = {
+        subcategories: queryObject.subcategories as string,
+        subOptions: queryObject.subOptions as string,
+        minPrice: parseInt(queryObject.minPrice, 10) as number,
+        maxPrice: parseInt(queryObject.maxPrice, 10) as number,
+        category: queryObject.category as string,
+        page: parseInt(queryObject.page, 10) | 1,
+        limit: PageSize as number,
+      };
+
+      let subads: Result;
       if (
         queryObject.subcategories ||
         queryObject.subOptions ||
@@ -36,14 +48,20 @@ export default function FilterBySubs() {
         queryObject.maxPrice ||
         queryObject.category
       ) {
-        subads = await getAdsBySub(queryObject, queryObject?.page, PageSize);
+        subads = (await getAdsBySub({ subcategoryId })) || {
+          result: [],
+          resultCount: 0,
+        };
       } else {
-        subads = await getPostAds(queryObject?.page, PageSize);
+        subads = (await getPostAds({ subcategoryId })) || {
+          result: [],
+          resultCount: 0,
+        };
       }
 
       setAds(subads?.result || []);
-      setAdsCounts(subads?.resultcount);
-      setAdsLoader(false); 
+      setAdsCounts(subads?.resultCount);
+      setAdsLoader(false);
     };
 
     fetchAds();
@@ -62,13 +80,20 @@ export default function FilterBySubs() {
           {ads.map((ad: PostAd, index: number) => (
             <div key={index}>
               {/* <AdCard GetAds={ad} /> */}
-              <ProfileAdCard title={ad.adName} category={ad.categoryTitle} image={ad?.photos[0]?.asset?.url} price={ad.price} timestamp={ad._createdAt} id={ad._id} />
+              <ProfileAdCard
+                title={ad.adName}
+                category={ad.categoryTitle}
+                image={ad?.photos[0]?.asset?.url || ""}
+                price={ad.price}
+                timestamp={ad._createdAt}
+                id={ad._id}
+              />
             </div>
           ))}
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-[400px] w-full text-center text-gray-500 space-y-4">
-           <Image src={NoItem} alt="No Ads Available" width={160} height={160} />
+          <Image src={NoItem} alt="No Ads Available" width={160} height={160} />
           <h2 className="text-2xl font-semibold text-gray-700">
             Oops! No ads match your search.
           </h2>
@@ -80,7 +105,7 @@ export default function FilterBySubs() {
 
       {ads?.length > 0 && (
         <div className="min-w-full flex justify-center mt-6">
-          <PaginationComponent TotoleCount={adsCount} PageSisze={PageSize} />
+          <PaginationComponent TotoleCount={adsCount as number} PageSisze={PageSize as number} />
         </div>
       )}
     </>

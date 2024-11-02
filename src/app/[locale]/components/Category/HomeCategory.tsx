@@ -1,3 +1,4 @@
+import { Category } from "@/lib/categoryInterface";
 import { useTranslations } from "next-intl";
 import { cookies } from "next/headers";
 import Image from "next/image";
@@ -6,7 +7,11 @@ import React from "react";
 
 export const revalidate = 1;
 
-function HomeCategory(getCategory: any) {
+interface getCategory{
+  getCategory:Category[]
+}
+
+const HomeCategory:React.FC<getCategory> = ({getCategory})=>{
   const cookieStore = cookies();
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const t = useTranslations("TopNav");
@@ -25,7 +30,7 @@ function HomeCategory(getCategory: any) {
       {/* Main Grid */}
 
       <div className="grid grid-cols-1 md:grid-cols-3  lg:grid-cols-5 xl:grid-cols-6  gap-3 ">
-        {getCategory.getCategory.map((data: any, index: any) => {
+        {getCategory.map((data: Category, index: number) => {
           return (
             <Link
               key={index}
@@ -35,12 +40,12 @@ function HomeCategory(getCategory: any) {
                 <Image
                   width={80}
                   height={80}
-                  alt={data.title?.[locale]}
-                  src={data.imageUrl}
+                  alt={data.title?.[locale as "en" | "ar"]}
+                  src={data.imageUrl || "/defultimage.png"}
                   className="transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-150"
                 />
                 <h1 className="text-heading04 font-semibold ">
-                  {data.title?.[locale]}
+                  {data.title?.[locale as "en" | "ar"]}
                 </h1>
               </div>
             </Link>

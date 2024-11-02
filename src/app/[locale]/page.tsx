@@ -1,4 +1,4 @@
-import Hero from "./components/Hero/Hero";
+import { Hero } from "./components/Hero/Hero";
 import { getHeroImages } from "./actions/getHero";
 import HomeCategory from "./components/Category/HomeCategory";
 import { getAllCategory } from "./actions/getCategories";
@@ -7,14 +7,27 @@ import { getPostAds } from "./actions/getAds";
 import Details from "./components/Details/Details";
 import MobileApp from "./components/MobileApp/MobileApp";
 
-
 export const revalidate = 1;
+
+interface GetPostD {
+  subcategoryId: {
+    page: number;
+    limit: number;
+  };
+}
 
 export default async function Home() {
   const HeroImages = await getHeroImages();
   const GetCategory = await getAllCategory();
-  const getPost = await getPostAds(1, 4);
 
+  const GetPostData: GetPostD = {
+    subcategoryId: {
+      page: 1,
+      limit: 4,
+    },
+  };
+
+  const getPost = await getPostAds(GetPostData);
 
   return (
     <main className="flex flex-col space-y-[40px]">

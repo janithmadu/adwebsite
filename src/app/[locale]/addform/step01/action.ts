@@ -4,10 +4,59 @@ import { client } from "@/lib/sanity";
 import { FormType, SchemaAdPostForm } from "@/lib/schemas";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
-export const stepOpneFormAction: any = async (
-  prevState: any,
+export type ApiResponse = {
+  ZodError: null ; // Adjust as necessary for the actual error type
+  data: {
+    name: string;
+    category: string;
+    subcategory: string;
+    price: number;
+    brand: string;
+    model: string;
+    conditions: string;
+    authenticity: string;
+    mobile: string;
+    description: string;
+    image: string;
+    options: string[];
+    formDataObject: {
+      name: string;
+      subcategory: string;
+      price: number | null; // Assuming price can be null
+      brand: string;
+      model: string;
+      conditions: string;
+      authenticity: string;
+      Currency: string;
+      description: string;
+      options: string[];
+      mobile: string;
+      country: string;
+      state: string;
+      negotiable: boolean;
+      features:string[]; // Adjust type as needed
+    };
+  };
+  message: string;
+  status: boolean;
+  response: {
+    Currency: string;
+    _createdAt: string;
+    _id: string;
+    _rev: string;
+    _type: string;
+  };
+  zodErrors: {
+    [key: string]: string[]; // Key is the field name, value is an array of error messages
+  };
+};
+
+
+export const stepOpneFormAction = async (
+  prevState: ApiResponse | undefined,
   formData: FormData
 ) => {
+
 
   let CategoryID
   if (formData.get("category")) {
@@ -45,7 +94,7 @@ export const stepOpneFormAction: any = async (
 
   const formDataObject: FormType = {
     name: formData?.get("name") as string,
-    category: CategoryID.id,
+    category: CategoryID?.id,
     subcategory: formData.get("subcategory") as string,
     price: price as number,
     brand: formData.get("brand") as string,
@@ -82,7 +131,7 @@ export const stepOpneFormAction: any = async (
   if (!ZodValidations.success) {
     return {
       ...prevState,
-      data: { ...prevState.data, formDataObject },
+      data: { ...prevState?.data, formDataObject },
       zodErrors: ZodValidations.error.flatten().fieldErrors,
       message: "Missing required fields",
       status: false,
@@ -90,7 +139,9 @@ export const stepOpneFormAction: any = async (
   }
 
   const uploadedImages = await Promise.all(
-    images.map(async (image: any) => {
+    images.map(async (image: FormDataEntryValue) => {
+   
+      
       if (image instanceof File) {
         try {
           const imageData = await client.assets.upload("image", image, {
@@ -149,7 +200,7 @@ export const stepOpneFormAction: any = async (
     if (response) {
       return {
         ...prevState,
-        data: { ...prevState.data, formDataObject },
+        data: { ...prevState?.data, formDataObject },
         zodErrors: null,
         message: "Almost There! Confirm Your Payment to Go Live!",
         status: true,

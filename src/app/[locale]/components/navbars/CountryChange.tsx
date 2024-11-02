@@ -1,18 +1,19 @@
 "use client";
 
 import React from "react";
-import { useTranslations } from "next-intl";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import UKflag from "../../../../../public/uk.png";
 import Arab from "../../../../../public/arab.png";
 import Image from "next/image";
+
+
 
 function CountryChange() {
   const router = useRouter(); // Provides programmatic navigation
   const pathname = usePathname(); // Get the current path (e.g., /en/ads)
   const searchParams = useSearchParams(); // Get the current query parameters (e.g., ?id=1)
 
-  const languages: any = [
+  const languages = [
     { code: "en", label: "English", Image: UKflag },
     { code: "ar", label: "عربي", Image: Arab },
   ];
@@ -40,7 +41,7 @@ function CountryChange() {
 
   return (
     <div className="flex items-center space-x-5 rtl:gap-10">
-      {languages.map((language: any) => (
+      {languages.map((language) => (
         <button
           key={language.code}
           onClick={() => handleLanguageSwitch(language.code)}

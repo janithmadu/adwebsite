@@ -7,6 +7,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Loader from "../../../../../public/system-regular-719-spinner-circle-hover-rotation (3).gif";
 import Image from "next/image";
+import { PostAd } from "@/lib/categoryInterface";
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -14,14 +15,23 @@ function getCookie(name: string) {
   if (parts.length === 2) return parts.pop()?.split(";").shift();
 }
 
-const Checkout = ({ amount, Ad }: any) => {
+interface CheckOut{
+  amount:number
+  Ad:PostAd
+}
+
+const Checkout = ({ amount, Ad }: CheckOut) => {
+  
+  
   const stripe = useStripe();
   const elements = useElements();
 
-  const [errorMessege, seterrorMessege] = useState<any>();
-  const [clientSecret, setclientSecret] = useState<any>();
+  const [errorMessege, seterrorMessege] = useState<string | undefined>();
+  const [clientSecret, setclientSecret] = useState<string | undefined>();
   const [loading, setloading] = useState<boolean>();
-  const [locale, setLocale] = useState<any>("en");
+  const [locale, setLocale] = useState<string>("en");
+
+  console.log(errorMessege);
 
   //Get the locales from cookies for navigate based on the locals
   useEffect(() => {
@@ -44,7 +54,7 @@ const Checkout = ({ amount, Ad }: any) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setloading(true);
-    if (!stripe || !elements) {
+    if (!stripe || !elements || !clientSecret) {
       return;
     }
     const { error: submitError } = await elements.submit();
@@ -63,7 +73,8 @@ const Checkout = ({ amount, Ad }: any) => {
     });
 
     if (error) {
-      seterrorMessege(error);
+      seterrorMessege(error.message);
+
     } else {
     }
   };
@@ -90,7 +101,7 @@ const Checkout = ({ amount, Ad }: any) => {
                   <span className="block font-semibold text-gray-600">
                     Ad Title:
                   </span>
-                  <span className="text-gray-800">{Ad[0]?.adName}</span>
+                  <span className="text-gray-800">{Ad?.adName}</span>
                 </div>
 
                 <div className="py-4 border-b border-gray-200 ">

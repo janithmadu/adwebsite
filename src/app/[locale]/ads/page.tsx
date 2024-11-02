@@ -14,6 +14,8 @@ import {
 } from "../../../components/ui/sheet";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
+export const revalidate = 1;
+
 export default async function Home() {
   const getSubCategoryAndCategory = await getCategoryAndSubcategory();
   const getOptions = await getSubCategoryOptions();

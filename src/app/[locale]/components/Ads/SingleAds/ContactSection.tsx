@@ -1,5 +1,4 @@
 import {
-  ChatCircleDots,
   Envelope,
   PhoneCall,
   WhatsappLogo,
@@ -16,7 +15,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-function ContactSection({ PhoneNumber }: any) {
+interface PhoneNumber {
+  PhoneNumber: string;
+}
+
+const ContactSection: React.FC<PhoneNumber> = ({ PhoneNumber }) => {
   const HidePhone = PhoneNumber.slice(0, 4);
 
   return (
@@ -64,6 +67,6 @@ function ContactSection({ PhoneNumber }: any) {
       </div>
     </div>
   );
-}
+};
 
 export default ContactSection;

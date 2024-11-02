@@ -2,7 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-function AddSubcategory({ subcatotitle, subcatoId }: any) {
+interface SubCategory {
+  subcatotitle:string
+  subcatoId:string
+}
+
+const  AddSubcategory:React.FC<SubCategory> = ({ subcatotitle, subcatoId }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 

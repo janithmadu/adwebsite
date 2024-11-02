@@ -8,12 +8,25 @@ import CountryChange from "./CountryChange";
 export const revalidate = 1;
 import { cookies } from "next/headers";
 import { useTranslations } from "next-intl";
-import {
-  LoginLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
+import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import UserSetting from "./UserSetting";
 
-function Topnavbar({ user }: any) {
+export interface User {
+  user:{
+    id?: string;
+  email?: string;
+  family_name?: string;
+  given_name?: string;
+  picture: string;
+  username?: string;
+  phone_number?: string;
+  }
+}
+
+const Topnavbar: React.FC<User> = ({user}) => {
+
+
+  
   const cookieStore = cookies();
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const t = useTranslations("TopNav");
@@ -25,9 +38,10 @@ function Topnavbar({ user }: any) {
         <div className="relative container mx-auto px-5 lg:px-5 xl:px-20 md:px-10 min-h-[100px] flex gap-10 items-center justify-between">
           {/* Logo */}
           <Link href="/">
-           <h1 className="text-heading02 font-bold">
-            <span className="text-primary600">G</span>oshop
-          </h1></Link>
+            <h1 className="text-heading02 font-bold">
+              <span className="text-primary600">G</span>oshop
+            </h1>
+          </Link>
 
           {/* Search Box */}
           <div className="relative">
@@ -46,7 +60,7 @@ function Topnavbar({ user }: any) {
           {/* Top Nav Button Section */}
           <div className="hidden md:flex min-w-[243px] space-x-[20px] rtl:gap-[20px]">
             {user ? (
-              <UserSetting User={user} />
+              <UserSetting picture={user.picture} email={user.email} family_name={user.family_name} given_name={user.given_name} id={user.id} phone_number={user.phone_number} username={user.username} />
             ) : (
               <button className="min-w-[92px] min-h-[50px] rounded-[4px] bg-primary50 text-primary500 text-[16px] font-bold">
                 <LoginLink>{t("SignIn")}</LoginLink>
@@ -75,6 +89,6 @@ function Topnavbar({ user }: any) {
       </div>
     </>
   );
-}
+};
 
 export default Topnavbar;

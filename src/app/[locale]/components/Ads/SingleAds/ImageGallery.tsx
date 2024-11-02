@@ -5,7 +5,15 @@ import React, { useState } from "react";
 
 export const revalidate = 1;
 
-function ImageGallery(Images: any) {
+interface Images{
+  Images: Array<{ asset?: { _id?: string; url?: string }; alt?: string }> ; // Adjusted photos structure
+}
+
+interface imagenew {
+  asset?: { url?: string };
+}
+
+function ImageGallery(Images:Images) {
   const [selectedImage, setSelectedImage] = useState("");
 
   return (
@@ -20,15 +28,15 @@ function ImageGallery(Images: any) {
 
       {/* Thumbnails */}
       <div className="flex gap-x-2 ">
-        {Images?.Images?.map((image: any, index: any) => (
+        {Images?.Images?.map((image: imagenew, index: number) => (
           <Image
             key={index}
-            src={image?.asset?.url}
+            src={image?.asset?.url || ""}
             alt={`Thumbnail ${index + 1}`}
             width={80}
             height={80}
             className="cursor-pointer  h-20 object-cover"
-            onClick={() => setSelectedImage(image?.asset?.url)}
+            onClick={() => setSelectedImage(image?.asset?.url || "")}
           />
         ))}
       </div>

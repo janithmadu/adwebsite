@@ -5,8 +5,14 @@ import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import AdCard from "./AdCard";
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { PostAd } from "@/lib/categoryInterface";
 export const revalidate = 1;
-function HomePageAdds(Ads: any) {
+
+interface Ads{
+  Ads:PostAd[]
+}
+
+const  HomePageAdds:React.FC<Ads> = ({Ads}) =>{
   const t = useTranslations("TopNav");
   const cookieStore = cookies();
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
@@ -24,7 +30,7 @@ function HomePageAdds(Ads: any) {
       {/* Heading End*/}
       {/* Main Grid */}
       <div className="   lg:max-w-[920px]  xl:min-w-[1120px] grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4  2xl:grid-cols-4 md:gap-x-16  lg:gap-x-20  xl:gap-x-24 2xl:gap-x-[234px]  gap-y-3  place-items-center   ">
-        {Ads.Ads.map((item: any, index: number) => (
+        {Ads.map((item: PostAd, index: number) => (
           <div key={index}>
             <AdCard GetAds={item} />
           </div>

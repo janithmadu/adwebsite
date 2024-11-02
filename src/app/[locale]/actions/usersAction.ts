@@ -39,12 +39,39 @@ export const UserRegistration = async () => {
         ...userData,
         _id: user.id,
       });
-      return  CreateUser;
+      return CreateUser;
     }
-  
+
 
   } catch (err) {
     console.error("Error fetching user:", err);
     return null;
   }
 };
+
+export const GetFavoritesOfUsers = async (userId: string, adId: string) => {
+  const query = `*[_type == "user" && _id == $userId && favoriteAds[]._ref == $adId] {
+    favoriteAds
+  }`;
+
+  const params = {
+    userId,
+    adId,
+  };
+
+  try {
+    const result = await client.fetch(query, params);
+    
+    if (result.length > 0) {
+
+      return true; // Indicate that the ad is a favorite
+    } else {
+     
+      return false; // Indicate that the ad is not a favorite
+    }
+  } catch (error) {
+    
+    return error; // Return null in case of error
+  }
+};
+

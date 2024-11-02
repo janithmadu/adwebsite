@@ -32,7 +32,7 @@ export const getAllSubCategories = async () => {
 
 
 
-export const getSubCategoryOptions = async () =>{
+export const getSubCategoryOptions = async () => {
   const query = `*[_type == "option"]{
     title {
       en,
@@ -44,16 +44,16 @@ export const getSubCategoryOptions = async () =>{
       ar
     }
   }`;
-  
+
   const data = await client.fetch(query);
 
   return data;
-  
+
 }
 
-export const getSubCategoriesByID = async (id: any) => {
-  console.log(id);
-  
+export const getSubCategoriesByID = async (id: string) => {
+
+
   const query = `*[_type == "subcategory" && category._ref == $categoryId]{
     _id,
     title,
@@ -80,10 +80,10 @@ export const getSubCategoriesByID = async (id: any) => {
   const params = {
     categoryId: id,
   };
-  
-  const data = await client.fetch(query,params);
-  console.log(data);
+
+  const data = await client.fetch(query, params);
+
   return data;
-  
-  
+
+
 };

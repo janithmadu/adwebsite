@@ -20,5 +20,17 @@ export default {
       type: 'boolean',
       description: 'Indicates if the user is a member of the platform',
     },
+    {
+      name: 'favoriteAds',
+      title: 'Favorite Ads',
+      type: 'array',
+      description: 'List of ads that the user has marked as favorite',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'postAd' }], // Replace 'postAd' with the actual schema name of your ads
+        },
+      ],
+    },
   ],
 };

@@ -1,4 +1,5 @@
 export interface Category {
+  id:string;
   title: {
     en: string; // English title
     ar: string; // Arabic title
@@ -6,13 +7,7 @@ export interface Category {
   slug: {
     current: string; // Current slug string
   };
-  image?: {
-    _type: "image"; // Specify the type
-    asset: {
-      _ref: string; // Reference to the image asset
-      _type: "reference"; // Asset type
-    };
-  };
+  imageUrl?:string;
   description?: {
     en: string; // English description
     ar: string; // Arabic description
@@ -20,21 +15,38 @@ export interface Category {
   price: number; // Price of the category
 
   // Optional: Define GetCategory method if needed
-  GetCategory: any;
+
+  subcategories:Array<{
+    _id:string;
+    title:Array<string>
+    slug:Array<string>
+
+  }>
+
+}
+
+export interface SubcategoryNew {
+  _id: string;
+  title:{
+    en:string
+    ar:string
+  }
+  
 }
 
 export interface Subcategory {
+  id?:string;
   _id: string; // Document ID
-  _type: "subcategory"; // Type of the document
+  _type?: "subcategory"; // Type of the document
   title: {
     en: string; // English title
     ar: string; // Arabic title
   };
-  slug: {
+  slug?: {
     _type: "slug"; // Type of the slug
     current: string; // Slug string
   };
-  category: {
+  category?: {
     _type: "reference"; // Reference type
     _ref: string; // Reference ID to the category document
   };
@@ -52,6 +64,7 @@ export interface Subcategory {
 
 // Define the Brand interface for the main document structure
 export interface Brand {
+  id: string;
   title: {
     en: string; // English Title
     ar: string; // Arabic Title
@@ -72,7 +85,6 @@ export interface Brand {
       _ref: string; // Reference ID to the image asset
     };
   };
-  subBrands: any;
 }
 
 export interface Option {
@@ -95,6 +107,7 @@ export interface Option {
 }
 
 export interface Model {
+  id:string
   title: {
     en: string; // English title with a length between 2 and 50 characters
     ar: string; // Arabic title with a length between 2 and 50 characters
@@ -111,33 +124,33 @@ export interface Model {
 }
 
 export interface FormStateNew {
-  ZodError: null | string;
+  ZodError: null;
   data: {
     name: string;
     category: string;
     subcategory: string;
-    price: string;
+    price: number;
     brand: string;
     model: string;
     conditions: string;
     authenticity: string;
     mobile: string;
     description: string;
-    image: string;
-    options: string;
+    image?: string;
+    options: string[];
   };
-  message: string | null; // Message to show if required fields are missing
+  message: string | null;
+  status: boolean;
   response: {
     Currency: string;
     _createdAt: string;
     _id: string;
     _rev: string;
     _type: string;
-    [key: string]: any; // Allows additional fields that might be part of the response
   };
-  status: boolean;
-  zodErrors?: {
-    [key: string]: string[]; // Error messages for fields, stored in arrays
+  zodErrors: {
+    name: string[];
+    [key: string]: string[] | null;
   };
 }
 
@@ -151,6 +164,16 @@ export interface PostAd {
     categoryTitle: string; // Add title directly
     categorySlug: string; // Add slug directly
     city: string | null;
+    category: {
+      _type: "reference"; // Type indicating it's a reference
+      _ref: string; // Reference ID for subcategory
+      price:number;
+      title: {
+        en: string;
+        ar: string;
+      };
+      
+    };
     condition: string;
     country: string;
     description: string;
@@ -161,7 +184,7 @@ export interface PostAd {
     model: string;
     negotiable: boolean;
     phoneNumber: string;
-    photos: Array<{ asset: { _id: string; url: string }; alt?: string }>; // Adjusted photos structure
+    photos: Array<{ asset?: { _id?: string; url?: string }; alt?: string }> ; // Adjusted photos structure
     price: number;
     state: string;
     subcategoryId: string; // Use subcategory ID directly

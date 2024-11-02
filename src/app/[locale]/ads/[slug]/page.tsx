@@ -7,17 +7,16 @@ import DescriptionAds from "../../components/Ads/SingleAds/DescriptionAds";
 import { getAdById } from "../../actions/getAds";
 import PriceSection from "../../components/Ads/SingleAds/PriceSection";
 import ProductOverwiew from "../../components/Ads/SingleAds/ProductOverwiew";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 export const revalidate = 1;
 
 export default async function AdDetailsPage({
   params,
 }: {
-  params: { slug: string }; 
+  params: { slug: string };
 }) {
   const GetAdByID = await getAdById(params.slug);
-
-  console.log(GetAdByID);
 
   const adTitile = GetAdByID?.adName;
   const AddCratedDate = GetAdByID?._createdAt;
@@ -36,14 +35,22 @@ export default async function AdDetailsPage({
   const Brand = GetAdByID?.brand;
   const Authenticity = GetAdByID?.authenticity;
   const State = GetAdByID?.state;
-  const VerifiedSeller =  GetAdByID?.user.verifiedSeller;
-  const Member =  GetAdByID?.user.member;
-
+  const VerifiedSeller = GetAdByID?.user.verifiedSeller;
+  const Member = GetAdByID?.user.member;
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+  const UserID = user?.id;
+  const AdID = GetAdByID?._id;
 
   return (
     <div className="container mx-auto  px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-10 flex space-x-6 ">
       <div className="flex-1 min-w-[872px] flex flex-col gap-x-[36px] ">
-        <HeaderSection Titile={adTitile} CreatedDate={AddCratedDate} VerifiedSeller={VerifiedSeller} Member={Member} />
+        <HeaderSection
+          Titile={adTitile}
+          CreatedDate={AddCratedDate}
+          VerifiedSeller={VerifiedSeller}
+          Member={Member}
+        />
 
         <ImageGallery Images={GetAdByID?.photos} />
 
@@ -60,6 +67,8 @@ export default async function AdDetailsPage({
             Price={Price}
             Currency={currency}
             Negotiable={Negotiable}
+            UserID={UserID}
+            AdID={AdID}
           />
           <ProductOverwiew
             Model={Model}

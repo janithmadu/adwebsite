@@ -26,7 +26,7 @@ const Pricing = () => {
 
     const GetAd = async () => {
       const GetAdd = await getAdByIdForPayment(AdID as string);
-      console.log();
+
       
 
       if (!GetAdd) {

@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Option } from "@/lib/categoryInterface";
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -14,8 +15,12 @@ function getCookie(name: string) {
   if (parts.length === 2) return parts.pop()?.split(";").shift();
 }
 
-const AdsSubOptions = ({ Options }: any) => {
-  const [locale, setLocale] = useState("en");
+interface AdsSubOptionsProps {
+  Options: Option[];
+}
+
+const AdsSubOptions: React.FC<AdsSubOptionsProps> = ({ Options }) => {
+  const [locale, setLocale] = useState<"en" | "ar">("en");
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -34,10 +39,13 @@ const AdsSubOptions = ({ Options }: any) => {
 
   useEffect(() => {
     const cookieLocale = getCookie("NEXT_LOCALE") || "en";
-    setLocale(cookieLocale);
+    setLocale(cookieLocale as "en" | "ar"); // Ensure locale is either 'en' or 'ar'
   }, []);
 
-  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>, optionValue: string) => {
+  const handleOptionChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    optionValue: string
+  ) => {
     const isChecked = e.target.checked;
     let updatedSubOptions = [...selectedSubOptions];
 
@@ -65,38 +73,35 @@ const AdsSubOptions = ({ Options }: any) => {
 
   return (
     <>
-      {Options.map((option: any, index: number) => {
-        return (
-          <div key={index}>
-
-          <Accordion  type="single" collapsible>
+      {Options.map((option, index) => (
+        <div key={index}>
+          <Accordion type="single" collapsible>
             <AccordionItem value={`item-${index}`}>
               <AccordionTrigger>{option.title?.[locale]}</AccordionTrigger>
               <AccordionContent>
-                {option?.values?.map((value: any) => {
+                {option.values.map((value) => {
                   const optionValue = value[locale];
                   return (
-                    <ul key={value[locale]} className="no-bullets">
-                    <li>
-                      <label className="inline-flex items-center ">
-                        <input
-                          type="checkbox"
-                          className="form-checkbox"
-                          checked={selectedSubOptions.includes(optionValue)}
-                          onChange={(e) => handleOptionChange(e, optionValue)}
+                    <ul key={optionValue} className="no-bullets">
+                      <li>
+                        <label className="inline-flex items-center">
+                          <input
+                            type="checkbox"
+                            className="form-checkbox"
+                            checked={selectedSubOptions.includes(optionValue)}
+                            onChange={(e) => handleOptionChange(e, optionValue)}
                           />
-                        <span className="ml-2">{optionValue}</span>
-                      </label>
-                    </li>
+                          <span className="ml-2">{optionValue}</span>
+                        </label>
+                      </li>
                     </ul>
                   );
                 })}
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-                </div>
-        );
-      })}
+        </div>
+      ))}
     </>
   );
 };
