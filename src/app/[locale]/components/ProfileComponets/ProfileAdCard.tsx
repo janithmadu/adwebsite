@@ -76,7 +76,7 @@ export function ProfileAdCard({
         href={`${locale ? `/${locale}` : ""}/ads/${id}`}
         className="block transition-transform hover:-translate-y-1 "
       >
-        <Card className="overflow-hidden border-0 shadow-lg min-w-[500px]">
+        <Card className="overflow-hidden border-0 shadow-lg ">
           <CardContent className="p-0">
             <div className="flex gap-4 p-4">
               <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg">
@@ -105,11 +105,11 @@ export function ProfileAdCard({
                     )}
                   </div>
                 </div>
-                <div className="flex items-center justify-between max-w-[700px] min-w-[360px] ">
-                  <span className="text-lg font-semibold text-green-600">
+                <div className="flex items-center sm:justify-between sm:max-w-[700px] 2xl:min-w-[360px] lg:min-w-[520px] sm:min-w-[360px]  max-w-[600px] gap-x-[10px]">
+                  <span className=" text-bodytiny sm:text-lg font-semibold text-green-600">
                     Rs {price.toLocaleString()}
                   </span>
-                  <Badge variant="secondary" className="text-xs font-normal">
+                  <Badge variant="secondary" className=" text-[0.7rem] sm:text-xs font-normal">
                     {timestamp}
                   </Badge>
                 </div>

@@ -89,12 +89,10 @@ export interface AdResponse {
   _updatedAt: string; // Example: "2024-11-02T17:57:44Z"
 }
 
-
 export const stepOpneFormAction = async (
-  prevSatte:undefined,
-
+  prevSatte: undefined,
   formData: FormData
-)=>{
+) => {
   const submisstions = parseWithZod(formData, {
     schema: SchemaAdPostForm,
   });
@@ -134,6 +132,8 @@ export const stepOpneFormAction = async (
     CategoryID = JSON.parse(formData.get("category") as string);
   }
 
+  const image = formData.getAll("image") as File[]; 
+
   const formDataObject: FormType = {
     name: formData?.get("name") as string,
     category: CategoryID?.id,
@@ -155,12 +155,11 @@ export const stepOpneFormAction = async (
     features: features.filter(
       (option): option is string => typeof option === "string"
     ),
+    image,
   };
 
-  const images = formData.getAll("image");
-
   const uploadedImages = await Promise.all(
-    images.map(async (image: FormDataEntryValue) => {
+    formDataObject.image.map(async (image: FormDataEntryValue) => {
       if (image instanceof File) {
         try {
           const imageData = await client.assets.upload("image", image, {
@@ -216,9 +215,19 @@ export const stepOpneFormAction = async (
     };
 
     const response = await client.create(newAd);
-    return {...prevSatte as any}
-   
-    
+
+    if (response) {
+      return {
+        ...(prevSatte as any),
+        response,
+        status: true,
+        message: "Almost There! Confirm Your Payment to Go Live!",
+      };
+    } else {
+      return {
+        status: false,
+      };
+    }
   } catch (error) {
     console.error("Error creating new ad:", error);
   }

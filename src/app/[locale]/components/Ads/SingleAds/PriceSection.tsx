@@ -25,7 +25,7 @@ const PriceSection: React.FC<Price> = ({
   const [NegotiableCheck, setNegotiableCheck] = useState<boolean>();
   const [FevoriteCheck, setFevoriteCheck] = useState<boolean>();
 
-  console.log(NegotiableCheck);
+  
   
 
   const router = useRouter();

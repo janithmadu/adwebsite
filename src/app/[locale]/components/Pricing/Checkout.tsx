@@ -31,7 +31,6 @@ const Checkout = ({ amount, Ad }: CheckOut) => {
   const [loading, setloading] = useState<boolean>();
   const [locale, setLocale] = useState<string>("en");
 
-  console.log(errorMessege);
 
   //Get the locales from cookies for navigate based on the locals
   useEffect(() => {

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import Logo from "../../../../../public/fi_search.svg";
+import LogoMain from "../../../../../public/logo.png"
 import Link from "next/link";
 import { PlusCircle } from "@phosphor-icons/react/dist/ssr";
 import CategoryBar from "./CategoryBar";
@@ -8,7 +9,7 @@ import CountryChange from "./CountryChange";
 export const revalidate = 1;
 import { cookies } from "next/headers";
 import { useTranslations } from "next-intl";
-import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { LoginLink,RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import UserSetting from "./UserSetting";
 
 export interface User {
@@ -32,6 +33,8 @@ const Topnavbar: React.FC<User> = ({user}) => {
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const t = useTranslations("TopNav");
 
+
+  
   return (
     <>
       <div className="min-w-full flex flex-col justify-start border-b-[#EBEEF7] border">
@@ -39,9 +42,7 @@ const Topnavbar: React.FC<User> = ({user}) => {
         <div className="relative container mx-auto px-5 lg:px-5 xl:px-20 md:px-10 min-h-[100px] flex gap-10 items-center justify-between">
           {/* Logo */}
           <Link href="/">
-            <h1 className="text-heading02 font-bold">
-              <span className="text-primary600">G</span>oshop
-            </h1>
+             <Image src={LogoMain} width={130} height={0} className="" alt="Logo"></Image>
           </Link>
 
           {/* Search Box */}
@@ -60,12 +61,22 @@ const Topnavbar: React.FC<User> = ({user}) => {
 
           {/* Top Nav Button Section */}
           <div className="hidden md:flex min-w-[243px] space-x-[20px] rtl:gap-[20px]">
-            {user ? (
+            {user?.email ? (
               <UserSetting picture={user.picture} email={user.email} family_name={user.family_name} given_name={user.given_name} id={user.id} phone_number={user.phone_number} username={user.username} />
             ) : (
+              <>
               <button className="min-w-[92px] min-h-[50px] rounded-[4px] bg-primary50 text-primary500 text-[16px] font-bold">
                 <LoginLink>{t("SignIn")}</LoginLink>
+                
               </button>
+
+              <button className="min-w-[92px] min-h-[50px] rounded-[4px] bg-primary50 text-primary500 text-[16px] font-bold">
+                <RegisterLink>{t("SignUp")}</RegisterLink>
+                
+              </button>
+              
+            
+              </>
             )}
 
             <Link

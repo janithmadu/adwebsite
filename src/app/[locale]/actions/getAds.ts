@@ -286,7 +286,7 @@ export async function getAdById(id: string) {
   const params = { id };
 
   const result = await client.fetch(query, params);
-
+  
 
   return result;
 }

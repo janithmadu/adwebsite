@@ -81,9 +81,9 @@ export default function FilterBySubs() {
           </div>
         </div>
       ) : ads.length > 0 ? (
-        <div className="grid grid-cols-1 xl:ml-14 md:gap-x-36 gap-x-32 gap-y-6 lg:grid-cols-2 xl:grid-cols-2 sm:grid-cols-2 xl:gap-x-32 place-items-center place-content-center">
+        <div className="grid grid-cols-1 xl:ml-14 md:gap-x-36 gap-x-32 lg:gap-y-1 xl:gap-y-6 lg:grid-cols-1  2xl:grid-cols-2 xl:gap-x-32 place-items-center place-content-center  ">
           {ads.map((ad: PostAd, index: number) => (
-            <div key={index}>
+            <div className="min-w-full" key={index}>
               <ProfileAdCard
                 title={ad.adName}
                 category={ad.categoryTitle}

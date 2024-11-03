@@ -12,7 +12,8 @@ import {
   SheetHeader,
   SheetTrigger,
 } from "../../../components/ui/sheet";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+
+import { ListBullets } from "@phosphor-icons/react/dist/ssr";
 
 export const revalidate = 1;
 
@@ -21,12 +22,12 @@ export default async function Home() {
   const getOptions = await getSubCategoryOptions();
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="min-h-screen bg-gray-100 sm:p-4 p-1">
       {/* Main container */}
-      <div className="inline lg:hidden">
+      <div className="inline md:hidden">
         <Sheet>
           <SheetTrigger>
-            <HamburgerMenuIcon />
+            <ListBullets size={24} className="text-bodymedium" />
           </SheetTrigger>
           <SheetContent className="overflow-scroll flex min-w-[300px] ">
             <SheetHeader className=" min-w-full">
@@ -44,9 +45,9 @@ export default async function Home() {
           </SheetContent>
         </Sheet>
       </div>
-      <div className="container mx-auto flex px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-10">
+      <div className="container mx-auto md:flex sm:px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-5">
         {/* Sidebar */}
-        <aside className="w-[312px] hidden lg:inline bg-white rounded-lg p-4 shadow">
+        <aside className=" w-[210px] lg:w-[312px] hidden md:inline bg-white rounded-lg p-4 shadow">
           {/* Category Section */}
           <div className="mb-6">
             <AdsCategory Categories={getSubCategoryAndCategory} />
@@ -61,7 +62,7 @@ export default async function Home() {
         </aside>
 
         {/* Main Content - Grid */}
-        <main className="w-3/4 ml-4">
+        <main className="md:w-3/4 sm:ml-4 w-full">
           <FilterBySubs />
         </main>
       </div>

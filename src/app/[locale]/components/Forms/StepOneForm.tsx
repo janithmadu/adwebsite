@@ -27,6 +27,9 @@ import { FormStateNew, Option, Subcategory } from "@/lib/categoryInterface";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { SchemaAdPostForm } from "@/lib/schemas";
+import { useRef } from 'react';
+import { AnyARecord } from "dns";
+
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -192,11 +195,6 @@ interface Brand {
 }
 
 const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
-  // const [formState, formAction] = useFormState<FormStateNew>(
-  //   stepOpneFormAction,
-  //   initionlState
-  // );
-
   const [CategoriesID, setCategoriesID] = useState<string | undefined>();
   const [subCategoriesID, setsubCategoriesID] = useState<string | undefined>();
   const [subCategories, setsubCategories] = useState<
@@ -217,6 +215,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
   const router = useRouter();
   const [features, setFeatures] = useState<string[]>([""]);
   const [AdPrice, setAdPrice] = useState<number>();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   //Get Category ID for retrive subcategories
   const handleInputChange = (e: string) => {
@@ -350,31 +349,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
     );
 
     setImage(updatedPreviewUrlss);
+   
   };
 
-  // useEffect(() => {
-  //   if (formState.status == false) {
-  //     setPageLoader("Error");
-  //   }
-
-  //   if (formState.status == true) {
-  //     setPageLoader("Loading Done");
-  //     Swal.fire({
-  //       title: "Congratulations!",
-  //       text: formState.message ?? "", // Provide a fallback to an empty string if message is null
-  //       icon: "success",
-  //       confirmButtonText: `Pay ${AdPrice} USD`,
-  //       allowOutsideClick: false,
-  //       allowEscapeKey: true,
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         router.push(`/${locale}/payments`); // Redirect to payments page on confirm
-  //       }
-  //     });
-
-  //     localStorage.setItem("AdID", formState.response._id);
-  //   }
-  // }, [formState]);
 
   const LoadingHandle = () => {
     setPageLoader("Loading");
@@ -410,13 +387,34 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
     shouldRevalidate: "onInput",
   });
 
-  console.log(lastResult);
-  
+  useEffect(() => {
+    if (form.status == "error") {
+      setPageLoader("Error");
+    }
+
+    if (lastResult?.status == true) {
+      setPageLoader("Loading Done");
+      Swal.fire({
+        title: "Congratulations!",
+        text: lastResult?.message ?? "", // Provide a fallback to an empty string if message is null
+        icon: "success",
+        confirmButtonText: `Pay ${AdPrice} USD`,
+        allowOutsideClick: false,
+        allowEscapeKey: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.push(`/${locale}/payments`); // Redirect to payments page on confirm
+        }
+      });
+
+      localStorage.setItem("AdID", lastResult?.response._id);
+    }
+  });
 
   return (
     <div className=" flex flex-col gap-y-[20px] ">
-      <div className="min-h-[100px] bg-primary500 rounded-xl relative">
-        <Image alt="formHeader" src={FormHeader} className="rounded-xl" />
+      <div className=" min-h-[100px] rounded-xl relative">
+        <Image alt="formHeader" src={FormHeader} className="rounded-xl min-h-[100px] min-w-full object-cover" />
         <div className="absolute inset-0 flex items-center justify-center text-white">
           <h1 className="text-[32px]">Post Your Ad</h1>
         </div>
@@ -640,9 +638,12 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                 placeholder="Pick a good price - what would you pay?"
                 className={` max-w-[180px] sm:min-w-[354px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] `}
               ></Input>
+               <p className="text-red-600">{fields.Currency.errors}</p>
             </div>
           </div>
+         
         </div>
+        
         {/* Conditions and  Currency End*/}
 
         {/* Authenticity and  Mobile Number*/}
@@ -763,7 +764,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
             className="    "
             name="image"
             onChange={handleImageChange}
+            ref={fileInputRef}
           />
+           <p className="text-red-600"><span>{fields.image.errors}</span></p>
 
           {/* Display previews for all selected images */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
@@ -902,7 +905,15 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         </div>
       </form>
       <>
-      
+        {PageLoader === "Loading" ? (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="text-center">
+              <Image alt="loader" src={LoadingImage} />
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
       </>
     </div>
   );

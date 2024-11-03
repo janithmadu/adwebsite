@@ -42,9 +42,12 @@ export default async function AdDetailsPage({
   const UserID = user?.id;
   const AdID = GetAdByID?._id;
 
+
+  
+
   return (
-    <div className="container mx-auto  px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-10 flex space-x-6 ">
-      <div className="flex-1 min-w-[872px] flex flex-col gap-x-[36px] ">
+    <div className="container mx-auto  px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-10 flex space-x-6 flex-col lg:flex-row ">
+      <div className="flex-1 lg:min-w-[572px] xl:min-w-[672px] 2xl:min-w-[872px] flex flex-col gap-x-[36px] ">
         <HeaderSection
           Titile={adTitile}
           CreatedDate={AddCratedDate}
@@ -58,10 +61,24 @@ export default async function AdDetailsPage({
           Options={Options}
           Description={Description}
           Features={Features}
+          Price={Price}
+          Currency={currency}
+          Negotiable={Negotiable}
+          UserID={UserID}
+          AdID={AdID}
+          Model={Model}
+          State={State}
+          Condition={Condition}
+          Brand={Brand}
+          Authenticity={Authenticity}
+          PhoneNumber={PhoneNumber}
+          Username={UserName}
+          UserEmail={UserEmail}
+          UserAvatar={UserAvatar}
         />
       </div>
 
-      <div className="flex-1  min-w-[424px]">
+      <div className="flex-1  min-w-[424px] hidden lg:inline">
         <div className="w-[424px]  border  py-[36px] rounded-[12px]">
           <PriceSection
             Price={Price}
