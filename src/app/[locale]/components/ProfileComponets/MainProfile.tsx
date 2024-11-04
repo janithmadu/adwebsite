@@ -13,6 +13,13 @@ import {
   UserCircle,
 } from "@phosphor-icons/react/dist/ssr";
 import DraftAds from "./DraftAds";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { ListBullets } from "@phosphor-icons/react";
 
 interface MainProfileProps {
   UserAds: PostAd[];
@@ -27,8 +34,6 @@ const MainProfile: React.FC<MainProfileProps> = ({
 }) => {
   const [activeSection, setActiveSection] = useState("MyAds");
 
- 
-  
   // Function to render the component based on the active section
   const renderActiveSection = () => {
     switch (activeSection) {
@@ -39,7 +44,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
       case "DraftAds":
         return <DraftAds UserAds={UserAdsPaymentfalse} />;
       case "Favorites":
-        return <Favorites UserAds={UserFavoriteAds}/>;
+        return <Favorites UserAds={UserFavoriteAds} />;
       case "Settings":
         return <Settings />;
       default:
@@ -48,10 +53,106 @@ const MainProfile: React.FC<MainProfileProps> = ({
   };
 
   return (
-    <div className="container mx-auto flex  gap-x-3  px-5  lg:px-5 xl:px-20 md:px-10">
+    <div className="container mx-auto md:flex  md:gap-x-3  px-5  lg:px-5 xl:px-20 md:px-10 ">
+      <div className=" flex items-center justify-end md:hidden min-w-full ">
+        <Sheet>
+          <SheetTrigger>
+            <ListBullets size={24} className="text-bodymedium" />
+          </SheetTrigger>
+          <SheetContent className="overflow-scroll flex min-w-[300px] ">
+            <SheetHeader className=" min-w-full">
+              <aside
+                id="cta-button-sidebar"
+                className=" md:w-64 h-auto  md:inline "
+                aria-label="Sidebar"
+              >
+                <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+                  <ul className="space-y-2 font-medium">
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        onClick={() => setActiveSection("MyAds")}
+                      >
+                        <UserCircle size={24} color="gray" />
+                        <span className=" md:inline ms-3">My Ads</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        onClick={() => setActiveSection("MyMembership")}
+                      >
+                        <Shield size={24} color="gray" />
+                        <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
+                          My Membership
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        onClick={() => setActiveSection("DraftAds")}
+                      >
+                        <ClipboardText size={24} color="gray" />
+                        <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
+                          Draft Ads
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        onClick={() => setActiveSection("Favorites")}
+                      >
+                        <Heart size={24} color="gray" />
+                        <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
+                          Favorites
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        onClick={() => setActiveSection("Settings")}
+                      >
+                        <Gear size={24} color="gray" />
+                        <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
+                          Settings
+                        </span>
+                      </a>
+                    </li>
+                  </ul>
+                  <div
+                    id="dropdown-cta"
+                    className="   p-4 mt-6 rounded-lg bg-blue-50 dark:bg-blue-900"
+                    role="alert"
+                  >
+                    
+                    <p className="mb-3 text-sm text-blue-800 dark:text-blue-400">
+              Welcome to the new Arzaq dashboard! Effortlessly manage your ads,
+              memberships, drafts, and favorites, all in one convenient place.
+            </p>
+                    <a
+                      className="text-sm text-blue-800 underline font-medium hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                      href="#"
+                    >
+                      Turn new navigation off
+                    </a>
+                  </div>
+                </div>
+              </aside>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
+      </div>
       <aside
         id="cta-button-sidebar"
-        className=" w-64 h-auto transition-transform -translate-x-full sm:translate-x-0"
+        className=" md:w-64 h-auto hidden md:inline "
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
@@ -63,7 +164,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                 onClick={() => setActiveSection("MyAds")}
               >
                 <UserCircle size={24} color="gray" />
-                <span className="ms-3">My Ads</span>
+                <span className=" md:inline ms-3">My Ads</span>
               </a>
             </li>
             <li>
@@ -73,7 +174,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                 onClick={() => setActiveSection("MyMembership")}
               >
                 <Shield size={24} color="gray" />
-                <span className="flex-1 ms-3 whitespace-nowrap">
+                <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
                   My Membership
                 </span>
               </a>
@@ -85,7 +186,9 @@ const MainProfile: React.FC<MainProfileProps> = ({
                 onClick={() => setActiveSection("DraftAds")}
               >
                 <ClipboardText size={24} color="gray" />
-                <span className="flex-1 ms-3 whitespace-nowrap">Draft Ads</span>
+                <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
+                  Draft Ads
+                </span>
               </a>
             </li>
             <li>
@@ -95,7 +198,9 @@ const MainProfile: React.FC<MainProfileProps> = ({
                 onClick={() => setActiveSection("Favorites")}
               >
                 <Heart size={24} color="gray" />
-                <span className="flex-1 ms-3 whitespace-nowrap">Favorites</span>
+                <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
+                  Favorites
+                </span>
               </a>
             </li>
             <li>
@@ -105,39 +210,21 @@ const MainProfile: React.FC<MainProfileProps> = ({
                 onClick={() => setActiveSection("Settings")}
               >
                 <Gear size={24} color="gray" />
-                <span className="flex-1 ms-3 whitespace-nowrap">Settings</span>
+                <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
+                  Settings
+                </span>
               </a>
             </li>
           </ul>
           <div
             id="dropdown-cta"
-            className="p-4 mt-6 rounded-lg bg-blue-50 dark:bg-blue-900"
+            className=" hidden md:inline p-4 mt-6 rounded-lg  dark:bg-blue-900"
             role="alert"
           >
-            <div className="flex items-center mb-3">
-              <span className="bg-orange-100 text-orange-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-orange-200 dark:text-orange-900">
-                Beta
-              </span>
-              <button
-                type="button"
-                className="ms-auto -mx-1.5 -my-1.5 bg-blue-50 inline-flex justify-center items-center w-6 h-6 text-blue-900 rounded-lg focus:ring-2 focus:ring-blue-400 p-1 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-400 dark:hover:bg-blue-800"
-                data-dismiss-target="#dropdown-cta"
-                aria-label="Close"
-              >
-                <span className="sr-only">Close</span>
-               
-              </button>
-            </div>
             <p className="mb-3 text-sm text-blue-800 dark:text-blue-400">
-              Preview the new Flowbite dashboard navigation! You can turn the
-              new navigation off for a limited time in your profile.
+              Welcome to the new Arzaq dashboard! Effortlessly manage your ads,
+              memberships, drafts, and favorites, all in one convenient place.
             </p>
-            <a
-              className="text-sm text-blue-800 underline font-medium hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-              href="#"
-            >
-              Turn new navigation off
-            </a>
           </div>
         </div>
       </aside>

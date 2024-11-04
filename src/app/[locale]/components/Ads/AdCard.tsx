@@ -25,9 +25,7 @@ const AdCard: React.FC<AdCardProps> = ({ GetAds }) => {
     setLocale(cookieLocale);
   }, []);
 
-  useEffect(() => {
-    
-  });
+  useEffect(() => {});
 
   return (
     <Link href={`/${locale}/ads/${GetAds?._id}`}>

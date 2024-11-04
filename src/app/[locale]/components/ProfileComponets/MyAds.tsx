@@ -10,11 +10,15 @@ const MyAds: React.FC<MainProfileProps> = ({ UserAds }) => {
 
 
   return (
-    <div className="min-w-full  grid grid-cols-2 gap-3">
+    <>
+    <h1 className="text-grayscale900 font-bold text-bodyxl mb-3">My Ads</h1>
+    <div className="min-w-full  grid lg:grid-cols-1 xl:grid-cols-2 gap-3">
+      
       {UserAds.map((ad: PostAd, index: number) => {
-
+        
         return (
           <div key={index} className="">
+            
             <ProfileAdCard
               title={ad.adName}
               category={ad.categoryTitle}
@@ -22,11 +26,12 @@ const MyAds: React.FC<MainProfileProps> = ({ UserAds }) => {
               price={ad.price}
               image={ad?.photos[0]?.asset?.url || "/" }
               timestamp={ad._createdAt}
-            />
+              />
           </div>
         );
       })}
     </div>
+      </>
   );
 };
 

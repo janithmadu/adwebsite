@@ -40,7 +40,7 @@ const CommingSoonPage: React.FC<CommingSoonDate> = ({ date }) => {
   }, []);
 
   return (
-    <div className="bg-gray-900 text-white h-full flex flex-col items-center justify-center space-y-6 p-4">
+    <div className="bg-gray-900 text-white h-full flex flex-col items-center justify-center space-y-6 p-4 mb-5">
       <h1 className="text-4xl font-bold">We&apos;re Launching Soon!</h1>
       <p className="text-lg text-gray-400">
         Our site is under construction. Stay tuned for something amazing!

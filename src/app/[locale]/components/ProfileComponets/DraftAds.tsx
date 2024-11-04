@@ -21,9 +21,11 @@ const DraftAds: React.FC<MainProfileProps> = ({ UserAds }) => {
   // }, []);
 
   return (
+    <>
+     <h1 className="text-grayscale900 font-bold text-bodyxl mb-3">Draft Ads</h1>
     <div
-      className={` ${UserAds?.length > 0 ? "min-w-full  grid grid-cols-2 gap-3 " : "grid grid-cols-1"}`}
-    >
+      className={` ${UserAds?.length > 0 ? "min-w-full  grid grid-cols-1 xl:grid-cols-2 gap-3 " : "grid grid-cols-1"}`}
+      >
       {UserAds.length > 0 ? (
         UserAds.map((ad: PostAd, index: number) => {
           return (
@@ -38,7 +40,7 @@ const DraftAds: React.FC<MainProfileProps> = ({ UserAds }) => {
                 paymentPending={true}
                 adprice={ad.category.price}
                 id={ad._id}
-              />
+                />
             </div>
           );
         })
@@ -51,6 +53,7 @@ const DraftAds: React.FC<MainProfileProps> = ({ UserAds }) => {
         </div>
       )}
     </div>
+      </>
   );
 };
 

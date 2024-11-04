@@ -11,6 +11,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import Link from "next/link";
+import { cookies } from "next/headers";
 
 
 export interface UserSetting {
@@ -24,6 +25,8 @@ export interface UserSetting {
 }
 
 const UserSetting: React.FC<UserSetting> = ({ given_name, picture }) => {
+  const cookieStore = cookies();
+  const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -41,7 +44,7 @@ const UserSetting: React.FC<UserSetting> = ({ given_name, picture }) => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Link href="profile">Profile</Link>
+          <Link href={`/${locale}/profile`}>Profile</Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem>
