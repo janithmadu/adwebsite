@@ -64,7 +64,7 @@ const AdCard: React.FC<AdCardProps> = ({ GetAds }) => {
               </div>
               <div>
                 <h1 className="text-bodymedium text-danger500">
-                  {GetAds.currency} {GetAds.price}.000
+                  {GetAds.currency} {GetAds.price}.0000
                 </h1>
               </div>
             </div>
