@@ -42,7 +42,7 @@ const Favorites: React.FC<MainProfileProps> = ({ UserAds }) => {
               height={160}
               />
             <h2 className="text-2xl font-semibold text-gray-700">
-              Oops! No Favorites Adsss.
+              Oops! No Favorites Adssss.
             </h2>
           </div>
         </div>
