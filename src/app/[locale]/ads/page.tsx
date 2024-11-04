@@ -1,25 +1,55 @@
-import AdsCategory from "../components/AdsPriview/AdsCategory/AdsCategory";
+//import AdsCategory from "../components/AdsPriview/AdsCategory/AdsCategory";
 
 import { getCategoryAndSubcategory } from "../actions/getCategories";
 import { getSubCategoryOptions } from "../actions/getSubCategories";
 
-import FilterBySubs from "../components/AdsPriview/GetAds/FilterBySubs";
-import AdsSubOptions from "../components/AdsPriview/AdsCategory/AdsSubOptions";
-import AddPriceFilter from "../components/AdsPriview/AdsCategory/AddPriceFilter";
+//import FilterBySubs from "../components/AdsPriview/GetAds/FilterBySubs";
+// import AdsSubOptions from "../components/AdsPriview/AdsCategory/AdsSubOptions";
+// import AddPriceFilter from "../components/AdsPriview/AdsCategory/AddPriceFilter";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTrigger,
 } from "../../../components/ui/sheet";
+import dynamic from "next/dynamic";
 
 import { ListBullets } from "@phosphor-icons/react/dist/ssr";
 
 export const revalidate = 1;
 
+const FilterBySubs = dynamic(
+  () => import("../components/AdsPriview/GetAds/FilterBySubs"),
+  {
+    loading: () => <p>Loading...</p>,
+  }
+);
+
+const AdsCategory = dynamic(
+  () => import("../components/AdsPriview/AdsCategory/AdsCategory"),
+  {
+    loading: () => <p>Loading...</p>,
+  }
+);
+
+const AdsSubOptions = dynamic(
+  () => import("../components/AdsPriview/AdsCategory/AdsSubOptions"),
+  {
+    loading: () => <p>Loading...</p>,
+  }
+);
+const AddPriceFilter = dynamic(
+  () => import("../components/AdsPriview/AdsCategory/AddPriceFilter"),
+  {
+    loading: () => <p>Loading...</p>,
+  }
+);
+
 export default async function Home() {
-  const getSubCategoryAndCategory = await getCategoryAndSubcategory();
-  const getOptions = await getSubCategoryOptions();
+  const [getSubCategoryAndCategory, getOptions] = await Promise.all([
+    getCategoryAndSubcategory(),
+    getSubCategoryOptions(),
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-100 sm:p-4 p-1">

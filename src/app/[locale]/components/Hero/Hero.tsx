@@ -25,6 +25,8 @@ export const Hero: React.FC<{ HeroImages: Images[] }> = ({ HeroImages }) => {
               src={image.imageUrl}
               width={1920}
               height={446}
+              layout="responsive"
+              loading="lazy"
             />
           </div>
         ))}
