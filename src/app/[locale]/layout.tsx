@@ -7,6 +7,7 @@ import { NextIntlClientProvider } from "next-intl";
 import Fotter from "./components/Fotter/Fotter";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from '@vercel/analytics/react';
 
 export const revalidate = 1;
 const inter = Nunito_Sans({ subsets: ["latin"] });
@@ -46,6 +47,7 @@ export default async function RootLayout({
             <Topnavbar user={users} />
           </div>
           {children}
+          <Analytics />
           <Fotter />
         </NextIntlClientProvider>
         <Toaster />
