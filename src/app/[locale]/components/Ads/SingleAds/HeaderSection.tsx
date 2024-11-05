@@ -1,6 +1,7 @@
 "use client";
+import { getRelativeTime } from "@/app/[locale]/actions/relativeTime";
 import { Clock, Eye } from "@phosphor-icons/react/dist/ssr";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 interface HeaderSection {
   Titile: string;
@@ -17,6 +18,17 @@ const HeaderSection: React.FC<HeaderSection> = ({
 }) => {
   const [isVerified, setisVerified] = React.useState<string>();
   const [isMember, setisMember] = React.useState<string>();
+  const [relativeTime, setRelativeTime] = useState(
+    getRelativeTime(CreatedDate)
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRelativeTime(getRelativeTime(CreatedDate));
+    }, 60000); // Update every minute
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [CreatedDate]);
 
   useEffect(() => {
     if (VerifiedSeller) {
@@ -52,7 +64,7 @@ const HeaderSection: React.FC<HeaderSection> = ({
           <div className="flex gap-x-[6px] items-center ">
             <Clock width={24} height={24} className="text-grayscale500" />
             <h1 className="text-grayscale500 text-bodytiny  md:text-bodymedium">
-              {CreatedDate}
+              {relativeTime}
             </h1>
           </div>
 

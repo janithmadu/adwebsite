@@ -35,14 +35,13 @@ const PaginationComponent: React.FC<Pagination> = ({
     router.push(`?${params.toString()}`);
   };
 
-  const handlePageClick = (pageNumber:number) => {
+  const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber);
     const params = new URLSearchParams(searchParams.toString()); // Keep existing params
 
     params.set("page", pageNumber.toString()); // Update page number
     router.push(`?${params.toString()}`);
     // Here, you can fetch the new data based on the selected page (e.g., API call)
-    
   };
 
   return (
@@ -52,11 +51,11 @@ const PaginationComponent: React.FC<Pagination> = ({
     >
       <div className="flex items-center  gap-5">
         <button
-          className="min-w-[48px] min-h-[48px]  bg-primary100 flex justify-center items-center rounded-[4px]"
+          className="min-w-[48px] min-h-[48px]  bg-primary100 flex justify-center items-center rounded-[4px] transition duration-300 ease-in-out hover:bg-primary700 hover:shadow-lg"
           onClick={() => changePage(page - 1)}
           disabled={page <= 1}
         >
-          <ArrowLeft width={24} height={24} className="text-primary500" />
+          <ArrowLeft width={24} height={24} className="text-primary500 " />
         </button>
 
         {Array.from({ length: totalPages }, (_, index) => {
@@ -65,7 +64,7 @@ const PaginationComponent: React.FC<Pagination> = ({
             <div
               key={pageNumber}
               onClick={() => handlePageClick(pageNumber)}
-              className={` ${currentPage === pageNumber ? "bg-primary500 text-white" : "bg-grayscale50 text-grayscale900"}  min-w-[48px] min-h-[48px] rounded-[4px] flex justify-center items-center cursor-pointer`}
+              className={` ${currentPage === pageNumber ? "bg-primary500 text-white" : "bg-grayscale50 text-grayscale900"}  min-w-[48px] min-h-[48px] rounded-[4px] flex justify-center items-center cursor-pointer transition duration-300 ease-in-out hover:bg-primary700 hover:shadow-lg `}
             >
               <span className="flex justify-center">{pageNumber}</span>
             </div>
@@ -75,9 +74,9 @@ const PaginationComponent: React.FC<Pagination> = ({
         <button
           disabled={totalPages <= currentPage}
           onClick={() => changePage(page + 1)}
-          className="min-w-[48px] min-h-[48px]  bg-primary100 flex justify-center items-center rounded-[4px]"
+          className="min-w-[48px] min-h-[48px]  bg-primary100 flex justify-center items-center rounded-[4px] transition duration-300 ease-in-out hover:bg-primary700 hover:shadow-lg"
         >
-          <ArrowRight width={24} height={24} className="text-primary500" />
+          <ArrowRight width={24} height={24} className="text-primary500 " />
         </button>
       </div>
     </div>

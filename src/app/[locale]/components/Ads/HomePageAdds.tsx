@@ -14,8 +14,6 @@ interface Ads {
 }
 
 const HomePageAdds: React.FC<Ads> = ({ Ads }) => {
-  
-
   const t = useTranslations("TopNav");
   const cookieStore = cookies();
   const locale: string = cookieStore.get("NEXT_LOCALE")?.value || "en";
@@ -36,7 +34,7 @@ const HomePageAdds: React.FC<Ads> = ({ Ads }) => {
         {Ads.map((item: PostAd, index: number) => (
           <div className=" relative " key={index}>
             <ProfileAdCard
-              category=""
+              category={item.category.title[(locale as "en") || "ar"]}
               price={item.price}
               image={item.photos[0].asset?.url || "/"}
               title={item.adName}
@@ -52,7 +50,7 @@ const HomePageAdds: React.FC<Ads> = ({ Ads }) => {
       <div className="min-w-full flex justify-center items-center">
         <Link
           href={`${locale}/ads?page=1`}
-          className="flex space-x-[8px] items-center min-w-[144px] min-h-[50px] bg-primary500 justify-center text-heading04 text-grayscalewhite rounded-[4px] rtl:flex-row-reverse"
+          className="flex space-x-[8px] items-center min-w-[144px] min-h-[50px] bg-primary500 justify-center text-heading04 text-grayscalewhite rounded-[4px] rtl:flex-row-reverse transition duration-300 ease-in-out hover:bg-primary700 hover:shadow-lg"
         >
           <h1>View Alls</h1>
           <ArrowRight />

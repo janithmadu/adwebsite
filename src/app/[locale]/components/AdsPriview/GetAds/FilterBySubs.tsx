@@ -20,6 +20,11 @@ const isResult = (data: any): data is Result => {
     data && Array.isArray(data.result) && typeof data.resultCount === "number"
   );
 };
+function getCookie(name: string) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift();
+}
 
 export default function FilterBySubs() {
   const [ads, setAds] = useState<PostAd[]>([]);
@@ -27,6 +32,11 @@ export default function FilterBySubs() {
   const [adsLoader, setAdsLoader] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const PageSize = 50;
+  const [locale, setLocale] = useState("en");
+  useEffect(() => {
+    const cookieLocale = getCookie("NEXT_LOCALE") || "en";
+    setLocale(cookieLocale);
+  }, []);
 
   useEffect(() => {
     const queryObject = Object.fromEntries(searchParams.entries());
@@ -86,7 +96,7 @@ export default function FilterBySubs() {
             <div className="min-w-full" key={index}>
               <ProfileAdCard
                 title={ad.adName}
-                category={ad.categoryTitle}
+                category={ad.category.title[(locale as "en") || "ar"]}
                 image={ad?.photos[0]?.asset?.url || ""}
                 price={ad.price}
                 timestamp={ad._createdAt}

@@ -44,7 +44,7 @@ const UserSetting: React.FC<UserSetting> = ({ given_name, picture }) => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Link href={`/${locale}/profile`}>Profile</Link>
+          <Link href={`/${locale}/profile/?page=1`}>Profile</Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem>

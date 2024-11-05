@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/app/[locale]/components/Card";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { getRelativeTime } from "../../actions/relativeTime";
 
 interface ProductCardProps {
   title: string;
@@ -14,7 +15,7 @@ interface ProductCardProps {
   subcategory?: string;
   price: number;
   image: string;
-  timestamp?: string;
+  timestamp: string;
   id?: string;
   paymentPending?: boolean;
   adprice?: number;
@@ -42,6 +43,14 @@ export function ProfileAdCard({
     const cookieLocale = getCookie("NEXT_LOCALE") || "en";
     setLocale(cookieLocale);
   }, []);
+  const [relativeTime, setRelativeTime] = useState(getRelativeTime(timestamp));
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRelativeTime(getRelativeTime(timestamp));
+    }, 60000); // Update every minute
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [timestamp]);
 
   const PaymentPendingPay = () => {
     localStorage.setItem("AdID", id as string);
@@ -81,7 +90,7 @@ export function ProfileAdCard({
             <div className="flex gap-4 p-4">
               <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg">
                 <Image
-                  src={image}
+                  src={image || "/"}
                   alt={title}
                   fill
                   className="object-cover"
@@ -109,8 +118,11 @@ export function ProfileAdCard({
                   <span className=" text-bodytiny sm:text-lg font-semibold text-green-600">
                     Rs {price.toLocaleString()}
                   </span>
-                  <Badge variant="secondary" className=" text-[0.7rem] sm:text-xs font-normal">
-                    {timestamp}
+                  <Badge
+                    variant="secondary"
+                    className=" text-[0.7rem] sm:text-xs font-normal"
+                  >
+                    {relativeTime}
                   </Badge>
                 </div>
               </div>

@@ -20,7 +20,7 @@ function ImageGallery(Images:Images) {
     <div className=" flex flex-col space-y-5">
       <div className="bg-grayscale20 flex justify-center items-center  min-w-full max-w-full max-h-[600px] rounded-lg overflow-hidden gap-y-10 ">
         <img
-          src={selectedImage || Images?.Images[0]?.asset?.url}
+          src={selectedImage || Images?.Images[0]?.asset?.url || "/"}
           alt="Main Product Image"
           className="rounded-lg shadow-lg  min-w-10 max-h-[600px]"
         />

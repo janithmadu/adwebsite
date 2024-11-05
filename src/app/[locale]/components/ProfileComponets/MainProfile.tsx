@@ -25,12 +25,14 @@ interface MainProfileProps {
   UserAds: PostAd[];
   UserAdsPaymentfalse: PostAd[]; // Expecting an array of PostAd objects
   UserFavoriteAds: PostAd[];
+  resultCount:number
 }
 
 const MainProfile: React.FC<MainProfileProps> = ({
   UserAds,
   UserAdsPaymentfalse,
   UserFavoriteAds,
+  resultCount
 }) => {
   const [activeSection, setActiveSection] = useState("MyAds");
 
@@ -38,11 +40,11 @@ const MainProfile: React.FC<MainProfileProps> = ({
   const renderActiveSection = () => {
     switch (activeSection) {
       case "MyAds":
-        return <MyAds UserAds={UserAds} />;
+        return <MyAds UserAds={UserAds} resultCount={resultCount} />;
       case "MyMembership":
         return <MyMembership />;
       case "DraftAds":
-        return <DraftAds UserAds={UserAdsPaymentfalse} />;
+        return <DraftAds UserAds={UserAdsPaymentfalse} resultCount={resultCount} />;
       case "Favorites":
         return <Favorites UserAds={UserFavoriteAds} />;
       case "Settings":
