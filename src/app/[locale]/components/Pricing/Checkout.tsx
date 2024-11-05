@@ -60,11 +60,15 @@ const Checkout = ({ amount, Ad }: CheckOut) => {
       return;
     }
 
+    const MainUrl="https://adwebsite.vercel.app/"
+    const DevUrl =  "http://localhost:3000/"
+
+
     const { error } = await stripe.confirmPayment({
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `http://localhost:3000/${locale}/payments/paymentsuccess`, //To Do
+        return_url: `${MainUrl}${locale}/payments/paymentsuccess`, //To Do
       },
     });
 
