@@ -10,6 +10,7 @@ import Image from "next/image";
 import { PostAd } from "@/lib/categoryInterface";
 
 function getCookie(name: string) {
+ 
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop()?.split(";").shift();
@@ -62,12 +63,14 @@ const Checkout = ({ amount, Ad }: CheckOut) => {
       setloading(false);
       return;
     }
+   
+    
 
     const { error } = await stripe.confirmPayment({
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `http://localhost:3000/${locale}/payments/paymentsuccess`, //To Do
+        return_url: `https://adwebsite.vercel.app/${locale}/payments/paymentsuccess`, //To Do
       },
     });
 
