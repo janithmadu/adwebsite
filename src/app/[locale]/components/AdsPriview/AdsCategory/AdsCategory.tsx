@@ -47,6 +47,7 @@ const AdsCategory: React.FC<Categories> = ({ Categories }) => {
                   
                     return(
                       <AddSubcategory
+                      key={subcate._id}
                       subcatotitle={subcate.title[localeIndex]}
                       subcatoId={subcate._id}
                     />
