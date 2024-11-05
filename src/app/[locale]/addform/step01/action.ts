@@ -93,6 +93,9 @@ export const stepOpneFormAction = async (
   prevSatte: undefined,
   formData: FormData
 ) => {
+
+
+
   const submisstions = parseWithZod(formData, {
     schema: SchemaAdPostForm,
   });

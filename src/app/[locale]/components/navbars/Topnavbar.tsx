@@ -38,7 +38,7 @@ const Topnavbar: React.FC<User> = ({ user }) => {
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const t = useTranslations("TopNav");
 
-  console.log(user);
+
   
   return (
     <>

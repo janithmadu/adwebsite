@@ -26,8 +26,8 @@ export const SchemaAdPostForm = z.object({
     { message: "Only .jpg and .png files are allowed." }
   )
   .refine(
-    (files) => files.every((file) => file.size <= 2 * 1024 * 1024),
-    { message: "Each file must be less than 2MB." }
+    (files) => files.every((file) => file.size <= 10 * 1024 * 1024),
+    { message: "Each file must be less than 10MB." }
   ),
   options: z.array(z.string()).optional(),
   features: z.array(z.string()).optional(),
