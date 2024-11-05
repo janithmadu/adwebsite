@@ -84,7 +84,7 @@ const DescriptionAds: React.FC<AdData> = ({
 
   const HidePhone = PhoneNumber?.slice(0, 4);
 
-  console.log();
+
 
   return (
     <div className="mt-8 ">

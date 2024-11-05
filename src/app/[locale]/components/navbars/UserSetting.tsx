@@ -18,7 +18,7 @@ export interface UserSetting {
   id?: string;
   email?: string;
   family_name?: string;
-  given_name?: string;
+  given_name: string;
   picture: string;
   username?: string;
   phone_number?: string;
@@ -36,7 +36,7 @@ const UserSetting: React.FC<UserSetting> = ({ given_name, picture }) => {
           </Avatar>
         ) : (
           <Avatar>
-            <AvatarFallback>{given_name}</AvatarFallback>
+            <AvatarFallback>{given_name[0]}</AvatarFallback>
           </Avatar>
         )}
       </DropdownMenuTrigger>

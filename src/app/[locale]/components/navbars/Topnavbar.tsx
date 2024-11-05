@@ -38,6 +38,8 @@ const Topnavbar: React.FC<User> = ({ user }) => {
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const t = useTranslations("TopNav");
 
+  console.log(user);
+  
   return (
     <>
       <div className="min-w-full flex flex-col justify-start border-b-[#EBEEF7] border">
@@ -70,7 +72,7 @@ const Topnavbar: React.FC<User> = ({ user }) => {
 
           {/* Top Nav Button Section */}
           <div className=" flex md:min-w-[243px] space-x-[20px] rtl:gap-[20px]">
-            {user?.email ? (
+            {user?.id ? (
               <UserSetting
                 picture={user.picture}
                 email={user.email}

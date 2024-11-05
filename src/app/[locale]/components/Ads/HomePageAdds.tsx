@@ -14,7 +14,7 @@ interface Ads {
 }
 
 const HomePageAdds: React.FC<Ads> = ({ Ads }) => {
-  console.log(Ads);
+  
 
   const t = useTranslations("TopNav");
   const cookieStore = cookies();
