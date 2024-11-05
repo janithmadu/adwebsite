@@ -10,20 +10,17 @@ import Image from "next/image";
 import { PostAd } from "@/lib/categoryInterface";
 
 function getCookie(name: string) {
- 
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop()?.split(";").shift();
 }
 
-interface CheckOut{
-  amount:number
-  Ad:PostAd
+interface CheckOut {
+  amount: number;
+  Ad: PostAd;
 }
 
 const Checkout = ({ amount, Ad }: CheckOut) => {
-  
-  
   const stripe = useStripe();
   const elements = useElements();
 
@@ -31,7 +28,6 @@ const Checkout = ({ amount, Ad }: CheckOut) => {
   const [clientSecret, setclientSecret] = useState<string | undefined>();
   const [loading, setloading] = useState<boolean>();
   const [locale, setLocale] = useState<string>("en");
-
 
   //Get the locales from cookies for navigate based on the locals
   useEffect(() => {
@@ -63,27 +59,24 @@ const Checkout = ({ amount, Ad }: CheckOut) => {
       setloading(false);
       return;
     }
-   
-    
 
     const { error } = await stripe.confirmPayment({
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `https://adwebsite.vercel.app/${locale}/payments/paymentsuccess`, //To Do
+        return_url: `http://localhost:3000/${locale}/payments/paymentsuccess`, //To Do
       },
     });
 
     if (error) {
       seterrorMessege(error.message);
-
     } else {
     }
   };
   if (!clientSecret || !stripe || !elements) {
     return (
-      <div className="min-w-full ">
-        <div className="w-full flex justify-center bg-red-500">
+      <div className="min-w-full min-h-[300px] flex justify-center items-center">
+        <div className="w-full flex justify-center ">
           <Image alt="Loader" src={Loader} />
         </div>
       </div>
