@@ -84,6 +84,8 @@ const DescriptionAds: React.FC<AdData> = ({
 
   const HidePhone = PhoneNumber?.slice(0, 4);
 
+  console.log();
+
   return (
     <div className="mt-8 ">
       <div className="mb-4 lg:hidden flex flex-col gap-y-2">
@@ -198,20 +200,22 @@ const DescriptionAds: React.FC<AdData> = ({
         </ul>
       </div>
 
-      <div className="mt-6 flex flex-col gap-y-[24px] mb-10">
-        <h2 className="text-grayscale900 text-heading03">Features</h2>
-        <ul className="grid grid-cols-2 gap-y-[16px] text-grayscale700 text-bodymedium">
-          {Features?.map((feature, index: number) => {
-            return (
-              <li key={index} className="flex gap-x-[12px] items-center">
-                <Check width={24} height={24} className="text-primary500" />
-                {feature}
-                {/* Accessing the string property inside the Feature object */}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      {Features?.every((item) => item === "") ? null : (
+        <div className="mt-6 flex flex-col gap-y-[24px] mb-10">
+          <h2 className="text-grayscale900 text-heading03">Features</h2>
+          <ul className="grid grid-cols-2 gap-y-[16px] text-grayscale700 text-bodymedium">
+            {Features?.map((feature, index: number) => {
+              return (
+                <li key={index} className="flex gap-x-[12px] items-center">
+                  <Check width={24} height={24} className="text-primary500" />
+                  {feature}
+                  {/* Accessing the string property inside the Feature object */}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
 
       <div className="mb-4 lg:hidden flex flex-col gap-y-2">
         <div className="">

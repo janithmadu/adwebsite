@@ -35,8 +35,7 @@ const AddPriceFilter = () => {
         onChange={(values) => setValues(values)}
         renderTrack={({ props, children }) => (
           <div
-            dir="ltr"
-            {...{ ...props, key: "track" }}
+            {...props}
             className="w-full h-1 bg-gray-300 rounded"
             style={{
               background: getTrackBackground({
@@ -50,9 +49,10 @@ const AddPriceFilter = () => {
             {children}
           </div>
         )}
-        renderThumb={({ props, isDragged }) => (
+        renderThumb={({ props, isDragged, index }) => (
           <div
-            {...{ ...props, key: "thumb" }}
+            {...props}
+            key={index}
             className={`w-5 h-5 bg-blue-500 rounded-full shadow-md cursor-pointer ${
               isDragged ? "shadow-lg" : ""
             }`}

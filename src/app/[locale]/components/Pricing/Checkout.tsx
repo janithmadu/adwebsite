@@ -60,9 +60,8 @@ const Checkout = ({ amount, Ad }: CheckOut) => {
       return;
     }
 
-    const MainUrl="https://adwebsite.vercel.app/"
-    const DevUrl =  "http://localhost:3000/"
-
+    const MainUrl = "https://adwebsite.vercel.app/";
+    const DevUrl = "http://localhost:3000/";
 
     const { error } = await stripe.confirmPayment({
       elements,
@@ -88,9 +87,9 @@ const Checkout = ({ amount, Ad }: CheckOut) => {
   } else {
     return (
       <div className="">
-        <div className="flex flex-row w-full  p-4">
+        <div className="flex flex-col min-w-full  md:flex-row w-full  p-4">
           {/* Left Side: Ad Details */}
-          <div className="w-1/2 p-4 border-r-1 border-gray-200">
+          <div className="md:w-1/2 p-4 border-r-1 border-gray-200">
             <div className="p-4 border-gray-200">
               <div className="bg-white shadow-xl rounded-lg p-8">
                 <h2 className="text-3xl font-extrabold mb-6 text-gray-900 tracking-wide border-b pb-4">
@@ -124,7 +123,7 @@ const Checkout = ({ amount, Ad }: CheckOut) => {
           </div>
 
           {/* Right Side: Payment Gateway */}
-          <div className="w-1/2 p-4">
+          <div className="md:w-1/2 p-4">
             <h2 className="text-2xl font-bold mb-2">Complete Your Payment</h2>
             <form
               onSubmit={handleSubmit}

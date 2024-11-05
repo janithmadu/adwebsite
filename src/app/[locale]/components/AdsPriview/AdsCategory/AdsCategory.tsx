@@ -19,15 +19,15 @@ interface SubcategoryNew {
   title: string[]; // Updated to string[] to match data structure
 }
 
-
-
 const AdsCategory: React.FC<Categories> = ({ Categories }) => {
   const cookieStore = cookies();
   const locale = (cookieStore.get("NEXT_LOCALE")?.value || "en") as "en" | "ar";
-  const localeIndex = locale === "ar" ? 1 : 0; // Assume the array has `en` at index 0 and `ar` at index 1
+  const localeIndex = locale; // Assume the array has `en` at index 0 and `ar` at index 1
   return (
     <>
       {Categories.map((category: Category, index: number) => {
+        
+        
         return (
           <Accordion key={index} type="single" collapsible>
             <AccordionItem value="item-1">
@@ -42,14 +42,18 @@ const AdsCategory: React.FC<Categories> = ({ Categories }) => {
               </AccordionTrigger>
               <AccordionContent>
                 <ul className="space-y-2">
-                  {category.subcategories.map((subcate:SubcategoryNew) => {
-                    <AddSubcategory
+                  
+                  {category.subcategories.map((subcate: any) => {
+                  
+                    return(
+                      <AddSubcategory
                       subcatotitle={subcate.title[localeIndex]}
                       subcatoId={subcate._id}
-                    />;
+                    />
+                    )
 
                     // Handle cases where subcate does not conform to SubcategoryNew
-                    return null; // or some fallback UI
+                    
                   })}
                 </ul>
               </AccordionContent>

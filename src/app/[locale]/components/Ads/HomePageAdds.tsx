@@ -6,16 +6,19 @@ import AdCard from "./AdCard";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { PostAd } from "@/lib/categoryInterface";
+import { ProfileAdCard } from "../ProfileComponets/ProfileAdCard";
 export const revalidate = 1;
 
-interface Ads{
-  Ads:PostAd[]
+interface Ads {
+  Ads: PostAd[];
 }
 
-const  HomePageAdds:React.FC<Ads> = ({Ads}) =>{
+const HomePageAdds: React.FC<Ads> = ({ Ads }) => {
+  console.log(Ads);
+
   const t = useTranslations("TopNav");
   const cookieStore = cookies();
-  const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
+  const locale: string = cookieStore.get("NEXT_LOCALE")?.value || "en";
 
   return (
     <div className="container mx-auto flex flex-col space-y-[50px] px-5  lg:px-5 xl:px-20 md:px-10 2xl:px-44 mb-3 ">
@@ -29,10 +32,19 @@ const  HomePageAdds:React.FC<Ads> = ({Ads}) =>{
       </div>
       {/* Heading End*/}
       {/* Main Grid */}
-      <div className="   lg:max-w-[920px]  xl:min-w-[1120px] grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4  2xl:grid-cols-4 md:gap-x-16  lg:gap-x-20  xl:gap-x-24 2xl:gap-x-[234px]  gap-y-3  place-items-center   ">
+      <div className="  relative container mx-auto  grid grid-cols-1   lg:grid-cols-1 xl:grid-cols-1  2xl:grid-cols-2 md:gap-x-16     2xl:gap-x-1  gap-y-3  place-items-center   ">
         {Ads.map((item: PostAd, index: number) => (
-          <div key={index}>
-            <AdCard GetAds={item} />
+          <div className=" relative " key={index}>
+            <ProfileAdCard
+              category=""
+              price={item.price}
+              image={item.photos[0].asset?.url || "/"}
+              title={item.adName}
+              adprice={item.price}
+              id={item._id}
+              key={item._id}
+              timestamp={item._createdAt}
+            />
           </div>
         ))}
       </div>
@@ -48,6 +60,6 @@ const  HomePageAdds:React.FC<Ads> = ({Ads}) =>{
       </div>
     </div>
   );
-}
+};
 
 export default HomePageAdds;

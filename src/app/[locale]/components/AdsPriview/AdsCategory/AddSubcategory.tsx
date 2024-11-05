@@ -8,6 +8,8 @@ interface SubCategory {
 }
 
 const  AddSubcategory:React.FC<SubCategory> = ({ subcatotitle, subcatoId }) => {
+  
+  
   const router = useRouter();
   const searchParams = useSearchParams();
 
