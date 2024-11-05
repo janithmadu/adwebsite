@@ -52,7 +52,7 @@ export default async function RootLayout({
           <Analytics />
           <Fotter />
         </NextIntlClientProvider>
-        <div className="md:hidden fixed bottom-16 left-1/2 transform -translate-x-1/2 z-50 bg-primary500 px-7 mb-4 font-bold py-3 rounded-full text-white">
+        <div className="md:hidden fixed bottom-1 left-1/2 transform -translate-x-1/2 z-50 bg-primary500 px-7 mb-4 font-bold py-3 rounded-full text-white">
           <Link
             href={`/${locale}/addform/step01`}
             className="flex items-center gap-x-1"
