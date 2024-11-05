@@ -18,6 +18,8 @@ export default async function AdDetailsPage({
 }) {
   const GetAdByID = await getAdById(params.slug);
 
+  
+
   const adTitile = GetAdByID?.adName;
   const AddCratedDate = GetAdByID?._createdAt;
   const Price = GetAdByID?.price;

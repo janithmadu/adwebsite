@@ -5,7 +5,7 @@ import Link from "next/link";
 
 interface SellerInfo {
   Username: string;
-  UserEmail: string;
+  UserEmail?: string;
   UserAvatar: string;
 }
 const SellerInfo: React.FC<SellerInfo> = ({
@@ -18,13 +18,19 @@ const SellerInfo: React.FC<SellerInfo> = ({
       <div className="flex gap-y-[24px] flex-col">
         <div className="flex justify-between min-h-[56px]  min-w-full items-center">
           <div className="flex gap-x-[16px] items-center">
-            <Image
-              src={UserAvatar}
+           {
+            UserAvatar ? (
+              <Image
+              src={UserAvatar || "/"}
               width={52}
               height={52}
               alt=""
               className="rounded-full bg-red-500 bg-cover"
             />
+            ):(
+              <div className="rounded-full bg-grayscale200 w-12 h-12 flex justify-center items-center"><h1 className="text-bodyxl">{Username[1]}</h1></div>
+            )
+           }
             <div className="flex flex-col gap-y-[6px] ">
               <h1 className="text-grayscale500 text-bodysmall">Add by:</h1>
               <h1 className="text-grayscale900 text-bodymedium flex gap-x-[4px] items-center">
@@ -42,7 +48,9 @@ const SellerInfo: React.FC<SellerInfo> = ({
           </Link>
         </div>
 
-        <div className="flex flex-col justify-center gap-y-[16px]">
+       {
+        UserEmail ?(
+          <div className="flex flex-col justify-center gap-y-[16px]">
           <span className="flex gap-x-[12px] items-center">
             {" "}
             <Envelope
@@ -50,9 +58,13 @@ const SellerInfo: React.FC<SellerInfo> = ({
               height={24}
               className="text-primary500"
             />{" "}
-            <h1 className="text-grayscale600 text-bodymedium">{UserEmail}</h1>{" "}
+            <h1 className="text-grayscale600 text-bodymedium">{UserEmail}</h1>
           </span>
         </div>
+        ):(
+          <></>
+        )
+       }
       </div>
     </div>
   );
