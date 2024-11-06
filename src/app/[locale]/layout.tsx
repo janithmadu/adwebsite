@@ -10,6 +10,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
 import Link from "next/link";
 import { PlusCircle } from "@phosphor-icons/react/dist/ssr";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const revalidate = 1;
 const inter = Nunito_Sans({ subsets: ["latin"] });
@@ -50,6 +51,7 @@ export default async function RootLayout({
           </div>
           {children}
           <Analytics />
+          <SpeedInsights />
           <Fotter />
         </NextIntlClientProvider>
         <div className="md:hidden fixed bottom-1 left-1/2 transform -translate-x-1/2 z-50 bg-primary500 px-7 mb-4 font-bold py-3 rounded-full text-white">
