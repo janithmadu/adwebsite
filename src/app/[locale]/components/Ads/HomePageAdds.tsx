@@ -32,7 +32,7 @@ const HomePageAdds: React.FC<Ads> = ({ Ads }) => {
       {/* Main Grid */}
       <div className="  relative container mx-auto  grid grid-cols-1   lg:grid-cols-1 xl:grid-cols-1  2xl:grid-cols-2 md:gap-x-16     2xl:gap-x-1  gap-y-3  place-items-center   ">
         {Ads.map((item: PostAd, index: number) => (
-          <div className=" relative " key={index}>
+          <div className=" relative min-w-full md:min-w-fit" key={index}>
             <ProfileAdCard
               category={item.category.title[(locale as "en") || "ar"]}
               price={item.price}
