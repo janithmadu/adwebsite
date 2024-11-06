@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { getRelativeTime } from "../../actions/relativeTime";
 import { Trash } from "@phosphor-icons/react/dist/ssr";
 import Loading from "../../loading";
+import { useTranslations } from "next-intl";
 
 export const revalidate = 1;
 
@@ -46,6 +47,8 @@ export function ProfileAdCard({
   const [locale, setLocale] = useState("en");
   const [loading, setloading] = useState(true);
   const router = useRouter();
+  const t = useTranslations("TopNav");
+
   useEffect(() => {
     const cookieLocale = getCookie("NEXT_LOCALE") || "en";
     setLocale(cookieLocale);
@@ -126,7 +129,7 @@ export function ProfileAdCard({
             className="cursor-pointer bg-danger600 p-[4px] text-bodytiny px-2 rounded-full text-white transition duration-300 ease-in-out hover:bg-danger700 hover:shadow-lg"
             onClick={PaymentPendingPay}
           >
-            Payment Pending
+            {t("pandingpayment")}
           </button>
         ) : null}
 

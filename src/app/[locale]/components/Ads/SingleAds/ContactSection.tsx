@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useTranslations } from "next-intl";
 
 interface PhoneNumber {
   PhoneNumber: string;
@@ -21,6 +22,7 @@ interface PhoneNumber {
 
 const ContactSection: React.FC<PhoneNumber> = ({ PhoneNumber }) => {
   const HidePhone = PhoneNumber.slice(0, 4);
+  const t = useTranslations("TopNav");
 
   return (
     <div className="space-y-2 mb-6">
@@ -34,16 +36,14 @@ const ContactSection: React.FC<PhoneNumber> = ({ PhoneNumber }) => {
           </h1>
 
           <AlertDialog>
-            <AlertDialogTrigger>
-              Click here to reveal phone number.
-            </AlertDialogTrigger>
+            <AlertDialogTrigger>{t("Revelthephone")}</AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Owner Phone Number</AlertDialogTitle>
+                <AlertDialogTitle> {t("Revelthephone")}</AlertDialogTitle>
                 <AlertDialogDescription>{PhoneNumber}</AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{t("Cancel")}</AlertDialogCancel>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
@@ -57,13 +57,16 @@ const ContactSection: React.FC<PhoneNumber> = ({ PhoneNumber }) => {
       <div className="rounded-[4px] bg-[#2DD54B] flex items-center justify-center gap-x-[8px] py-[13px]">
         <WhatsappLogo width={24} height={24} className="text-white" />
         <h1 className="text-grayscalewhite text-heading04">
-          Message Via Whatsapp
+          {t("MessegeviaWhatsapp")}
         </h1>
       </div>
 
       <div className="rounded-[4px] bg-grayscale50 flex items-center justify-center gap-x-[8px] py-[13px]">
         <Envelope width={24} height={24} className="text-grayscale900" />
-        <h1 className="text-grayscale900 text-heading04">Message Via email</h1>
+        <h1 className="text-grayscale900 text-heading04">
+          {" "}
+          {t("MessegeviaEmail")}
+        </h1>
       </div>
     </div>
   );

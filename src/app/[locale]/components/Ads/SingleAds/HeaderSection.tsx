@@ -1,6 +1,7 @@
 "use client";
 import { getRelativeTime } from "@/app/[locale]/actions/relativeTime";
 import { Clock, Eye } from "@phosphor-icons/react/dist/ssr";
+import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 
 interface HeaderSection {
@@ -21,6 +22,7 @@ const HeaderSection: React.FC<HeaderSection> = ({
   const [relativeTime, setRelativeTime] = useState(
     getRelativeTime(CreatedDate)
   );
+  const t = useTranslations("TopNav");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -71,7 +73,7 @@ const HeaderSection: React.FC<HeaderSection> = ({
           <div className="flex gap-x-[6px] items-center ">
             <Eye width={24} height={24} className="text-grayscale500" />
             <h1 className="text-grayscale500 text-bodytiny  md:text-bodymedium">
-              69,656 Viewed
+              69,656 {t("Viewed")}
             </h1>
           </div>
         </div>

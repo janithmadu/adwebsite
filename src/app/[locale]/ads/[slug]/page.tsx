@@ -108,7 +108,7 @@ export default async function AdDetailsPage({
             </div>
 
             <div className="px-[32px] py-[32px] flex flex-col gap-y-[18px]">
-              <h1 className="text-grayscale900 text-bodylarge">Ads Location</h1>
+             
               <Map />
             </div>
           </div>

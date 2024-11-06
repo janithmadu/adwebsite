@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useActionState, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 
 import { useFormState } from "react-dom";
-import { AdResponse, stepOpneFormAction } from "../../addform/step01/action";
+import { stepOpneFormAction } from "../../addform/step01/action";
 import { Authenticity, ConditionList, Currency } from "@/lib/statics";
 import { getSubCategoriesByID } from "../../actions/getSubCategories";
 import { getModelsById } from "../../actions/getModels";
@@ -28,7 +28,8 @@ import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { SchemaAdPostForm } from "@/lib/schemas";
 import { useRef } from 'react';
-import { AnyARecord } from "dns";
+import { useTranslations } from "next-intl";
+
 
 
 function getCookie(name: string) {
@@ -216,6 +217,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
   const [features, setFeatures] = useState<string[]>([""]);
   const [AdPrice, setAdPrice] = useState<number>();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const t = useTranslations("TopNav");
 
   //Get Category ID for retrive subcategories
   const handleInputChange = (e: string) => {
@@ -416,7 +418,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
       <div className=" min-h-[100px] rounded-xl relative">
         <Image alt="formHeader" src={FormHeader} className="rounded-xl min-h-[100px] min-w-full object-cover" />
         <div className="absolute inset-0 flex items-center justify-center text-white">
-          <h1 className="text-[32px]">Post Your Ad</h1>
+          <h1 className="text-[32px]">{t("PostYourAd")}</h1>
         </div>
       </div>
 
@@ -429,14 +431,14 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         {/* Name */}
 
         <div className="flex flex-col">
-          <label className="text-grayscale900">Ad Name</label>
+          <label className="text-grayscale900">{t("AdName")}</label>
           <Input
             type="text"
             name={fields.name.name}
             defaultValue={fields.name.initialValue}
             key={fields.name.key}
             className={`min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] `}
-            placeholder="Ad name"
+            placeholder={t("AdName")}
           ></Input>
 
           <p className="text-red-600">{fields.name.errors}</p>
@@ -449,7 +451,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         {/* Category and  Subcategory*/}
         <div className="flex  flex-col lg:flex-row justify-between">
           <div className="flex flex-col ">
-            <label className="text-grayscale900">Category</label>
+            <label className="text-grayscale900">{t("Category")}</label>
             <Select
               onValueChange={(e) => handleInputChange(e)}
               name={fields.category.name}
@@ -457,7 +459,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
               key={fields.category.key}
             >
               <SelectTrigger className="  sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder="Select Category" />
+                <SelectValue placeholder={t("SelectCategory")} />
               </SelectTrigger>
               <SelectContent>
                 {categories?.map((selectData) => {
@@ -482,7 +484,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
           </div>
 
           <div className="flex flex-col">
-            <label className="text-grayscale900">Subcategory</label>
+            <label className="text-grayscale900">{t("Subcategory")}</label>
             <Select
               onValueChange={(e) => handleSubCategoryChange(e)}
               name={fields.subcategory.name}
@@ -490,7 +492,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
               key={fields.subcategory.key}
             >
               <SelectTrigger className="  sm:min-w-[451px]  min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder="Select Subcategory" />
+                <SelectValue placeholder={t("SelectCategory")} />
               </SelectTrigger>
               <SelectContent>
                 {subCategories?.map((selectData: SubCategory) => {
@@ -514,14 +516,14 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         {/* Brands and  Models */}
         <div className="flex  flex-col lg:flex-row justify-between ">
           <div className="flex flex-col">
-            <label className="text-grayscale900">Brands</label>
+            <label className="text-grayscale900">{t("Brands")}</label>
             <Select
               name={fields.brand.name}
               defaultValue={fields.brand.initialValue}
               key={fields.brand.key}
             >
               <SelectTrigger className=" sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder="Select Brands" />
+                <SelectValue placeholder={t("SelectBrand")} />
               </SelectTrigger>
               <SelectContent>
                 {subBrands?.map((selectData: Brand) => {
@@ -541,14 +543,14 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
           </div>
 
           <div className="flex flex-col">
-            <label className="text-grayscale900">Models</label>
+            <label className="text-grayscale900">{t("Models")}</label>
             <Select
               name={fields.model.name}
               defaultValue={fields.model.initialValue}
               key={fields.model.key}
             >
               <SelectTrigger className=" sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder="Select Models" />
+                <SelectValue placeholder={t("SelectModels")}/>
               </SelectTrigger>
 
               <SelectContent>
@@ -574,14 +576,14 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         {/* Conditions and  Currency */}
         <div className="flex  flex-col lg:flex-row justify-between">
           <div className="flex flex-col">
-            <label className="text-grayscale900">Conditions</label>
+            <label className="text-grayscale900">{t("Conditions")}</label>
             <Select
               name={fields.conditions.name}
               defaultValue={fields.conditions.initialValue}
               key={fields.conditions.key}
             >
               <SelectTrigger className=" sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder="Select Conditions" />
+                <SelectValue placeholder={t("SelectConditions")}/>
               </SelectTrigger>
               <SelectContent>
                 {ConditionList?.map((selectData: Model) => {
@@ -602,14 +604,14 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
 
           <div className="flex gap-x-1">
             <div className="flex flex-col">
-              <label className="text-grayscale900">Currency</label>
+              <label className="text-grayscale900">{t("Currency")}</label>
               <Select
                 name={fields.Currency.name}
                 defaultValue={fields.Currency.initialValue}
                 key={fields.Currency.key}
               >
                 <SelectTrigger className="max-w-[151px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                  <SelectValue placeholder="Currency" />
+                  <SelectValue placeholder={t("Currency")} />
                 </SelectTrigger>
 
                 <SelectContent>
@@ -631,11 +633,11 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
             </div>
 
             <div className="flex flex-col">
-              <label className="text-grayscale900">Ad Prices</label>
+              <label className="text-grayscale900">{t("AdPrices")}</label>
               <Input
                 type="text"
                 name="price"
-                placeholder="Pick a good price - what would you pay?"
+                placeholder={t("Pickagoodprice-whatwouldyoupay?")}
                 className={` max-w-[180px] sm:min-w-[354px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] `}
               ></Input>
                <p className="text-red-600">{fields.Currency.errors}</p>
@@ -649,7 +651,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         {/* Authenticity and  Mobile Number*/}
         <div className="flex  flex-col lg:flex-row justify-between">
           <div className="flex flex-col">
-            <label className="text-grayscale900">Authenticity</label>
+            <label className="text-grayscale900">{t("Authenticity")}</label>
             <Select
               name={fields.authenticity.name}
               defaultValue={fields.authenticity.initialValue}
@@ -658,7 +660,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
               // //
             >
               <SelectTrigger className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder="Select an Authenticity" />
+                <SelectValue placeholder={t("SelectanAuthenticity")} />
               </SelectTrigger>
 
               <SelectContent>
@@ -679,7 +681,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
           </div>
           <div className="flex justify-between">
             <div className="flex flex-col">
-              <label className="text-grayscale900">Mobile Numbe</label>
+              <label className="text-grayscale900">{t("MobileNumbe")}</label>
               <Input
                 type="text"
                 name={fields.mobile.name}
@@ -697,7 +699,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         {/* Authenticity and  Mobile Number End*/}
 
         <div className="flex flex-col gap-y-[8px]">
-          <label className="text-grayscale900">Description</label>
+          <label className="text-grayscale900">{t("Addescription")}</label>
           <textarea
             id="description"
             name={fields.description.name}
@@ -705,7 +707,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
             key={fields.description.key}
             rows={5}
             cols={50}
-            placeholder="Ad description"
+            placeholder={t("Addescription")}
             className="border border-grayscale50 px-[18px] py-[12px] rounded-[5px]"
           />
           <p className="text-red-600">{fields.description.errors}</p>
@@ -713,7 +715,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         </div>
 
         <div className="flex flex-col gap-y-[8px]">
-          <label className="text-grayscale900">Options</label>
+          <label className="text-grayscale900">{t("Options")}</label>
           <div className="flex gap-x-[20px] flex-wrap min-w-full">
             {Options?.map((option: Options, index: number) => {
               return (
@@ -755,7 +757,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         </div>
 
         <div className="flex flex-col gap-y-[8px]">
-          <label className="text-grayscale900">Images</label>
+          <label className="text-grayscale900">{t("Images")}</label>
           {/* Input allows multiple files */}
           <Input
             type="file"
@@ -807,7 +809,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                 }}
               >
                 <SelectTrigger className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                  <SelectValue placeholder={`Select Country`} />
+                  <SelectValue placeholder={t("SelectCountry")} />
                 </SelectTrigger>
                 <SelectContent>
                   {Countries.map((country: Countries) => (
@@ -831,7 +833,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                 key={fields.state.key}
               >
                 <SelectTrigger className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                  <SelectValue placeholder={`Select State`} />
+                  <SelectValue placeholder={t("SelectState")}/>
                 </SelectTrigger>
                 <SelectContent>
                   {State?.map((state: State, index: number) => (
@@ -855,7 +857,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                 htmlFor="terms1"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Negotiable
+                {t("Negotiable")}
               </label>
               <p className="text-red-600">{fields.negotiable.errors}</p>
             </div>
@@ -863,7 +865,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
           {/* <div className="min-w-full min-h-[348px] rounded-[8px]" ref={MapRef} /> */}
         </div>
         <div>
-          <label className="text-grayscale900">Ad Features</label>
+          <label className="text-grayscale900">{t("AdFeatures")}</label>
 
           {/* Render feature input fields */}
           {features.map((feature, index) => (
@@ -880,7 +882,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                 onClick={() => removeFeature(index)}
                 className="bg-red-500 text-white px-4 py-2 rounded"
               >
-                Remove
+                {t("Remove")}
               </button>
             </div>
           ))}
@@ -891,7 +893,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
             className="bg-blue-500 text-white px-4 py-2 rounded"
             type="button"
           >
-            Add Feature
+           {t("AdFeatures")}
           </button>
         </div>
         <div className="min-w-full flex justify-end">
@@ -900,7 +902,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
             type="submit"
             onClick={LoadingHandle}
           >
-            <span>Submit Ad</span>
+            <span>{t("SubmitAd")}</span>
           </button>
         </div>
       </form>

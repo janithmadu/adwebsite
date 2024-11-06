@@ -3,15 +3,18 @@ import React from "react";
 import { ProfileAdCard } from "./ProfileAdCard";
 import Image from "next/image";
 import NoItem from "../../../../../public/rb_127823.png";
+import { useTranslations } from "next-intl";
 
 interface MainProfileProps {
   UserAds: PostAd[]; // Expecting an array of PostAd objects
 }
 
 const Favorites: React.FC<MainProfileProps> = ({ UserAds }) => {
+  const t = useTranslations("TopNav");
+
   return (
     <>
-     <h1 className="text-grayscale900 font-bold text-bodyxl mb-3">Favorites Ads</h1>
+     <h1 className="text-grayscale900 font-bold text-bodyxl mb-3">{t("Favorites")}</h1>
     <div
       className={` ${UserAds?.length > 0 ? "min-w-full grid  grid-cols-1 xl:grid-cols-2 gap-3 " : "grid grid-cols-1"}`}
       >

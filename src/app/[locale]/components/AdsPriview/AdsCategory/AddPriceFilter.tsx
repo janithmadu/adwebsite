@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Range, getTrackBackground } from "react-range";
+import { useTranslations } from "next-intl";
 
 const STEP = 1;
 const MIN = 0;
@@ -11,6 +12,7 @@ const AddPriceFilter = () => {
   const [values, setValues] = useState([100, 500]);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations("TopNav");
 
   const applyFilter = () => {
     const currentParams = new URLSearchParams(searchParams.toString());
@@ -20,8 +22,8 @@ const AddPriceFilter = () => {
   };
 
   return (
-    <div className="w-full px-4 py-4">
-      <div className="text-xl font-semibold mb-2">Price Range</div>
+    <div className="w-full px-4 py-4"  dir="ltr">
+      <div className="text-xl font-semibold mb-2">{t("PriceRange")}</div>
       <div className="flex justify-between mb-4">
         <span>${values[0]}</span>
         <span>${values[1]}</span>
@@ -51,6 +53,7 @@ const AddPriceFilter = () => {
         )}
         renderThumb={({ props, isDragged, index }) => (
           <div
+         
             {...props}
             key={index}
             className={`w-5 h-5 bg-blue-500 rounded-full shadow-md cursor-pointer ${
@@ -64,8 +67,9 @@ const AddPriceFilter = () => {
         <button
           onClick={applyFilter}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
+          
         >
-          Apply Filter
+          {t("PriceApply")}
         </button>
       </div>
     </div>

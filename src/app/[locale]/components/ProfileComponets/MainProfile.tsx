@@ -20,6 +20,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ListBullets } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 
 interface MainProfileProps {
   UserAds: PostAd[];
@@ -35,6 +36,8 @@ const MainProfile: React.FC<MainProfileProps> = ({
   resultCount
 }) => {
   const [activeSection, setActiveSection] = useState("MyAds");
+  const t = useTranslations("TopNav");
+
 
   // Function to render the component based on the active section
   const renderActiveSection = () => {
@@ -77,7 +80,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                         onClick={() => setActiveSection("MyAds")}
                       >
                         <UserCircle size={24} color="gray" />
-                        <span className=" md:inline ms-3">My Ads</span>
+                        <span className=" md:inline ms-3">{t("MyAds")}</span>
                       </a>
                     </li>
                     <li>
@@ -88,7 +91,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                       >
                         <Shield size={24} color="gray" />
                         <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                          My Membership
+                        {t("MyMembership")}
                         </span>
                       </a>
                     </li>
@@ -100,7 +103,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                       >
                         <ClipboardText size={24} color="gray" />
                         <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                          Draft Ads
+                        {t("DraftAds")}
                         </span>
                       </a>
                     </li>
@@ -112,7 +115,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                       >
                         <Heart size={24} color="gray" />
                         <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                          Favorites
+                        {t("Favorites")}
                         </span>
                       </a>
                     </li>
@@ -124,7 +127,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                       >
                         <Gear size={24} color="gray" />
                         <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                          Settings
+                        {t("Settings")}
                         </span>
                       </a>
                     </li>
@@ -136,8 +139,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                   >
                     
                     <p className="mb-3 text-sm text-blue-800 dark:text-blue-400">
-              Welcome to the new Arzaq dashboard! Effortlessly manage your ads,
-              memberships, drafts, and favorites, all in one convenient place.
+                    {t("profilenavdis")}
             </p>
                     <a
                       className="text-sm text-blue-800 underline font-medium hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
@@ -166,7 +168,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                 onClick={() => setActiveSection("MyAds")}
               >
                 <UserCircle size={24} color="gray" />
-                <span className=" md:inline ms-3">My Ads</span>
+                <span className=" md:inline ms-3">{t("MyAds")}</span>
               </a>
             </li>
             <li>
@@ -177,7 +179,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
               >
                 <Shield size={24} color="gray" />
                 <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                  My Membership
+                {t("MyMembership")}
                 </span>
               </a>
             </li>
@@ -189,7 +191,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
               >
                 <ClipboardText size={24} color="gray" />
                 <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                  Draft Ads
+                {t("DraftAds")}
                 </span>
               </a>
             </li>
@@ -201,7 +203,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
               >
                 <Heart size={24} color="gray" />
                 <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                  Favorites
+                {t("Favorites")}
                 </span>
               </a>
             </li>
@@ -213,7 +215,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
               >
                 <Gear size={24} color="gray" />
                 <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                  Settings
+                {t("Settings")}
                 </span>
               </a>
             </li>
@@ -224,8 +226,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
             role="alert"
           >
             <p className="mb-3 text-sm text-blue-800 dark:text-blue-400">
-              Welcome to the new Arzaq dashboard! Effortlessly manage your ads,
-              memberships, drafts, and favorites, all in one convenient place.
+            {t("profilenavdis")}
             </p>
           </div>
         </div>

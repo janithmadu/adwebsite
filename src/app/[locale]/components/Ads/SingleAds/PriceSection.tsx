@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import GetFavoritesOfUsers from "@/app/[locale]/actions/GetFavoritesOfUsers";
+import { useTranslations } from "next-intl";
 
 export const revalidate = 1;
 
@@ -24,7 +25,7 @@ const PriceSection: React.FC<Price> = ({
 }) => {
   const [NegotiableCheck, setNegotiableCheck] = useState<boolean>();
   const [FevoriteCheck, setFevoriteCheck] = useState<boolean>();
-
+  const t = useTranslations("TopNav");
   
   
 
@@ -112,7 +113,7 @@ const PriceSection: React.FC<Price> = ({
             <div className="flex gap-x-4 items-center">
               {" "}
               <Star className="text-blue-500" />
-              <h1 className="text-grayscale900 text-bodysmall">Negotiable</h1>
+              <h1 className="text-grayscale900 text-bodysmall">{t("Negotiable")}</h1>
             </div>
           )}
         </div>

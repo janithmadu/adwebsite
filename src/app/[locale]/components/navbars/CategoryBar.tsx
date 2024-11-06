@@ -14,11 +14,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { CaretDown } from "@phosphor-icons/react/dist/ssr";
+import { useTranslations } from "next-intl";
 
 export const revalidate = 1;
 
 interface CurrentLocal {
   CurrentLocal: string;
+  t: string;
+  categorytitle:string;
 }
 
 interface Category {
@@ -28,8 +31,8 @@ interface Category {
   imageUrl?: string;
   price?: number;
 }
-  
-const CategoryBar: React.FC<CurrentLocal> = async ({ CurrentLocal }) => {
+
+const CategoryBar: React.FC<CurrentLocal> = async ({ CurrentLocal, t,categorytitle }) => {
   //get category that limit to 7
   const getLimitedCate = await getlimitedCategory();
   //get all category
@@ -42,11 +45,13 @@ const CategoryBar: React.FC<CurrentLocal> = async ({ CurrentLocal }) => {
         {/* Select category section */}
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="bg-grayscale50 text-bodysmall rounded-lg text-black gap-x-2 font-semibold px-1 justify-center py-2  flex items-center transition duration-300 ease-in-out hover:bg-grayscale200 hover:shadow-lg">
-            Select Your Category <CaretDown />{" "}
+          <DropdownMenuTrigger
+            className={`bg-grayscale50 text-bodysmall rounded-lg text-black gap-x-2 font-semibold px-1 justify-center py-2  flex items-center transition duration-300 ease-in-out hover:bg-grayscale200 hover:shadow-lg min-w-[140px]`}
+          >
+            {t} <CaretDown />{" "}
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>Categories</DropdownMenuLabel>
+            <DropdownMenuLabel>{categorytitle}</DropdownMenuLabel>
             <DropdownMenuSeparator />
 
             {getallCategory?.map((item: Category, index: number) => {

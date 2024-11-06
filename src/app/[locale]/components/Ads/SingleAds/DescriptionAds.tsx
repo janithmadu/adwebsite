@@ -22,6 +22,7 @@ import Image from "next/image";
 
 import { CircleWavyCheck } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface AdData {
   Options?: Option[];
@@ -73,7 +74,7 @@ const DescriptionAds: React.FC<AdData> = ({
   UserAvatar,
 }) => {
   const [NegotiableCheck, setNegotiableCheck] = useState<boolean>();
-
+  const t = useTranslations("TopNav");
   useEffect(() => {
     if (Negotiable) {
       setNegotiableCheck(true);
@@ -98,7 +99,7 @@ const DescriptionAds: React.FC<AdData> = ({
           <div className="flex gap-x-1 items-center">
             {" "}
             <Star className="text-blue-500" />
-            <h1 className="text-grayscale900 text-bodysmall">Negotiable</h1>
+            <h1 className="text-grayscale900 text-bodysmall"> {t("Negotiable")}</h1>
           </div>
         )}
       </div>
@@ -106,21 +107,21 @@ const DescriptionAds: React.FC<AdData> = ({
       <div className="mb-4 lg:hidden flex flex-col gap-y-2">
         <div className="min-w-full border-b  py-5">
           <div className="flex gap-x-3">
-            <h1 className="text-grayscale400">Model:</h1> <span>{Model}</span>
+            <h1 className="text-grayscale400"> {t("Model")}:</h1> <span>{Model}</span>
           </div>
           <div className="flex gap-x-3">
-            <h1 className="text-grayscale400">Condition:</h1>{" "}
+            <h1 className="text-grayscale400">{t("Condition")}:</h1>{" "}
             <span>{Condition}</span>
           </div>
           <div className="flex gap-x-3">
-            <h1 className="text-grayscale400">Brand:</h1> <span>{Brand}</span>
+            <h1 className="text-grayscale400">{t("Brand")}:</h1> <span>{Brand}</span>
           </div>
           <div className="flex gap-x-3">
-            <h1 className="text-grayscale400">Authenticity:</h1>{" "}
+            <h1 className="text-grayscale400">{t("Authenticity")}:</h1>{" "}
             <span>{Authenticity}</span>
           </div>
           <div className="flex gap-x-3">
-            <h1 className="text-grayscale400">State:</h1> <span>{State}</span>
+            <h1 className="text-grayscale400">{t("State")}:</h1> <span>{State}</span>
           </div>
         </div>
       </div>
@@ -138,17 +139,17 @@ const DescriptionAds: React.FC<AdData> = ({
 
               <AlertDialog>
                 <AlertDialogTrigger>
-                  Click here to reveal phone number.
+                {t("Revelthephone")}
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Owner Phone Number</AlertDialogTitle>
+                    <AlertDialogTitle> {t("OwnerPhone")}</AlertDialogTitle>
                     <AlertDialogDescription>
                       {PhoneNumber}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{t("Cancel")}</AlertDialogCancel>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
@@ -175,14 +176,14 @@ const DescriptionAds: React.FC<AdData> = ({
         </div>
       </div>
 
-      <h2 className="text-heading03 text-grayscale900">Description</h2>
+      <h2 className="text-heading03 text-grayscale900">{t("Description")}</h2>
       <p className="text-bodymedium text-grayscale500 text-wrap">
         {Description}
       </p>
 
       {/* Features List */}
       <div className="mt-6 flex flex-col gap-y-[24px]">
-        <h2 className="text-grayscale900 text-heading03">Options</h2>
+        <h2 className="text-grayscale900 text-heading03">{t("Options")}</h2>
         <ul className="grid grid-cols-2 gap-y-[16px] text-grayscale700 text-bodymedium">
           {Options?.map((GetOption: Option, index: number) => {
             return (
@@ -202,7 +203,7 @@ const DescriptionAds: React.FC<AdData> = ({
 
       {Features?.every((item) => item === "") ? null : (
         <div className="mt-6 flex flex-col gap-y-[24px] mb-10">
-          <h2 className="text-grayscale900 text-heading03">Features</h2>
+          <h2 className="text-grayscale900 text-heading03">{t("Features")}</h2>
           <ul className="grid grid-cols-2 gap-y-[16px] text-grayscale700 text-bodymedium">
             {Features?.map((feature, index: number) => {
               return (
@@ -230,7 +231,7 @@ const DescriptionAds: React.FC<AdData> = ({
                   className="rounded-full bg-red-500 bg-cover"
                 />
                 <div className="flex flex-col gap-y-[6px] ">
-                  <h1 className="text-grayscale500 text-bodysmall">Add by:</h1>
+                  <h1 className="text-grayscale500 text-bodysmall">{t("Addby")}</h1>
                   <h1 className="text-grayscale900 text-bodymedium flex gap-x-[4px] items-center">
                     <span> {Username}</span>
                     <CircleWavyCheck

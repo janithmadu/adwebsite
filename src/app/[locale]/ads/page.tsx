@@ -75,9 +75,9 @@ export default async function Home() {
           </SheetContent>
         </Sheet>
       </div>
-      <div className="container mx-auto md:flex sm:px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-5">
+      <div className="container mx-auto md:flex sm:px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-5 rtl:gap-x-[100px]">
         {/* Sidebar */}
-        <aside className=" w-[210px] lg:w-[312px] hidden md:inline bg-white rounded-lg p-4 shadow">
+        <aside className=" w-[210px] lg:w-[312px] hidden md:inline bg-white rounded-lg p-4 shadow ">
           {/* Category Section */}
           <div className="mb-6">
             <AdsCategory Categories={getSubCategoryAndCategory} />

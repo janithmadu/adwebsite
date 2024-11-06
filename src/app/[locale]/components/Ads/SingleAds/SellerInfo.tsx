@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { CircleWavyCheck, Envelope } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface SellerInfo {
   Username: string;
@@ -13,6 +14,7 @@ const SellerInfo: React.FC<SellerInfo> = ({
   UserEmail,
   UserAvatar,
 }) => {
+  const t = useTranslations("TopNav");
   return (
     <div className="">
       <div className="flex gap-y-[24px] flex-col">
@@ -32,7 +34,7 @@ const SellerInfo: React.FC<SellerInfo> = ({
             )
            }
             <div className="flex flex-col gap-y-[6px] ">
-              <h1 className="text-grayscale500 text-bodysmall">Add by:</h1>
+              <h1 className="text-grayscale500 text-bodysmall">{t("Addby")}:</h1>
               <h1 className="text-grayscale900 text-bodymedium flex gap-x-[4px] items-center">
                 <span> {Username}</span>
                 <CircleWavyCheck
@@ -44,7 +46,7 @@ const SellerInfo: React.FC<SellerInfo> = ({
             </div>
           </div>
           <Link className="text-primary500 text-bodysmall" href="#">
-            View Profile
+            {t("ViewProfile")}
           </Link>
         </div>
 

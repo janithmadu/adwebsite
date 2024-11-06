@@ -52,7 +52,7 @@ const HomePageAdds: React.FC<Ads> = ({ Ads }) => {
           href={`${locale}/ads?page=1`}
           className="flex space-x-[8px] items-center min-w-[144px] min-h-[50px] bg-primary500 justify-center text-heading04 text-grayscalewhite rounded-[4px] rtl:flex-row-reverse transition duration-300 ease-in-out hover:bg-primary700 hover:shadow-lg"
         >
-          <h1>View Alls</h1>
+          <h1>{t("ViewAllButtion")}</h1>
           <ArrowRight />
         </Link>
       </div>
