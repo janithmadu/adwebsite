@@ -38,13 +38,11 @@ const Topnavbar: React.FC<User> = ({ user }) => {
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const t = useTranslations("TopNav");
 
-
-  
   return (
     <>
       <div className="min-w-full flex flex-col justify-start border-b-[#EBEEF7] border">
         {/* Top Nav Start */}
-        <div className="relative container mx-auto px-5 lg:px-5 xl:px-20 md:px-10 min-h-[100px] flex md:gap-10 items-center justify-between min-w-full">
+        <div className=" container mx-auto px-5 lg:px-5 xl:px-20 md:px-10 min-h-[100px] flex md:gap-10 items-center justify-between ">
           {/* Logo */}
           <Link href="/">
             <Image
@@ -53,7 +51,7 @@ const Topnavbar: React.FC<User> = ({ user }) => {
               height={0}
               className=""
               alt="Logo"
-            ></Image>
+            />
           </Link>
 
           {/* Search Box */}
@@ -101,7 +99,7 @@ const Topnavbar: React.FC<User> = ({ user }) => {
             )}
 
             <Link
-              className=" hidden min-w-[139px] min-h-[5px] md:flex items-center justify-center bg-primary500 text-grayscalewhite font-bold rounded-[4px]"
+              className=" hidden min-w-[139px] min-h-[5px] md:flex items-center justify-center bg-primary500 text-grayscalewhite font-bold rounded-[4px] transition duration-300 ease-in-out hover:bg-primary700 hover:shadow-lg"
               href={`/${locale}/addform/step01`}
             >
               <div className=" flex space-x-[8px] rtl:gap-[8px]">

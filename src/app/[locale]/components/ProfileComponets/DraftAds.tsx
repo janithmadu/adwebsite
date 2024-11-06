@@ -3,8 +3,10 @@ import React from "react";
 import { ProfileAdCard } from "./ProfileAdCard";
 import NoItem from "../../../../../public/rb_127823.png";
 import Image from "next/image";
+import PaginationComponent from "../AdsPriview/PaginationComponet/PaginationComponet";
 interface MainProfileProps {
   UserAds: PostAd[]; // Expecting an array of PostAd objects
+  resultCount:number
 }
 
 // function getCookie(name: string) {
@@ -13,13 +15,14 @@ interface MainProfileProps {
 //   if (parts.length === 2) return parts.pop()?.split(";").shift();
 // }
 
-const DraftAds: React.FC<MainProfileProps> = ({ UserAds }) => {
+const DraftAds: React.FC<MainProfileProps> = ({ UserAds,resultCount }) => {
   // const [locale, setLocale] = useState("en");
   // useEffect(() => {
   //   const cookieLocale = getCookie("NEXT_LOCALE") || "en";
   //   setLocale(cookieLocale);
   // }, []);
 
+  const PageSize = 10;
   return (
     <>
      <h1 className="text-grayscale900 font-bold text-bodyxl mb-3">Draft Ads</h1>
@@ -31,6 +34,7 @@ const DraftAds: React.FC<MainProfileProps> = ({ UserAds }) => {
           return (
             <div key={index} className="">
               <ProfileAdCard
+              
                 title={ad.adName}
                 category={ad.categoryTitle}
                 subcategory="Mobile Phones"
@@ -53,6 +57,11 @@ const DraftAds: React.FC<MainProfileProps> = ({ UserAds }) => {
         </div>
       )}
     </div>
+    {UserAds.length > 0 && (
+        <div className="min-w-full flex justify-center mt-6">
+          <PaginationComponent TotoleCount={resultCount} PageSisze={PageSize} />
+        </div>
+      )}
       </>
   );
 };

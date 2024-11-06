@@ -1,16 +1,19 @@
-import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   getAllCategory,
   getlimitedCategory,
 } from "@/app/[locale]/actions/getCategories";
 import Link from "next/link";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { CaretDown } from "@phosphor-icons/react/dist/ssr";
 
 export const revalidate = 1;
 
@@ -25,7 +28,7 @@ interface Category {
   imageUrl?: string;
   price?: number;
 }
-
+  
 const CategoryBar: React.FC<CurrentLocal> = async ({ CurrentLocal }) => {
   //get category that limit to 7
   const getLimitedCate = await getlimitedCategory();
@@ -38,28 +41,29 @@ const CategoryBar: React.FC<CurrentLocal> = async ({ CurrentLocal }) => {
       <div className="flex items-center rtl:gap-[24px]  space-x-[24px]">
         {/* Select category section */}
 
-        <Select>
-          <SelectTrigger className="w-[173px] font-bold border-none bg-grayscale20 text-grayscale700">
-            <SelectValue placeholder={"No Cate"} />
-          </SelectTrigger>
-          <SelectContent>
-            {getallCategory.length === 0 ? (
-              <SelectItem value="art">You have no category</SelectItem>
-            ) : (
-              getallCategory.map((item: Category, index: number) => {
-                return (
-                  <SelectItem key={index} value={item?.id as string}>
-                    <Link
-                      href={`${getCurentLocal}/ads?page=1&category=${item?.slug?.current}`}
-                    >
+        <DropdownMenu>
+          <DropdownMenuTrigger className="bg-grayscale50 text-bodysmall rounded-lg text-black gap-x-2 font-semibold px-1 justify-center py-2  flex items-center transition duration-300 ease-in-out hover:bg-grayscale200 hover:shadow-lg">
+            Select Your Category <CaretDown />{" "}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Categories</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+
+            {getallCategory?.map((item: Category, index: number) => {
+              return (
+                <DropdownMenuItem key={index}>
+                  <Link
+                    href={`/${getCurentLocal}/ads?page=1&category=${item?.slug?.current}`}
+                  >
+                    <span>
                       {item.title?.[(getCurentLocal as "en") || "ar"]}
-                    </Link>
-                  </SelectItem>
-                );
-              })
-            )}
-          </SelectContent>
-        </Select>
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
+              );
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* Select category section End */}
 
@@ -77,7 +81,7 @@ const CategoryBar: React.FC<CurrentLocal> = async ({ CurrentLocal }) => {
                 <Link
                   key={index}
                   href={`${getCurentLocal ? `/${getCurentLocal}` : ""}/ads?page=1&category=${item?.slug?.current}`}
-                  className="text-grayscale600 text-heading04 hover:text-grayscale800 hover:font-bold"
+                  className="text-grayscale600 text-heading04 transition duration-300 ease-in-out  hover:text-grayscale800 hover:font-bold"
                 >
                   {item.title?.[(getCurentLocal as "en") || "ar"]}
                 </Link>
