@@ -30,6 +30,7 @@ const MyAds: React.FC<MainProfileProps> = ({ UserAds,resultCount }) => {
                   price={ad.price}
                   image={ad?.photos[0]?.asset?.url || "/"}
                   timestamp={ad._createdAt}
+                  delteActive={true}
                 />
               </div>
             );

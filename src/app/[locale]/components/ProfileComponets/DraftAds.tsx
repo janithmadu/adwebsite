@@ -44,6 +44,7 @@ const DraftAds: React.FC<MainProfileProps> = ({ UserAds,resultCount }) => {
                 paymentPending={true}
                 adprice={ad.category.price}
                 id={ad._id}
+                delteActive={true}
                 />
             </div>
           );

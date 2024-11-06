@@ -8,6 +8,10 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { getRelativeTime } from "../../actions/relativeTime";
+import { Trash } from "@phosphor-icons/react/dist/ssr";
+import Loading from "../../loading";
+
+export const revalidate = 1;
 
 interface ProductCardProps {
   title: string;
@@ -18,6 +22,7 @@ interface ProductCardProps {
   timestamp: string;
   id?: string;
   paymentPending?: boolean;
+  delteActive?: boolean;
   adprice?: number;
 }
 function getCookie(name: string) {
@@ -36,8 +41,10 @@ export function ProfileAdCard({
   id,
   paymentPending,
   adprice,
+  delteActive,
 }: ProductCardProps) {
   const [locale, setLocale] = useState("en");
+  const [loading, setloading] = useState(true);
   const router = useRouter();
   useEffect(() => {
     const cookieLocale = getCookie("NEXT_LOCALE") || "en";
@@ -68,19 +75,72 @@ export function ProfileAdCard({
     });
   };
 
+  const DeleteAd = () => {
+    Swal.fire({
+      title: "Are You Sure You Want to Delete?",
+      text: `This action cannot be undone. Do you want to proceed?`,
+      icon: "info",
+      confirmButtonText: `Yes, Delete`,
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setloading(false);
+        const getAds = async () => {
+          const response = await fetch("/api/delete", {
+            method: "POST",
+            body: JSON.stringify({ id }),
+          });
+          const responses = await response.json();
+          if (responses.status === 401) {
+            router.push("/");
+            return;
+          }
+          if (responses.status) {
+            setloading(true);
+            Swal.fire({
+              title: "Deleting Ad...",
+              text: `Your ad will be deleted shortly. Please wait.`,
+              icon: "info",
+              confirmButtonText: `Close`,
+              allowOutsideClick: false,
+              allowEscapeKey: true,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            });
+          }
+        };
+        getAds();
+      }
+    });
+  };
+
   return (
     <div className="relative">
-      <div className="min-w-full flex justify-end p-1 ">
+      <div className="min-w-full flex justify-end p-1  gap-x-3">
         {paymentPending ? (
           <button
             type="button"
-            className="cursor-pointer bg-danger600 p-[4px] rounded-full text-white"
+            className="cursor-pointer bg-danger600 p-[4px] text-bodytiny px-2 rounded-full text-white transition duration-300 ease-in-out hover:bg-danger700 hover:shadow-lg"
             onClick={PaymentPendingPay}
           >
             Payment Pending
           </button>
         ) : null}
+
+        {delteActive ? (
+          <button
+            type="button"
+            className="cursor-pointer bg-danger600 p-[7px] rounded-full text-white transition duration-300 ease-in-out hover:bg-danger700 hover:shadow-lg"
+            onClick={DeleteAd}
+          >
+            <Trash />
+          </button>
+        ) : null}
       </div>
+
       <Link
         href={`${locale ? `/${locale}` : ""}/ads/${id}`}
         className="block transition-transform hover:-translate-y-1 "
@@ -130,6 +190,7 @@ export function ProfileAdCard({
           </CardContent>
         </Card>
       </Link>
+      {!loading ? <Loading /> : <></>}
     </div>
   );
 }

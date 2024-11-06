@@ -5,9 +5,9 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import GetFavoritesAds from "../actions/GetFavoritesAds";
 import { CheckUserLog } from "../actions/ChekAuth";
 
-async function page({ searchParams }: any) {
- 
+export const revalidate = 1;
 
+async function page({ searchParams }: any) {
   const { getUser } = getKindeServerSession();
 
   const user = await getUser();
@@ -16,11 +16,15 @@ async function page({ searchParams }: any) {
     await CheckUserLog();
   }
 
-  const Page = parseInt(searchParams.page)
-  const Limit = 5
+  const Page = parseInt(searchParams.page);
+  const Limit = 5;
 
-  const UserAds = await GetAdByUser(user?.id,Page,Limit);
-  const UserAdsPaymentFalse = await GetAdByUserPayementFalse(user?.id,Page,Limit);
+  const UserAds = await GetAdByUser(user?.id, Page, Limit);
+  const UserAdsPaymentFalse = await GetAdByUserPayementFalse(
+    user?.id,
+    Page,
+    Limit
+  );
   const UserFavoriteAds = await GetFavoritesAds(user?.id);
 
   return (
