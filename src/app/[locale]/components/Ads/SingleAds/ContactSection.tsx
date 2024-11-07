@@ -27,7 +27,7 @@ const ContactSection: React.FC<PhoneNumber> = ({ PhoneNumber, Email }) => {
   const t = useTranslations("TopNav");
 
   const handleWhatsAppClick = () => {
-    const phoneNumber = "1234567890"; // Replace with the actual phone number
+    const phoneNumber = PhoneNumber; // Replace with the actual phone number
     const whatsappURL = `https://wa.me/${PhoneNumber}`;
     window.open(whatsappURL, "_blank");
   };

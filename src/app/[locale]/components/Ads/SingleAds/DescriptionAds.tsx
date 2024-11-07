@@ -86,7 +86,7 @@ const DescriptionAds: React.FC<AdData> = ({
   const HidePhone = PhoneNumber?.slice(0, 4);
 
   const handleWhatsAppClick = () => {
-    const phoneNumber = "1234567890"; // Replace with the actual phone number
+    const phoneNumber = PhoneNumber; // Replace with the actual phone number
     const whatsappURL = `https://wa.me/${PhoneNumber}`;
     window.open(whatsappURL, "_blank");
   };
