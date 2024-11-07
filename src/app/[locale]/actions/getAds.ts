@@ -67,6 +67,8 @@ export async function getPostAds(data: Params): Promise<Result> {
   const queryCount = `count(*[_type == "postAd" && payment == true])`;
 
   const result = await client.fetch(query);
+
+  
   const resultCount = await client.fetch(queryCount); // Change this to match 'resultCount'
 
   return {

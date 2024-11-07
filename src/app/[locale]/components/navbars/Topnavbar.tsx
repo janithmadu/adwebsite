@@ -38,7 +38,6 @@ const Topnavbar: React.FC<User> = ({ user }) => {
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const t = useTranslations("TopNav");
 
-  
   return (
     <>
       <div className="min-w-full flex flex-col justify-start border-b-[#EBEEF7] border">
@@ -128,7 +127,11 @@ const Topnavbar: React.FC<User> = ({ user }) => {
 
       <div className="container mx-auto lg:px-5 px-5 xl:px-20 md:px-10">
         <div className="min-w-full min-h-[78px] flex items-center justify-between">
-          <CategoryBar CurrentLocal={locale} t={t("SelectYourCategory")} categorytitle={t("categorytitle")} />
+          <CategoryBar
+            CurrentLocal={locale}
+            t={t("SelectYourCategory")}
+            categorytitle={t("categorytitle")}
+          />
           <CountryChange />
         </div>
       </div>

@@ -180,6 +180,16 @@ export interface PostAd {
   city: string | null;
   category: {
     _type: "reference"; // Type indicating it's a reference
+    _id:string;
+    _ref: string; // Reference ID for subcategory
+    price: number;
+    title: {
+      en: string;
+      ar: string;
+    };
+  };
+  subcategory: {
+    _type: "reference"; // Type indicating it's a reference
     _ref: string; // Reference ID for subcategory
     price: number;
     title: {
@@ -198,6 +208,62 @@ export interface PostAd {
   negotiable: boolean;
   phoneNumber: string;
   photos: Array<{ asset?: { _id?: string; url?: string }; alt?: string }>; // Adjusted photos structure
+  price: number;
+  state: string;
+  subcategoryId: string; // Use subcategory ID directly
+  subcategoryTitle: string; // Add title directly
+  tags: string | null;
+  website: string | null;
+  _id: string;
+  _createdAt: string;
+}
+export interface UpdateAd {
+  currency: string;
+  adName: string;
+  authenticity: string;
+  backupPhoneNumber: string | null;
+
+  brand:string
+  categoryId: string; // Use category ID directly
+  categoryTitle: string; // Add title directly
+  categorySlug: string; // Add slug directly
+  city: string | null;
+  category: {
+    _type: "reference"; // Type indicating it's a reference
+    _id:string;
+    _ref: string; // Reference ID for subcategory
+    price: number;
+    title: {
+      en: string;
+      ar: string;
+    };
+  };
+  subcategory: {
+    _id:string;
+    _type: "reference"; // Type indicating it's a reference
+    _ref: string; // Reference ID for subcategory
+    price: number;
+    title: {
+      en: string;
+      ar: string;
+    };
+  };
+  options?:{
+    key?:string
+    value?:string
+    _key?:string
+  }
+  condition: string;
+  country: string;
+  description: string;
+  email: string | null;
+  features: string[];
+  location: string | null;
+  mapLocation: string | null;
+  model: string;
+  negotiable: boolean;
+  phoneNumber: string;
+  photos: string[]; // Adjusted photos structure
   price: number;
   state: string;
   subcategoryId: string; // Use subcategory ID directly

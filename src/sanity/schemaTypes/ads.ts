@@ -114,6 +114,7 @@ export default {
         hotspot: true,
       },
     },
+    
     {
       name: "phoneNumber",
       title: "Phone Number",
@@ -363,7 +364,30 @@ export default {
       name: "payment",
       title: "payment",
       type: "boolean",
-    }
+    },
+    {
+      name: "asset",
+      title: "Asset",
+      type: "object",
+      fields: [
+        {
+          name: "imageId",
+          title: "Image ID",
+          type: "string",
+          description: "Unique identifier for the image asset",
+        },
+        {
+          name: "imageUrl",
+          title: "Image URL",
+          type: "url",
+          description: "URL of the image asset",
+        },
+      ],
+    },
+
+    
   ],
+
+  
   
 };

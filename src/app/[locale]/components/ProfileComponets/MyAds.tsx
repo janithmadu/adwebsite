@@ -38,7 +38,7 @@ const MyAds: React.FC<MainProfileProps> = ({ UserAds,resultCount }) => {
                 <ProfileAdCard
                 id={ad._id}
                   title={ad.adName}
-                  category={ad.category.title[locale as "en" | "ar"]}
+                  category={ad?.category?.title[locale as "en" | "ar"]}
                   price={ad.price}
                   image={ad?.photos[0]?.asset?.url || "/"}
                   timestamp={ad._createdAt}

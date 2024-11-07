@@ -1,11 +1,11 @@
 "use server";
 
-import { AdFormState, PostAd } from "@/lib/categoryInterface";
+
 import { client } from "@/lib/sanity";
-import { FormType, SchemaAdPostForm } from "@/lib/schemas";
+import { FormType, SchemaAdPostForm, SchemaUpdatePostForm } from "@/lib/schemas";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { parseWithZod } from "@conform-to/zod";
-import { SubmissionResult } from "@conform-to/react";
+
 export type ApiResponse = {
   ZodError: null; // Adjust as necessary for the actual error type
   data: {
@@ -89,18 +89,19 @@ export interface AdResponse {
   _updatedAt: string; // Example: "2024-11-02T17:57:44Z"
 }
 
-export const stepOpneFormAction = async (
+export const UpdateFormAction = async (
   prevSatte: undefined,
   formData: FormData
 ) => {
 
-  console.log(formData);
-  
+
+
+
 
 
 
   const submisstions = parseWithZod(formData, {
-    schema: SchemaAdPostForm,
+    schema: SchemaUpdatePostForm,
   });
 
   if (submisstions.status !== "success") {
@@ -138,7 +139,7 @@ export const stepOpneFormAction = async (
     CategoryID = JSON.parse(formData.get("category") as string);
   }
 
-  const image = formData.getAll("image") as File[]; 
+  const image = formData.getAll("image") as File[];
 
   const formDataObject: FormType = {
     name: formData?.get("name") as string,
@@ -163,6 +164,8 @@ export const stepOpneFormAction = async (
     ),
     image,
   };
+
+  
 
   const uploadedImages = await Promise.all(
     formDataObject.image.map(async (image: FormDataEntryValue) => {
@@ -220,9 +223,37 @@ export const stepOpneFormAction = async (
       payment: false,
     };
 
-    const response = await client.create(newAd);
+    
 
-    if (response) {
+    const response = await fetch('http://localhost:3000/api/updatead', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        adId: '771Z0lGwtN2xJdRxDI0IrN', // The document ID to update
+        adName: formDataObject.name,
+        price:formDataObject.price,
+        description: formDataObject.description,
+        category: formDataObject.category,
+        subcategory: formDataObject.subcategory,
+        brand: formDataObject.brand,
+        model: formDataObject.model,
+        condition: formDataObject.conditions,
+        Currency: formDataObject.Currency,
+        authenticity: formDataObject.authenticity,
+        options: parsedValuesArray,
+        negotiable: NegotiableValue,
+        features: features,
+        photos: uploadedImages,
+        phoneNumber: formDataObject.mobile,
+        country: formDataObject.country,
+        state: formDataObject.state,
+        payment: true,
+      }),
+    });
+
+    if (response.status == 200) {
       return {
         ...(prevSatte as any),
         response,
