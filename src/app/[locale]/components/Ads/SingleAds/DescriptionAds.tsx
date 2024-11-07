@@ -85,7 +85,19 @@ const DescriptionAds: React.FC<AdData> = ({
 
   const HidePhone = PhoneNumber?.slice(0, 4);
 
+  const handleWhatsAppClick = () => {
+    const phoneNumber = "1234567890"; // Replace with the actual phone number
+    const whatsappURL = `https://wa.me/${PhoneNumber}`;
+    window.open(whatsappURL, "_blank");
+  };
 
+  const handleEmailClick = () => {
+    const emailAddress = UserEmail; // Replace with the actual email address
+    const subject = "Hello"; // Optional: Add a subject line
+    const body = "I would like to reach out regarding..."; // Optional: Add body text
+    const mailtoURL = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoURL;
+  };
 
   return (
     <div className="mt-8 ">
@@ -99,7 +111,10 @@ const DescriptionAds: React.FC<AdData> = ({
           <div className="flex gap-x-1 items-center">
             {" "}
             <Star className="text-blue-500" />
-            <h1 className="text-grayscale900 text-bodysmall"> {t("Negotiable")}</h1>
+            <h1 className="text-grayscale900 text-bodysmall">
+              {" "}
+              {t("Negotiable")}
+            </h1>
           </div>
         )}
       </div>
@@ -107,21 +122,24 @@ const DescriptionAds: React.FC<AdData> = ({
       <div className="mb-4 lg:hidden flex flex-col gap-y-2">
         <div className="min-w-full border-b  py-5">
           <div className="flex gap-x-3">
-            <h1 className="text-grayscale400"> {t("Model")}:</h1> <span>{Model}</span>
+            <h1 className="text-grayscale400"> {t("Model")}:</h1>{" "}
+            <span>{Model}</span>
           </div>
           <div className="flex gap-x-3">
             <h1 className="text-grayscale400">{t("Condition")}:</h1>{" "}
             <span>{Condition}</span>
           </div>
           <div className="flex gap-x-3">
-            <h1 className="text-grayscale400">{t("Brand")}:</h1> <span>{Brand}</span>
+            <h1 className="text-grayscale400">{t("Brand")}:</h1>{" "}
+            <span>{Brand}</span>
           </div>
           <div className="flex gap-x-3">
             <h1 className="text-grayscale400">{t("Authenticity")}:</h1>{" "}
             <span>{Authenticity}</span>
           </div>
           <div className="flex gap-x-3">
-            <h1 className="text-grayscale400">{t("State")}:</h1> <span>{State}</span>
+            <h1 className="text-grayscale400">{t("State")}:</h1>{" "}
+            <span>{State}</span>
           </div>
         </div>
       </div>
@@ -138,9 +156,7 @@ const DescriptionAds: React.FC<AdData> = ({
               </h1>
 
               <AlertDialog>
-                <AlertDialogTrigger>
-                {t("Revelthephone")}
-                </AlertDialogTrigger>
+                <AlertDialogTrigger>{t("Revelthephone")}</AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle> {t("OwnerPhone")}</AlertDialogTitle>
@@ -160,19 +176,26 @@ const DescriptionAds: React.FC<AdData> = ({
         <ChatCircleDots width={24} height={24} className="text-white" />
         <h1 className="text-grayscalewhite text-heading04">Send Message</h1>
       </div> */}
-          <div className="rounded-[4px] bg-[#2DD54B] flex items-center justify-center gap-x-[8px] py-[13px]">
+          <button
+            onClick={handleWhatsAppClick}
+            className="rounded-[4px] bg-[#2DD54B] flex items-center justify-center gap-x-[8px] py-[13px] min-w-full"
+          >
             <WhatsappLogo width={24} height={24} className="text-white" />
             <h1 className="text-grayscalewhite text-heading04">
-              Message Via Whatsapp
+              {t("MessegeviaWhatsapp")}
             </h1>
-          </div>
+          </button>
 
-          <div className="rounded-[4px] bg-grayscale50 flex items-center justify-center gap-x-[8px] py-[13px]">
+          <button
+            onClick={handleEmailClick}
+            className="rounded-[4px] bg-grayscale50 flex items-center justify-center gap-x-[8px] py-[13px] min-w-full"
+          >
             <Envelope width={24} height={24} className="text-grayscale900" />
             <h1 className="text-grayscale900 text-heading04">
-              Message Via email
+              {" "}
+              {t("MessegeviaEmail")}
             </h1>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -231,7 +254,9 @@ const DescriptionAds: React.FC<AdData> = ({
                   className="rounded-full bg-red-500 bg-cover"
                 />
                 <div className="flex flex-col gap-y-[6px] ">
-                  <h1 className="text-grayscale500 text-bodysmall">{t("Addby")}</h1>
+                  <h1 className="text-grayscale500 text-bodysmall">
+                    {t("Addby")}
+                  </h1>
                   <h1 className="text-grayscale900 text-bodymedium flex gap-x-[4px] items-center">
                     <span> {Username}</span>
                     <CircleWavyCheck

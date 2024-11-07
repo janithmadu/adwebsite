@@ -1,3 +1,4 @@
+"use client";
 import {
   Envelope,
   PhoneCall,
@@ -18,11 +19,26 @@ import { useTranslations } from "next-intl";
 
 interface PhoneNumber {
   PhoneNumber: string;
+  Email: string;
 }
 
-const ContactSection: React.FC<PhoneNumber> = ({ PhoneNumber }) => {
+const ContactSection: React.FC<PhoneNumber> = ({ PhoneNumber, Email }) => {
   const HidePhone = PhoneNumber.slice(0, 4);
   const t = useTranslations("TopNav");
+
+  const handleWhatsAppClick = () => {
+    const phoneNumber = "1234567890"; // Replace with the actual phone number
+    const whatsappURL = `https://wa.me/${PhoneNumber}`;
+    window.open(whatsappURL, "_blank");
+  };
+
+  const handleEmailClick = () => {
+    const emailAddress = Email; // Replace with the actual email address
+    const subject = "Hello"; // Optional: Add a subject line
+    const body = "I would like to reach out regarding..."; // Optional: Add body text
+    const mailtoURL = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoURL;
+  };
 
   return (
     <div className="space-y-2 mb-6">
@@ -54,20 +70,26 @@ const ContactSection: React.FC<PhoneNumber> = ({ PhoneNumber }) => {
         <ChatCircleDots width={24} height={24} className="text-white" />
         <h1 className="text-grayscalewhite text-heading04">Send Message</h1>
       </div> */}
-      <div className="rounded-[4px] bg-[#2DD54B] flex items-center justify-center gap-x-[8px] py-[13px]">
+      <button
+        onClick={handleWhatsAppClick}
+        className="rounded-[4px] bg-[#2DD54B] flex items-center justify-center gap-x-[8px] py-[13px] min-w-full"
+      >
         <WhatsappLogo width={24} height={24} className="text-white" />
         <h1 className="text-grayscalewhite text-heading04">
           {t("MessegeviaWhatsapp")}
         </h1>
-      </div>
+      </button>
 
-      <div className="rounded-[4px] bg-grayscale50 flex items-center justify-center gap-x-[8px] py-[13px]">
+      <button
+        onClick={handleEmailClick}
+        className="rounded-[4px] bg-grayscale50 flex items-center justify-center gap-x-[8px] py-[13px] min-w-full"
+      >
         <Envelope width={24} height={24} className="text-grayscale900" />
         <h1 className="text-grayscale900 text-heading04">
           {" "}
           {t("MessegeviaEmail")}
         </h1>
-      </div>
+      </button>
     </div>
   );
 };

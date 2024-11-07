@@ -18,8 +18,6 @@ export default async function AdDetailsPage({
 }) {
   const GetAdByID = await getAdById(params.slug);
 
-  
-
   const adTitile = GetAdByID?.adName;
   const AddCratedDate = GetAdByID?._createdAt;
   const Price = GetAdByID?.price;
@@ -95,7 +93,7 @@ export default async function AdDetailsPage({
           />
           <div className="px-[32px] mt-[32px]">
             {/* Contact Buttons */}
-            <ContactSection PhoneNumber={PhoneNumber} />
+            <ContactSection Email={UserEmail} PhoneNumber={PhoneNumber} />
           </div>
 
           <div className="mt-[32px]">
@@ -108,7 +106,6 @@ export default async function AdDetailsPage({
             </div>
 
             <div className="px-[32px] py-[32px] flex flex-col gap-y-[18px]">
-             
               <Map />
             </div>
           </div>
