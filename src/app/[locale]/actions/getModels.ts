@@ -16,7 +16,7 @@ export async function getModelsById(subcategoryId: string) {
 
     return models;
   } catch (error) {
-    console.error("Error fetching models:", error);
+    
     return [];
   }
 }

@@ -10,32 +10,18 @@ export const SchemaAdPostForm = z.object({
     .string()
     .min(1, "Pick the perfect subcategory to refine your listing."),
   price: z.coerce.number().min(1, "Set a fair price for your item."),
-  brand: z.string().optional(),
+  brands: z.string().optional(),
   model: z.string().optional(),
   conditions: z.string().optional(),
   authenticity: z.string().optional(),
-  mobile: z.string().min(10, "Enter a contact number."),
+  mobileNumbe: z.string().min(10, "Enter a contact number."),
   Currency: z.string().min(1, "State the currency for payment."),
   description: z.string().min(1, "Description is required"),
-  image: z
-  .array(z.instanceof(File))
-  .min(1, "At least one image is required.")
-  .max(5, "You can upload up to 5 images.")
-  .refine(
-    (files) => files.every((file) => ["image/jpeg", "image/png"].includes(file.type)),
-    { message: "Only .jpg and .png files are allowed." }
-  )
-  .refine(
-    (files) => files.every((file) => file.size <= 10 * 1024 * 1024),
-    { message: "Each file must be less than 10MB." }
-  ),
-  options: z.array(z.string()).optional(),
-  features: z.array(z.string()).optional(),
+  options: z.array(z.string()).min(1," Select One or more option "),
+  
   country: z.string().min(1, "Slect Your Country."),
   state: z.string().min(1, "Slect Your State."),
-  negotiable: z.boolean({
-    required_error: "Negotiable Need",
-  }),
+  negotiable: z.boolean().optional(),
 });
 
 
@@ -57,15 +43,15 @@ export const SchemaUpdatePostForm = z.object({
   Currency: z.string().min(1, "State the currency for payment."),
   description: z.string().min(1, "Description is required"),
   image: z
-  .array(z.instanceof(File))
-  .refine(
-    (files) => files.every((file) => ["image/jpeg", "image/png"].includes(file.type)),
-    { message: "Only .jpg and .png files are allowed." }
-  )
-  .refine(
-    (files) => files.every((file) => file.size <= 10 * 1024 * 1024),
-    { message: "Each file must be less than 10MB." }
-  ),
+    .array(z.instanceof(File))
+    .refine(
+      (files) => files.every((file) => ["image/jpeg", "image/png"].includes(file.type)),
+      { message: "Only .jpg and .png files are allowed." }
+    )
+    .refine(
+      (files) => files.every((file) => file.size <= 10 * 1024 * 1024),
+      { message: "Each file must be less than 10MB." }
+    ),
   options: z.array(z.string()).optional(),
   features: z.array(z.string()).optional(),
   country: z.string().min(1, "Slect Your Country."),

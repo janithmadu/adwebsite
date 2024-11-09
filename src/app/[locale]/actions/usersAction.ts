@@ -47,7 +47,7 @@ export const UserRegistration = async () => {
 
 
   } catch (err) {
-    console.error("Error fetching user:", err);
+   
     return null;
   }
 };

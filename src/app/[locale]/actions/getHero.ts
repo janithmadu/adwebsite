@@ -13,6 +13,6 @@ export async function getHeroImages() {
     
     return heroImages;
   } catch (error) {
-    console.error("Error fetching hero images:", error);
+  
   }
 }

@@ -114,7 +114,7 @@ export default {
         hotspot: true,
       },
     },
-    
+
     {
       name: "phoneNumber",
       title: "Phone Number",
@@ -385,9 +385,9 @@ export default {
       ],
     },
 
-    
+
   ],
 
-  
-  
+
+
 };

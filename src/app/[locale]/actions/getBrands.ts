@@ -15,7 +15,7 @@ export async function getbrandsById(subcategoryId: string) {
     
     return brands;
   } catch (error) {
-    console.error("Error fetching brands:", error);
+    
     return [];
   }
 }

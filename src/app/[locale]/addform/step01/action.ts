@@ -94,7 +94,7 @@ export const stepOpneFormAction = async (
   formData: FormData
 ) => {
 
-  console.log(formData);
+
   
 
 
@@ -180,7 +180,7 @@ export const stepOpneFormAction = async (
             },
           };
         } catch (error) {
-          console.error(`Failed to upload image: ${image.name}`, error);
+        
           return null; // Handle errors (you can handle this differently based on your use case)
         }
       }
@@ -235,6 +235,6 @@ export const stepOpneFormAction = async (
       };
     }
   } catch (error) {
-    console.error("Error creating new ad:", error);
+  
   }
 };

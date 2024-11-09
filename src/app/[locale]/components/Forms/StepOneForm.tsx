@@ -24,11 +24,14 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import FormHeader from "../../../../../public/AdForm.png";
 import { FormStateNew, Option, Subcategory } from "@/lib/categoryInterface";
-import { useForm } from "@conform-to/react";
+
 import { parseWithZod } from "@conform-to/zod";
-import { SchemaAdPostForm } from "@/lib/schemas";
+import { FormType, SchemaAdPostForm } from "@/lib/schemas";
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
+import { CldUploadWidget } from "next-cloudinary";
+import { FieldValues, useForm } from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod"
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -59,53 +62,6 @@ interface CategoryNew {
     slug: Array<string>;
   }>;
 }
-
-const initionlState: FormStateNew = {
-  ZodError: null,
-  data: {
-    name: "",
-    category: "",
-    subcategory: "",
-    price: 0,
-    brand: "",
-    model: "",
-    conditions: "",
-    authenticity: "",
-    mobile: "",
-    description: "",
-    image: "",
-    options: [],
-    formDataObject: {
-      name: "",
-      subcategory: "",
-      price: 0,
-      brand: "",
-      model: "",
-      conditions: "",
-      authenticity: "",
-      Currency: "",
-      description: "",
-      options: [],
-      mobile: "",
-      country: "",
-      state: "",
-      negotiable: "",
-      features: [],
-    },
-  },
-  message: null,
-  status: false,
-  response: {
-    Currency: "",
-    _createdAt: "",
-    _id: "",
-    _rev: "",
-    _type: "",
-  }, // Initialize response with empty values as needed
-  zodErrors: {
-    name: [], // Initialize with any required fields
-  },
-};
 
 interface Countries {
   name?: string;
@@ -216,7 +172,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
   const [AdPrice, setAdPrice] = useState<number>();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const t = useTranslations("TopNav");
-
+  const [ImagesArray, setImages] = useState<string[]>([]);
   //Get Category ID for retrive subcategories
   const handleInputChange = (e: string) => {
     const { id, price } = JSON.parse(e);
@@ -372,42 +328,52 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
     setFeatures(newFeatures);
   };
 
-  const [lastResult, action] = useFormState(stepOpneFormAction, undefined);
+  // useEffect(() => {
+  //   if (form.status == "error") {
+  //     setPageLoader("Error");
+  //   }
 
-  const [form, fields] = useForm({
-    lastResult,
-    onValidate({ formData }) {
-      return parseWithZod(formData, {
-        schema: SchemaAdPostForm,
-      });
-    },
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
+  //   if (lastResult?.status == true) {
+  //     setPageLoader("Loading Done");
+  //     Swal.fire({
+  //       title: "Congratulations!",
+  //       text: lastResult?.message ?? "", // Provide a fallback to an empty string if message is null
+  //       icon: "success",
+  //       confirmButtonText: `Pay ${AdPrice} USD`,
+  //       allowOutsideClick: false,
+  //       allowEscapeKey: true,
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         router.push(`/${locale}/payments`); // Redirect to payments page on confirm
+  //       }
+  //     });
+
+  //     localStorage.setItem("AdID", lastResult?.response._id);
+  //   }
+  // });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitted },
+    reset,
+    getValues,
+  } = useForm({
+    resolver:zodResolver(SchemaAdPostForm)
   });
 
-  useEffect(() => {
-    if (form.status == "error") {
-      setPageLoader("Error");
-    }
-
-    if (lastResult?.status == true) {
-      setPageLoader("Loading Done");
-      Swal.fire({
-        title: "Congratulations!",
-        text: lastResult?.message ?? "", // Provide a fallback to an empty string if message is null
-        icon: "success",
-        confirmButtonText: `Pay ${AdPrice} USD`,
-        allowOutsideClick: false,
-        allowEscapeKey: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          router.push(`/${locale}/payments`); // Redirect to payments page on confirm
-        }
-      });
-
-      localStorage.setItem("AdID", lastResult?.response._id);
-    }
-  });
+  const onSubmit = async (data: FieldValues) => {
+    console.log(data);
+    
+    const dataToSend = { ...data, images: ImagesArray, featurs: features };
+    await fetch("/api/createad", {
+      method: "POST",
+      body: JSON.stringify(dataToSend),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
 
   return (
     <div className=" flex flex-col gap-y-[20px] ">
@@ -423,9 +389,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
       </div>
 
       <form
-        id={form.id}
-        onSubmit={form.onSubmit}
-        action={action}
+        onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-y-[20px] "
       >
         {/* Name */}
@@ -433,15 +397,16 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         <div className="flex flex-col">
           <label className="text-grayscale900">{t("AdName")}</label>
           <Input
+            {...register("name")}
             type="text"
-            name={fields.name.name}
-            defaultValue={fields.name.initialValue}
-            key={fields.name.key}
+            name="name"
             className={`min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] `}
             placeholder={t("AdName")}
           ></Input>
 
-          <p className="text-red-600">{fields.name.errors}</p>
+          {errors.name && (
+            <p className="text-red-600">{`${errors.name.message}`}</p>
+          )}
 
           {/* Show error for name */}
         </div>
@@ -452,62 +417,52 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         <div className="flex  flex-col lg:flex-row justify-between">
           <div className="flex flex-col ">
             <label className="text-grayscale900">{t("Category")}</label>
-            <Select
-              onValueChange={(e) => handleInputChange(e)}
-              name={fields.category.name}
-              defaultValue={fields.category.initialValue}
-              key={fields.category.key}
+            <select
+              className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+              {...register("category")}
+              onChange={(e) => handleInputChange(e.target.value)}
             >
-              <SelectTrigger className="  sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder={t("SelectCategory")} />
-              </SelectTrigger>
-              <SelectContent>
-                {categories?.map((selectData) => {
-                  return (
-                    <SelectItem
-                      key={selectData?.id}
-                      value={JSON.stringify({
-                        id: selectData?.id,
-                        price: selectData?.price,
-                      })}
-                    >
-                      {selectData?.title[locale as "en" | "ar"]}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
+              <option value="" disabled selected>
+                {t("SelectCategory")}
+              </option>
+              {categories?.map((selectData) => (
+                <option
+                  key={selectData?.id}
+                  value={JSON.stringify({
+                    id: selectData?.id,
+                    price: selectData?.price,
+                  })}
+                >
+                  {selectData?.title[locale as "en" | "ar"]}
+                </option>
+              ))}
+            </select>
 
-            <p className="text-red-600">{fields.category.errors}</p>
-
+            {errors.category && (
+              <p className="text-red-600">{`${errors.category.message}`}</p>
+            )}
             {/* Show error for name */}
           </div>
 
           <div className="flex flex-col">
             <label className="text-grayscale900">{t("Subcategory")}</label>
-            <Select
-              onValueChange={(e) => handleSubCategoryChange(e)}
-              name={fields.subcategory.name}
-              defaultValue={fields.subcategory.initialValue}
-              key={fields.subcategory.key}
+            <select
+              className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+              {...register("subcategory")}
+              onChange={(e) => handleSubCategoryChange(e.target.value)}
             >
-              <SelectTrigger className="  sm:min-w-[451px]  min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder={t("SelectCategory")} />
-              </SelectTrigger>
-              <SelectContent>
-                {subCategories?.map((selectData: SubCategory) => {
-                  return (
-                    <SelectItem
-                      key={selectData._id}
-                      value={selectData._id as string}
-                    >
-                      {selectData?.title[locale as "en" | "ar"]}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-            <p className="text-red-600">{fields.subcategory.errors}</p>
+              <option value="" disabled selected>
+                {t("SelectCategory")}
+              </option>
+              {subCategories?.map((selectData: SubCategory) => (
+                <option key={selectData._id} value={selectData._id as string}>
+                  {selectData?.title[locale as "en" | "ar"]}
+                </option>
+              ))}
+            </select>
+            {errors.subcategory && (
+              <p className="text-red-600">{`${errors.subcategory.message}`}</p>
+            )}
             {/* Show error for name */}
           </div>
         </div>
@@ -517,56 +472,47 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         <div className="flex  flex-col lg:flex-row justify-between ">
           <div className="flex flex-col">
             <label className="text-grayscale900">{t("Brands")}</label>
-            <Select
-              name={fields.brand.name}
-              defaultValue={fields.brand.initialValue}
-              key={fields.brand.key}
+            <select
+              className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+              {...register("brands")}
             >
-              <SelectTrigger className=" sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder={t("SelectBrand")} />
-              </SelectTrigger>
-              <SelectContent>
-                {subBrands?.map((selectData: Brand) => {
-                  return (
-                    <SelectItem
-                      key={selectData._id}
-                      value={selectData?.title[locale as "en" | "ar"]}
-                    >
-                      {selectData?.title[locale as "en" | "ar"]}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-            <p className="text-red-600">{fields.brand.errors}</p>
+              <option value="" disabled selected>
+                {t("SelectBrand")}
+              </option>
+              {subBrands?.map((selectData: Brand) => (
+                <option
+                  key={selectData._id}
+                  value={selectData?.title[locale as "en" | "ar"]}
+                >
+                  {selectData?.title[locale as "en" | "ar"]}
+                </option>
+              ))}
+            </select>
+
             {/* Show error for name */}
           </div>
 
           <div className="flex flex-col">
             <label className="text-grayscale900">{t("Models")}</label>
-            <Select
-              name={fields.model.name}
-              defaultValue={fields.model.initialValue}
-              key={fields.model.key}
+            <select
+            {...register("model")}
+              name="model"
+              className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
             >
-              <SelectTrigger className=" sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder={t("SelectModels")} />
-              </SelectTrigger>
+              <option value="" disabled selected>
+                {t("SelectModels")}
+              </option>
+              {Models?.map((selectData: Model) => (
+                <option
+                  key={selectData._id}
+                  value={selectData?.title[locale as "en" | "ar"] as string}
+                >
+                  {selectData?.title[locale as "en" | "ar"]}
+                </option>
+              ))}
+            </select>
 
-              <SelectContent>
-                {Models?.map((selectData: Model) => {
-                  return (
-                    <SelectItem
-                      key={selectData._id}
-                      value={selectData?.title[locale as "en" | "ar"] as string}
-                    >
-                      {selectData?.title[locale as "en" | "ar"]}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-            <p className="text-red-600">{fields.model.errors}</p>
+            {/* <p className="text-red-600">{fields.model.errors}</p> */}
             {/* Show error for name */}
           </div>
         </div>
@@ -577,70 +523,64 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         <div className="flex  flex-col lg:flex-row justify-between">
           <div className="flex flex-col">
             <label className="text-grayscale900">{t("Conditions")}</label>
-            <Select
-              name={fields.conditions.name}
-              defaultValue={fields.conditions.initialValue}
-              key={fields.conditions.key}
+            <select
+              className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+              {...register("conditions")}
             >
-              <SelectTrigger className=" sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder={t("SelectConditions")} />
-              </SelectTrigger>
-              <SelectContent>
-                {ConditionList?.map((selectData: Model) => {
-                  return (
-                    <SelectItem
-                      key={selectData?.title[locale as "en" | "ar"]}
-                      value={selectData?.value[locale as "en" | "ar"] as string}
-                    >
-                      {selectData?.title[locale as "en" | "ar"]}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-            <p className="text-red-600">{fields.conditions.errors}</p>
+              <option value="" disabled selected>
+                {t("SelectConditions")}
+              </option>
+              {ConditionList?.map((selectData: Model) => (
+                <option
+                  key={selectData?.title[locale as "en" | "ar"]}
+                  value={selectData?.value[locale as "en" | "ar"] as string}
+                >
+                  {selectData?.title[locale as "en" | "ar"]}
+                </option>
+              ))}
+            </select>
+
+            {/* <p className="text-red-600">{fields.conditions.errors}</p> */}
             {/* Show error for name */}
           </div>
 
           <div className="flex gap-x-1">
             <div className="flex flex-col">
               <label className="text-grayscale900">{t("Currency")}</label>
-              <Select
-                name={fields.Currency.name}
-                defaultValue={fields.Currency.initialValue}
-                key={fields.Currency.key}
+              <select
+                className="max-w-[151px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+                {...register("Currency")}
               >
-                <SelectTrigger className="max-w-[151px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                  <SelectValue placeholder={t("Currency")} />
-                </SelectTrigger>
+                <option value="" disabled selected>
+                  {t("Currency")}
+                </option>
+                {Currency?.map((selectData: Currency) => (
+                  <option
+                    key={selectData?.title[locale as "en" | "ar"]}
+                    value={selectData?.title[locale as "en" | "ar"] as string}
+                  >
+                    {selectData?.title[locale as "en" | "ar"]}
+                  </option>
+                ))}
+              </select>
 
-                <SelectContent>
-                  {Currency?.map((selectData: Currency) => {
-                    return (
-                      <SelectItem
-                        key={selectData?.title[locale as "en" | "ar"]}
-                        value={
-                          selectData?.title[locale as "en" | "ar"] as string
-                        }
-                      >
-                        {selectData?.title[locale as "en" | "ar"]}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
-              <p className="text-red-600">{fields.Currency.errors}</p>
+              {errors.Currency && (
+                <p className="text-red-600">{`${errors.Currency.message}`}</p>
+              )}
             </div>
 
             <div className="flex flex-col">
               <label className="text-grayscale900">{t("AdPrices")}</label>
               <Input
                 type="text"
+                {...register("price")}
                 name="price"
                 placeholder={t("Pickagoodprice-whatwouldyoupay?")}
                 className={` max-w-[180px] sm:min-w-[354px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] `}
               ></Input>
-              <p className="text-red-600">{fields.Currency.errors}</p>
+              {errors.price && (
+                <p className="text-red-600">{`${errors.price.message}`}</p>
+              )}
             </div>
           </div>
         </div>
@@ -651,31 +591,24 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         <div className="flex  flex-col lg:flex-row justify-between">
           <div className="flex flex-col">
             <label className="text-grayscale900">{t("Authenticity")}</label>
-            <Select
-              name={fields.authenticity.name}
-              defaultValue={fields.authenticity.initialValue}
-              key={fields.authenticity.key}
-
-              // //
+            <select
+              {...register("authenticity")}
+              className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
             >
-              <SelectTrigger className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                <SelectValue placeholder={t("SelectanAuthenticity")} />
-              </SelectTrigger>
+              <option value="" disabled selected>
+                {t("SelectanAuthenticity")}
+              </option>
+              {Authenticity?.map((selectData: Model) => (
+                <option
+                  key={selectData?.title[locale as "en" | "ar"]}
+                  value={selectData?.value[locale as "en" | "ar"] as string}
+                >
+                  {selectData?.title[locale as "en" | "ar"]}
+                </option>
+              ))}
+            </select>
 
-              <SelectContent>
-                {Authenticity?.map((selectData: Model) => {
-                  return (
-                    <SelectItem
-                      key={selectData?.title[locale as "en" | "ar"]}
-                      value={selectData?.value[locale as "en" | "ar"] as string}
-                    >
-                      {selectData?.title[locale as "en" | "ar"]}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-            <p className="text-red-600">{fields.authenticity.errors}</p>
+            {/* <p className="text-red-600">{fields.authenticity.errors}</p> */}
             {/* Show error for name */}
           </div>
           <div className="flex justify-between">
@@ -683,13 +616,13 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
               <label className="text-grayscale900">{t("MobileNumbe")}</label>
               <Input
                 type="text"
-                name={fields.mobile.name}
-                defaultValue={fields.mobile.initialValue}
-                key={fields.mobile.key}
+                {...register("mobileNumbe")}
                 placeholder="Ex: +96*********"
                 className={`min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] sm:min-w-[451px]`}
               ></Input>
-              <p className="text-red-600">{fields.mobile.errors}</p>
+              {errors.mobileNumbe && (
+                <p className="text-red-600">{`${errors.mobileNumbe.message}`}</p>
+              )}
               {/* Show error for name */}
             </div>
           </div>
@@ -701,15 +634,16 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
           <label className="text-grayscale900">{t("Addescription")}</label>
           <textarea
             id="description"
-            name={fields.description.name}
-            defaultValue={fields.description.initialValue}
-            key={fields.description.key}
             rows={5}
             cols={50}
             placeholder={t("Addescription")}
             className="border border-grayscale50 px-[18px] py-[12px] rounded-[5px]"
+            {...register("description")}
           />
-          <p className="text-red-600">{fields.description.errors}</p>
+          {errors.description && (
+            <p className="text-red-600">{`${errors.description.message}`}</p>
+          )}
+
           {/* Show error for name */}
         </div>
 
@@ -722,145 +656,120 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                   <label className="text-grayscale900">
                     {option.title[locale as "en" | "ar"]}
                   </label>
-                  <Select name={fields.options.name} key={fields.options.key}>
-                    <SelectTrigger className="min-w-[351px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                      <SelectValue
-                        placeholder={`Select ${option.title[locale as "en" | "ar"]}`}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {option.values?.map(
-                        (value: OptionValues, index: number) => {
-                          return (
-                            <SelectItem
-                              key={index}
-                              value={JSON.stringify({
-                                _key: value.en,
-                                key: option.title[locale as "en" | "ar"],
-                                value: value.en,
-                              })}
-                            >
-                              {value[locale as "en" | "ar"]}
-                            </SelectItem>
-                          );
-                        }
-                      )}
-                    </SelectContent>
-                  </Select>
+                  <select
+                    {...register(`options.${index}`)}
+                   
+                    className="min-w-[351px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+                  >
+                    <option value="" disabled selected>
+                      {`Select ${option.title[locale as "en" | "ar"]}`}
+                    </option>
+                    {option.values?.map(
+                      (value: OptionValues, index: number) => (
+                        <option
+                          key={index}
+                          value={JSON.stringify({
+                            _key: value.en,
+                            key: option.title[locale as "en" | "ar"],
+                            value: value.en,
+                          })}
+                        >
+                          {value[locale as "en" | "ar"]}
+                        </option>
+                      )
+                    )}
+                  </select>
+
+                  {errors.options && (
+            <p className="text-red-600">{`${errors.options.message}`}</p>
+          )}
                 </div>
               );
             })}
           </div>
-          <p className="text-red-600">{fields.options.errors}</p>
+
           {/* Show error for name */}
         </div>
 
         <div className="flex flex-col gap-y-[8px]">
           <label className="text-grayscale900">{t("Images")}</label>
-          {/* Input allows multiple files */}
-          <Input
-            type="file"
-            accept="image/*"
-            multiple
-            className="    "
-            name="image"
-            onChange={handleImageChange}
-            ref={fileInputRef}
-          />
-          <p className="text-red-600">
-            <span>{fields.image.errors}</span>
-          </p>
 
-          {/* Display previews for all selected images */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-            {previewUrls.map((url, index) => (
-              <div key={index} style={{ position: "relative" }}>
-                <img
-                  src={url}
-                  alt={`Selected Image ${index + 1}`}
-                  style={{ maxWidth: "100px" }}
-                />
-
-                <button
-                  type="button"
-                  onClick={() => handleDeleteImage(index)}
-                  className="absolute top-[5px] right-[5px] bg-danger700 text-white rounded-full  w-[25px] h-[25px]"
-                >
-                  <div className="">
-                    <h1>X</h1>
-                  </div>
-                </button>
-              </div>
-            ))}
-            {/* {formState?.zodErrors?.image && (
-              <p className="text-red-600">{formState?.zodErrors?.image}</p>
-            )}{" "} */}
-            {/* Show error for name */}
+          <div>
+            <CldUploadWidget
+              signatureEndpoint="/api/sign-cloudinary-params"
+              onSuccess={async (results: any) => {
+                const imageUrl = results?.info?.secure_url;
+                if (imageUrl) {
+                  setImages((prevImages) => [...prevImages, imageUrl]);
+                  const formData = new FormData();
+                  formData.append("image", JSON.stringify(ImagesArray));
+                }
+              }}
+            >
+              {({ open }) => {
+                return <button onClick={() => open()}>Upload Images</button>;
+              }}
+            </CldUploadWidget>
           </div>
+
           <div className="flex flex-col space-y-3 lg:space-y-0 lg:flex-row  gap-x-4">
             <div className="flex flex-col">
-              <Select
-                name={fields.country.name}
-                defaultValue={fields.country.initialValue}
-                key={fields.country.key}
-                onValueChange={(e: string | undefined) => {
-                  if (e !== undefined) {
-                    setSelectedCountry(e);
+              <select
+                {...register("country")}
+                name="country"
+                className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+                onChange={(e) => {
+                  const selectedCountry = e.target.value;
+                  if (selectedCountry) {
+                    setSelectedCountry(selectedCountry);
                   }
                 }}
               >
-                <SelectTrigger className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                  <SelectValue placeholder={t("SelectCountry")} />
-                </SelectTrigger>
-                <SelectContent>
-                  {Countries.map((country: Countries) => (
-                    <SelectItem
-                      key={country.code}
-                      value={country.name as string}
-                    >
-                      {country.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <option value="" disabled selected>
+                  {t("SelectCountry")}
+                </option>
+                {Countries.map((country: Countries) => (
+                  <option key={country.code} value={country.name}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
 
-              <p className="text-red-600">{fields.country.errors}</p>
+              {errors.country && (
+                <p className="text-red-600">{`${errors.country.message}`}</p>
+              )}
             </div>
 
             <div className="flex flex-col">
-              <Select
-                name={fields.state.name}
-                defaultValue={fields.state.initialValue}
-                key={fields.state.key}
+              <select
+                {...register("state")}
+                name="state"
+                className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               >
-                <SelectTrigger className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]">
-                  <SelectValue placeholder={t("SelectState")} />
-                </SelectTrigger>
-                <SelectContent>
-                  {State?.map((state: State, index: number) => (
-                    <SelectItem key={index} value={state.name}>
-                      {state.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-red-600">{fields.state.errors}</p>
+                <option value="" disabled selected>
+                  {t("SelectState")}
+                </option>
+                {State?.map((state: State, index: number) => (
+                  <option key={index} value={state.name}>
+                    {state.name}
+                  </option>
+                ))}
+              </select>
+
+              {errors.state && (
+                <p className="text-red-600">{`${errors.state.message}`}</p>
+              )}
             </div>
 
             <div className="flex items-center gap-x-3">
-              <Checkbox
-                name={fields.negotiable.name}
-                defaultValue={fields.negotiable.initialValue}
-                key={fields.negotiable.key}
-                id="terms1"
-              />
+              <Checkbox name="negotiable" id="terms1" />
               <label
                 htmlFor="terms1"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Negotiable")}
               </label>
-              <p className="text-red-600">{fields.negotiable.errors}</p>
+              {/* <p className="text-red-600">{fields.negotiable.errors}</p> */}
             </div>
           </div>
           {/* <div className="min-w-full min-h-[348px] rounded-[8px]" ref={MapRef} /> */}
@@ -872,12 +781,13 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
           {features.map((feature, index) => (
             <div key={index} className="mb-4 flex gap-x-5 items-center">
               <Input
+                {...register("feature")}
                 type="text"
-                value={feature}
                 onChange={(e) => handleFeatureChange(index, e.target.value)}
                 placeholder={`Feature ${index + 1}`}
                 className="min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
                 name="features"
+                value={feature}
               />
               <button
                 onClick={() => removeFeature(index)}
@@ -907,7 +817,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
           </button>
         </div>
       </form>
-      <>
+      {/* <>
         {PageLoader === "Loading" ? (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="text-center">
@@ -917,7 +827,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         ) : (
           <></>
         )}
-      </>
+      </> */}
     </div>
   );
 };

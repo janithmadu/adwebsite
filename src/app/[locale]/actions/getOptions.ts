@@ -23,7 +23,7 @@ export const getOptionsByID = async (subcategoryId:string) => {
     
     return options;
   } catch (error) {
-    console.error("Error fetching options:", error);
+   
     return [];
   }
 };
