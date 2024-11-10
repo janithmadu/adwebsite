@@ -29,9 +29,9 @@ import { parseWithZod } from "@conform-to/zod";
 import { FormType, SchemaAdPostForm } from "@/lib/schemas";
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
-import { CldUploadWidget } from "next-cloudinary";
+import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { FieldValues, useForm } from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod"
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -172,13 +172,30 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
   const [AdPrice, setAdPrice] = useState<number>();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const t = useTranslations("TopNav");
-  const [ImagesArray, setImages] = useState<string[]>([]);
+  const [ImagesArray, setImages] = useState<
+    { _key: string; url: string; altText: string }[]
+  >([]);
+  const [ImageError, setImageError] = useState<boolean>(true);
+  const [ImageCountError, setImageCountError] = useState<boolean>(true);
   //Get Category ID for retrive subcategories
   const handleInputChange = (e: string) => {
     const { id, price } = JSON.parse(e);
     setCategoriesID(id);
     setAdPrice(price);
   };
+
+  useEffect(() => {
+    if (ImagesArray.length === 0) {
+      setImageError(true);
+    } else {
+      setImageError(false);
+    }
+    if (ImagesArray.length > 5) {
+      setImageCountError(true);
+    } else {
+      setImageCountError(false);
+    }
+  }, [ImagesArray]);
 
   //Get SubCategory ID for retrive Models,Brands,Options
   const handleSubCategoryChange = (e: string) => {
@@ -277,21 +294,19 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
   }, [selectedCountry]);
 
   //Upload Image show it
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-
-    const filePreviews = files.map((file: File) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-
-      return new Promise<string>((resolve) => {
-        reader.onloadend = () => {
-          resolve(reader.result as string);
-        };
+  const handleRemoveImage = async (id: string) => {
+    setImages((prevImages) => prevImages.filter((image) => image._key !== id));
+    try {
+      await fetch("/api/delete-image", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
       });
-    });
-
-    Promise.all(filePreviews).then((urls) => setPreviewUrls(urls));
+    } catch (error) {
+      console.error("Error deleting image from Cloudinary:", error);
+    }
   };
 
   //Remove Uploaded Image
@@ -348,7 +363,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
   //       }
   //     });
 
-  //     localStorage.setItem("AdID", lastResult?.response._id);
+  //
   //   }
   // });
 
@@ -359,20 +374,53 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
     reset,
     getValues,
   } = useForm({
-    resolver:zodResolver(SchemaAdPostForm)
+    resolver: zodResolver(SchemaAdPostForm),
   });
 
   const onSubmit = async (data: FieldValues) => {
-    console.log(data);
-    
-    const dataToSend = { ...data, images: ImagesArray, featurs: features };
-    await fetch("/api/createad", {
-      method: "POST",
-      body: JSON.stringify(dataToSend),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    setPageLoader("Loading");
+
+    if (ImageError || ImageCountError) {
+      return null;
+    } else {
+      const dataToSend = { ...data, images: ImagesArray, featurs: features };
+      const CreateAdRes = await fetch("/api/createad", {
+        method: "POST",
+        body: JSON.stringify(dataToSend),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const CreateAdData = await CreateAdRes.json();
+      console.log();
+
+      if (!CreateAdRes.ok && !CreateAdData.success) {
+        setPageLoader("Error");
+        Swal.fire({
+          title: "Error!",
+          text: "Ad posting faild due to some error pleace check your inserting data.",
+          icon: "error",
+          confirmButtonText: `Cancel`,
+          allowOutsideClick: true,
+          allowEscapeKey: true,
+        });
+      } else {
+        setPageLoader("Error");
+        Swal.fire({
+          title: "Congratulations!",
+          text: "Ad Posting Success!",
+          icon: "success",
+          confirmButtonText: `Pay ${AdPrice} USD`,
+          allowOutsideClick: false,
+          allowEscapeKey: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.push(`/${locale}/payments`); // Redirect to payments page on confirm
+          }
+        });
+        localStorage.setItem("AdID", CreateAdData.res._id);
+      }
+    }
   };
 
   return (
@@ -421,8 +469,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               {...register("category")}
               onChange={(e) => handleInputChange(e.target.value)}
+              defaultValue={"DEFAULT"}
             >
-              <option value="" disabled selected>
+              <option value="DEFAULT" disabled>
                 {t("SelectCategory")}
               </option>
               {categories?.map((selectData) => (
@@ -450,8 +499,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               {...register("subcategory")}
               onChange={(e) => handleSubCategoryChange(e.target.value)}
+              defaultValue={"DEFAULT"}
             >
-              <option value="" disabled selected>
+              <option value="DEFAULT" disabled>
                 {t("SelectCategory")}
               </option>
               {subCategories?.map((selectData: SubCategory) => (
@@ -475,9 +525,10 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
             <select
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               {...register("brands")}
+              defaultValue=""
             >
-              <option value="" disabled selected>
-                {t("SelectBrand")}
+              <option value="" disabled>
+                Select Brands
               </option>
               {subBrands?.map((selectData: Brand) => (
                 <option
@@ -495,12 +546,13 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
           <div className="flex flex-col">
             <label className="text-grayscale900">{t("Models")}</label>
             <select
-            {...register("model")}
+              {...register("model")}
               name="model"
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+              defaultValue=""
             >
-              <option value="" disabled selected>
-                {t("SelectModels")}
+              <option value="" disabled>
+                Select Model
               </option>
               {Models?.map((selectData: Model) => (
                 <option
@@ -526,8 +578,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
             <select
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               {...register("conditions")}
+              defaultValue={"DEFAULT"}
             >
-              <option value="" disabled selected>
+              <option value="DEFAULT" disabled>
                 {t("SelectConditions")}
               </option>
               {ConditionList?.map((selectData: Model) => (
@@ -540,7 +593,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
               ))}
             </select>
 
-            {/* <p className="text-red-600">{fields.conditions.errors}</p> */}
+            {errors.conditions && (
+              <p className="text-red-600">{`${errors.conditions.message}`}</p>
+            )}
             {/* Show error for name */}
           </div>
 
@@ -550,8 +605,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
               <select
                 className="max-w-[151px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
                 {...register("Currency")}
+                defaultValue={"DEFAULT"}
               >
-                <option value="" disabled selected>
+                <option value="DEFAULT" disabled>
                   {t("Currency")}
                 </option>
                 {Currency?.map((selectData: Currency) => (
@@ -594,8 +650,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
             <select
               {...register("authenticity")}
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+              defaultValue={"DEFAULT"}
             >
-              <option value="" disabled selected>
+              <option value="DEFAULT" disabled>
                 {t("SelectanAuthenticity")}
               </option>
               {Authenticity?.map((selectData: Model) => (
@@ -608,7 +665,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
               ))}
             </select>
 
-            {/* <p className="text-red-600">{fields.authenticity.errors}</p> */}
+            {errors.authenticity && (
+              <p className="text-red-600">{`${errors.authenticity.message}`}</p>
+            )}
             {/* Show error for name */}
           </div>
           <div className="flex justify-between">
@@ -658,12 +717,8 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                   </label>
                   <select
                     {...register(`options.${index}`)}
-                   
                     className="min-w-[351px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
                   >
-                    <option value="" disabled selected>
-                      {`Select ${option.title[locale as "en" | "ar"]}`}
-                    </option>
                     {option.values?.map(
                       (value: OptionValues, index: number) => (
                         <option
@@ -681,8 +736,8 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                   </select>
 
                   {errors.options && (
-            <p className="text-red-600">{`${errors.options.message}`}</p>
-          )}
+                    <p className="text-red-600">{`${errors.options.message}`}</p>
+                  )}
                 </div>
               );
             })}
@@ -694,24 +749,63 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         <div className="flex flex-col gap-y-[8px]">
           <label className="text-grayscale900">{t("Images")}</label>
 
-          <div>
+          <div className="1 max-w-[400px] min-h-[300px] shadow rounded-xl">
+            
             <CldUploadWidget
               signatureEndpoint="/api/sign-cloudinary-params"
               onSuccess={async (results: any) => {
+                const id = results?.info?.public_id;
+                const alt = results?.info?.original_filename;
                 const imageUrl = results?.info?.secure_url;
+
                 if (imageUrl) {
-                  setImages((prevImages) => [...prevImages, imageUrl]);
-                  const formData = new FormData();
-                  formData.append("image", JSON.stringify(ImagesArray));
+                  setImages((prevImages) => [
+                    ...prevImages,
+                    { _key: id, url: imageUrl, altText: alt },
+                  ]);
                 }
               }}
             >
               {({ open }) => {
-                return <button onClick={() => open()}>Upload Images</button>;
+                return (
+                  <button type="button" onClick={() => open()}>
+                    Upload Images
+                  </button>
+                );
               }}
             </CldUploadWidget>
           </div>
 
+          <div className="flex gap-x-3 mb-2">
+            {ImagesArray.map((ImageOptions) => {
+              return (
+                <div key={ImageOptions._key}>
+                  <div className="min-w-full justify-end flex mb-1">
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(ImageOptions._key)}
+                      className="p-2 flex items-center justify-center bg-red-600 rounded-full text-white text-sm w-3 h-3"
+                    >
+                      X
+                    </button>
+                  </div>
+                  <CldImage
+                    alt={ImageOptions.altText}
+                    width={100}
+                    height={100}
+                    src={ImageOptions.url}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          {ImageError && (
+            <p className="text-red-600">Pleace upload at least one image</p>
+          )}
+          {ImageCountError && (
+            <p className="text-red-600">You can upload a maximum of 5 images</p>
+          )}
           <div className="flex flex-col space-y-3 lg:space-y-0 lg:flex-row  gap-x-4">
             <div className="flex flex-col">
               <select
@@ -724,8 +818,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                     setSelectedCountry(selectedCountry);
                   }
                 }}
+                defaultValue={"DEFAULT"}
               >
-                <option value="" disabled selected>
+                <option value="DEFAULT" disabled>
                   {t("SelectCountry")}
                 </option>
                 {Countries.map((country: Countries) => (
@@ -745,8 +840,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                 {...register("state")}
                 name="state"
                 className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+                defaultValue={"DEFAULT"}
               >
-                <option value="" disabled selected>
+                <option value="DEFAULT" disabled>
                   {t("SelectState")}
                 </option>
                 {State?.map((state: State, index: number) => (
@@ -781,12 +877,10 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
           {features.map((feature, index) => (
             <div key={index} className="mb-4 flex gap-x-5 items-center">
               <Input
-                {...register("feature")}
                 type="text"
                 onChange={(e) => handleFeatureChange(index, e.target.value)}
                 placeholder={`Feature ${index + 1}`}
                 className="min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
-                name="features"
                 value={feature}
               />
               <button

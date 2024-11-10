@@ -366,21 +366,29 @@ export default {
       type: "boolean",
     },
     {
-      name: "asset",
-      title: "Asset",
-      type: "object",
-      fields: [
+      name: "image",
+      title: "Photo URLs",
+      type: "array",
+      of: [
         {
-          name: "imageId",
-          title: "Image ID",
-          type: "string",
-          description: "Unique identifier for the image asset",
-        },
-        {
-          name: "imageUrl",
-          title: "Image URL",
-          type: "url",
-          description: "URL of the image asset",
+          type: "object",
+          fields: [
+            {
+              name: "url",
+              title: "Image URL",
+              type: "url",
+              validation: (Rule:Rule) =>
+                Rule.uri({
+                  scheme: ["http", "https"],
+                }),
+            },
+            {
+              name: "altText",
+              title: "Alt Text",
+              type: "string",
+              description: "Alternative text for the image",
+            },
+          ],
         },
       ],
     },
