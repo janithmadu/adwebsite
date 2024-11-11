@@ -32,6 +32,7 @@ import { useTranslations } from "next-intl";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { compressImage } from "../../actions/ImageComprestion";
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -177,6 +178,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
   >([]);
   const [ImageError, setImageError] = useState<boolean>(true);
   const [ImageCountError, setImageCountError] = useState<boolean>(true);
+  const [isCompressing, setIsCompressing] = useState(false);
   //Get Category ID for retrive subcategories
   const handleInputChange = (e: string) => {
     const { id, price } = JSON.parse(e);
@@ -199,6 +201,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
 
   //Get SubCategory ID for retrive Models,Brands,Options
   const handleSubCategoryChange = (e: string) => {
+    setOptions([]);
     setsubCategoriesID(e);
   };
 
@@ -213,7 +216,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
     const getSubCategory = async () => {
       if (CategoriesID) {
         const response = await getSubCategoriesByID(CategoriesID);
-
+        setOptions([]);
         setsubCategories(response);
       }
     };
@@ -246,10 +249,14 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
   useEffect(() => {
     const getOptions = async () => {
       if (subCategoriesID) {
+        // Clear options immediately on subCategoriesID change
+        setOptions([]);
+
         const response = await getOptionsByID(subCategoriesID);
         setOptions(response);
       }
     };
+
     getOptions();
   }, [subCategoriesID]);
 
@@ -322,10 +329,6 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
     setImage(updatedPreviewUrlss);
   };
 
-  const LoadingHandle = () => {
-    setPageLoader("Loading");
-  };
-
   const addFeature = () => {
     setFeatures([...features, ""]);
   };
@@ -343,30 +346,6 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
     setFeatures(newFeatures);
   };
 
-  // useEffect(() => {
-  //   if (form.status == "error") {
-  //     setPageLoader("Error");
-  //   }
-
-  //   if (lastResult?.status == true) {
-  //     setPageLoader("Loading Done");
-  //     Swal.fire({
-  //       title: "Congratulations!",
-  //       text: lastResult?.message ?? "", // Provide a fallback to an empty string if message is null
-  //       icon: "success",
-  //       confirmButtonText: `Pay ${AdPrice} USD`,
-  //       allowOutsideClick: false,
-  //       allowEscapeKey: true,
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         router.push(`/${locale}/payments`); // Redirect to payments page on confirm
-  //       }
-  //     });
-
-  //
-  //   }
-  // });
-
   const {
     register,
     handleSubmit,
@@ -379,8 +358,12 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
 
   const onSubmit = async (data: FieldValues) => {
     setPageLoader("Loading");
+    if (Object.keys(errors).length > 0) {
+      setPageLoader("Error");
+    }
 
     if (ImageError || ImageCountError) {
+      setPageLoader("Error");
       return null;
     } else {
       const dataToSend = { ...data, images: ImagesArray, featurs: features };
@@ -392,7 +375,6 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         },
       });
       const CreateAdData = await CreateAdRes.json();
-      console.log();
 
       if (!CreateAdRes.ok && !CreateAdData.success) {
         setPageLoader("Error");
@@ -422,6 +404,14 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
       }
     }
   };
+
+  const LoadingHandle = () => {
+    if (Object.keys(errors).length > 0) {
+      setPageLoader("Error");
+    }
+  };
+
+  console.log(getValues());
 
   return (
     <div className=" flex flex-col gap-y-[20px] ">
@@ -718,7 +708,9 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                   <select
                     {...register(`options.${index}`)}
                     className="min-w-[351px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+                    defaultValue=""
                   >
+                    <option value="">Select</option>
                     {option.values?.map(
                       (value: OptionValues, index: number) => (
                         <option
@@ -749,8 +741,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         <div className="flex flex-col gap-y-[8px]">
           <label className="text-grayscale900">{t("Images")}</label>
 
-          <div className="1 max-w-[400px] min-h-[300px] shadow rounded-xl">
-            
+          <div className="1 max-w-[400px] min-h-[300px] shadow rounded-xl flex justify-center items-center px-4">
             <CldUploadWidget
               signatureEndpoint="/api/sign-cloudinary-params"
               onSuccess={async (results: any) => {
@@ -768,9 +759,18 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
             >
               {({ open }) => {
                 return (
-                  <button type="button" onClick={() => open()}>
-                    Upload Images
-                  </button>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center min-w-full min-h-[200px] flex justify-center items-center flex-col">
+                    <button
+                      type="button"
+                      onClick={() => open()}
+                      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                    >
+                      Upload Images
+                    </button>
+                    <p className="mt-1 text-xs text-gray-400">
+                      Max 5 images, 10MB each
+                    </p>
+                  </div>
                 );
               }}
             </CldUploadWidget>
@@ -905,13 +905,12 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
           <button
             className={`min-w-[193px] min-h-[58px] bg-primary500 text-white rounded-[6px] flex justify-center items-center gap-x-[12px]}`}
             type="submit"
-            onClick={LoadingHandle}
           >
             <span>{t("SubmitAd")}</span>
           </button>
         </div>
       </form>
-      {/* <>
+      <>
         {PageLoader === "Loading" ? (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="text-center">
@@ -921,7 +920,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         ) : (
           <></>
         )}
-      </> */}
+      </>
     </div>
   );
 };

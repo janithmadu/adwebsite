@@ -35,13 +35,15 @@ const DraftAds: React.FC<MainProfileProps> = ({ UserAds, resultCount }) => {
       >
         {UserAds.length > 0 ? (
           UserAds.map((ad: PostAd, index: number) => {
+            console.log(ad.image[0].url);
+            
             return (
               <div key={index} >
                 <ProfileAdCard
                   title={ad.adName}
                   category={ad.category.title[(locale as "en") || "ar"]}
                   price={ad.price}
-                  image={ad?.photos[0]?.asset?.url || "/"}
+                  image={ad?.image[0]?.url  || "/" }
                   timestamp={ad._createdAt}
                   paymentPending={true}
                   adprice={ad.category.price}

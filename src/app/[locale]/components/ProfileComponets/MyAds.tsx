@@ -33,6 +33,8 @@ const MyAds: React.FC<MainProfileProps> = ({ UserAds,resultCount }) => {
       >
         {UserAds.length > 0 ? (
           UserAds.map((ad: PostAd, index: number) => {
+            console.log(ad);
+            
             return (
               <div key={index} className="">
                 <ProfileAdCard
@@ -40,7 +42,7 @@ const MyAds: React.FC<MainProfileProps> = ({ UserAds,resultCount }) => {
                   title={ad.adName}
                   category={ad?.category?.title[locale as "en" | "ar"]}
                   price={ad.price}
-                  image={ad?.photos[0]?.asset?.url || "/"}
+                  image={ad?.image[0]?.url  || "/"}
                   timestamp={ad._createdAt}
                   delteActive={true}
                 />

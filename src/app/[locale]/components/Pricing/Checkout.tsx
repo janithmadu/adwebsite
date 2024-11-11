@@ -67,7 +67,7 @@ const Checkout = ({ amount, Ad }: CheckOut) => {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `${MainUrl}${locale}/payments/paymentsuccess`, //To Do
+        return_url: `${DevUrl}${locale}/payments/paymentsuccess`, //To Do
       },
     });
 

@@ -36,7 +36,7 @@ const HomePageAdds: React.FC<Ads> = ({ Ads }) => {
             <ProfileAdCard
               category={item.category.title[(locale as "en") || "ar"]}
               price={item.price}
-              image={item.photos[0].asset?.url || "/"}
+              image={item.image[0].url || "/"}
               title={item.adName}
               adprice={item.price}
               id={item._id}

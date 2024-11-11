@@ -97,7 +97,7 @@ export default function FilterBySubs() {
               <ProfileAdCard
                 title={ad.adName}
                 category={ad.category.title[(locale as "en") || "ar"]}
-                image={ad?.photos[0]?.asset?.url || ""}
+                image={ad?.image[0].url || ""}
                 price={ad.price}
                 timestamp={ad._createdAt}
                 id={ad._id}

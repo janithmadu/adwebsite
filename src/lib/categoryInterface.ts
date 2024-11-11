@@ -208,6 +208,12 @@ export interface PostAd {
   negotiable: boolean;
   phoneNumber: string;
   photos: Array<{ asset?: { _id?: string; url?: string }; alt?: string }>; // Adjusted photos structure
+  image:Array<
+  {
+    _key: string;
+    url: string; // Ensures URL format
+    altText?: string; // Alt text is optional
+  }>;
   price: number;
   state: string;
   subcategoryId: string; // Use subcategory ID directly

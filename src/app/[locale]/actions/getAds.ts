@@ -61,7 +61,8 @@ export async function getPostAds(data: Params): Promise<Result> {
       location,
       mapLocation,
       Currency,
-      _createdAt
+      _createdAt,
+      image,
     }`;
 
   const queryCount = `count(*[_type == "postAd" && payment == true])`;
@@ -105,7 +106,7 @@ export async function getAdsBySub({ subcategoryId }: Params) {
     subcategoryId.category
   ) {
     query = `*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && category->slug.current == $categorySlug && $options in options[].value && price >= $minPrice && price <= $maxPrice] | order(_createdAt desc) [${start}...${start + subcategoryId.limit}] {
-      _id, adName, category->{_id, title, slug}, subcategory->{_id, title}, brand, model, condition, authenticity, tags, price, negotiable, description, features, photos[]{asset->{_id, url}}, phoneNumber, backupPhoneNumber, email, website, country, city, state, location, mapLocation, Currency, _createdAt
+      _id, adName, category->{_id, title, slug}, subcategory->{_id, title}, brand, model, condition, authenticity, tags, price, negotiable, description, features, photos[]{asset->{_id, url}}, phoneNumber, backupPhoneNumber, email, website, country, city, state, location, mapLocation, Currency, _createdAt,image
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && category->slug.current == $categorySlug && $options in options[].value && price >= $minPrice && price <= $maxPrice])`;
@@ -119,7 +120,7 @@ export async function getAdsBySub({ subcategoryId }: Params) {
     };
   } else if (subcategoryId.subcategories && subcategoryId.category) {
     query = `*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && category->slug.current == $categorySlug] | order(_createdAt desc) [${start}...${start + subcategoryId.limit}] {
-      _id, adName, category->{_id, title, slug}, subcategory->{_id, title}, brand, model, condition, authenticity, tags, price, negotiable, description, features, photos[]{asset->{_id, url}}, phoneNumber, backupPhoneNumber, email, website, country, city, state, location, mapLocation, Currency, _createdAt
+      _id, adName, category->{_id, title, slug}, subcategory->{_id, title}, brand, model, condition, authenticity, tags, price, negotiable, description, features, photos[]{asset->{_id, url}}, phoneNumber, backupPhoneNumber, email, website, country, city, state, location, mapLocation, Currency, _createdAt,image,
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId && category->slug.current == $categorySlug])`;
@@ -130,7 +131,7 @@ export async function getAdsBySub({ subcategoryId }: Params) {
     };
   } else if (subcategoryId.subOptions && subcategoryId.category) {
     query = `*[_type == "postAd" && payment == true && category->slug.current == $categorySlug && $options in options[].value] | order(_createdAt desc) [${start}...${start + subcategoryId.limit}] {
-      _id, adName, category->{_id, title, slug}, subcategory->{_id, title}, brand, model, condition, authenticity, tags, price, negotiable, description, features, photos[]{asset->{_id, url}}, phoneNumber, backupPhoneNumber, email, website, country, city, state, location, mapLocation, Currency, _createdAt
+      _id, adName, category->{_id, title, slug}, subcategory->{_id, title}, brand, model, condition, authenticity, tags, price, negotiable, description, features, photos[]{asset->{_id, url}}, phoneNumber, backupPhoneNumber, email, website, country, city, state, location, mapLocation, Currency, _createdAt,image
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && category->slug.current == $categorySlug && $options in options[].value])`;
@@ -181,7 +182,8 @@ export async function getAdsBySub({ subcategoryId }: Params) {
       location,
       mapLocation,
       Currency,
-       _createdAt
+       _createdAt,
+       image
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && category->slug.current == $categorySlug])`;
@@ -193,7 +195,7 @@ export async function getAdsBySub({ subcategoryId }: Params) {
 
   else if (subcategoryId.subcategories) {
     query = `*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId] | order(_createdAt desc) [${start}...${start + subcategoryId.limit}] {
-      _id, adName, category->{_id, title}, subcategory->{_id, title}, brand, model, condition, authenticity, tags, price, negotiable, description, features, photos[]{asset->{_id, url}}, phoneNumber, backupPhoneNumber, email, website, country, city, state, location, mapLocation, Currency, _createdAt
+      _id, adName, category->{_id, title}, subcategory->{_id, title}, brand, model, condition, authenticity, tags, price, negotiable, description, features, photos[]{asset->{_id, url}}, phoneNumber, backupPhoneNumber, email, website, country, city, state, location, mapLocation, Currency, _createdAt,image
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId])`;
@@ -203,7 +205,7 @@ export async function getAdsBySub({ subcategoryId }: Params) {
     };
   } else if (parsedMinPrice !== undefined && parsedMaxPrice !== undefined) {
     query = `*[_type == "postAd" && payment == true && price >= $minPrice && price <= $maxPrice] | order(_createdAt desc) [${start}...${start + subcategoryId.limit}] {
-      _id, adName, category->{_id, title}, subcategory->{_id, title}, brand, model, condition, authenticity, tags, price, negotiable, description, features, photos[]{asset->{_id, url}}, phoneNumber, backupPhoneNumber, email, website, country, city, state, location, mapLocation, Currency, _createdAt
+      _id, adName, category->{_id, title}, subcategory->{_id, title}, brand, model, condition, authenticity, tags, price, negotiable, description, features, photos[]{asset->{_id, url}}, phoneNumber, backupPhoneNumber, email, website, country, city, state, location, mapLocation, Currency, _createdAt,image
     }`;
 
     queryCount = `count(*[_type == "postAd" && payment == true && price >= $minPrice && price <= $maxPrice])`;
@@ -279,9 +281,11 @@ export async function getAdById(id: string) {
         avatarUrl,
         email,
         verifiedSeller,
-        member
+        member,
+      
 
       },
+      image,
     }
   `;
 
@@ -340,6 +344,7 @@ export async function getAdByIdForPayment(id: string) {
         email
 
       },
+      image,
     }
   `;
 
@@ -391,7 +396,8 @@ export async function GetAdByUser(userID: string,page:number,Limit:number) {
       location,
       mapLocation,
       Currency,
-      _createdAt
+      _createdAt,
+      image
   }`;
 
   const params = { userExternalId: userID };
@@ -447,12 +453,16 @@ export async function GetAdByUserPayementFalse(userID: string,page:number,Limit:
       mapLocation,
       Currency,
       _createdAt,
+      image
       
   }`;
 
   const params = { userExternalId: userID };
 
   const result = await client.fetch(query, params);
+
+  console.log(result);
+  
 
   return result;
 }

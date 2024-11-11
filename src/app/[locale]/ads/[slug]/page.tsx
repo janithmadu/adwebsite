@@ -18,6 +18,8 @@ export default async function AdDetailsPage({
 }) {
   const GetAdByID = await getAdById(params.slug);
 
+
+
   const adTitile = GetAdByID?.adName;
   const AddCratedDate = GetAdByID?._createdAt;
   const Price = GetAdByID?.price;
@@ -52,7 +54,7 @@ export default async function AdDetailsPage({
           Member={Member}
         />
 
-        <ImageGallery Images={GetAdByID?.photos} />
+        <ImageGallery images={GetAdByID.image} />
 
         <DescriptionAds
           Options={Options}
