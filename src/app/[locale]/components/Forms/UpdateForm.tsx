@@ -27,6 +27,7 @@ import {
   Option,
   PostAd,
   Subcategory,
+  UpdateAd,
 } from "@/lib/categoryInterface";
 
 import { parseWithZod } from "@conform-to/zod";
@@ -184,7 +185,14 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
   const [ImageError, setImageError] = useState<boolean>(true);
   const [ImageCountError, setImageCountError] = useState<boolean>(true);
   const [isCompressing, setIsCompressing] = useState(false);
+  const [updateAd, setupdateAd] = useState<UpdateAd>();
   //Get Category ID for retrive subcategories
+
+  useEffect(() => {
+    setCategoriesID(updateAd?.category._id);
+    setsubCategoriesID(updateAd?.subcategory._id);
+  }, [updateAd?.category._id, updateAd?.subcategory._id]);
+
   const handleInputChange = (e: string) => {
     const { id, price } = JSON.parse(e);
     setCategoriesID(id);
@@ -410,8 +418,6 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
     }
   };
 
-  const [updateAd, setupdateAd] = useState<PostAd>();
-
   useEffect(() => {
     const getAd = async () => {
       const UpdateAdDetails = await getAdById("usBAIdOsFBFLqIqm5LCdkp");
@@ -421,10 +427,8 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
     getAd();
   }, []);
 
-  console.log(updateAd?.category.title[locale as "en" | "ar"]);
-  
-  console.log(updateAd?.currency);
-  
+  console.log(updateAd?.adName);
+
   return (
     <div className=" flex flex-col gap-y-[20px] ">
       <div className=" min-h-[100px] rounded-xl relative">
@@ -472,9 +476,9 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               {...register("category")}
               onChange={(e) => handleInputChange(e.target.value)}
-              defaultValue={updateAd?.category.title[locale as "en" | "ar"]}
+              defaultValue={updateAd?.category._id}
             >
-              <option value={updateAd?.category.title[locale as "en" | "ar"]} >
+              <option value={updateAd?.category.title[locale as "en" | "ar"]}>
                 {updateAd?.category.title[locale as "en" | "ar"]}
               </option>
               {categories?.map((selectData) => (
@@ -502,9 +506,9 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               {...register("subcategory")}
               onChange={(e) => handleSubCategoryChange(e.target.value)}
-              defaultValue={updateAd?.subcategory.title[locale as "en" | "ar"]}
+              defaultValue={updateAd?.subcategory._id}
             >
-              <option value={updateAd?.subcategory.title[locale as "en" | "ar"]} >
+              <option value={updateAd?.subcategory._id}>
                 {updateAd?.subcategory.title[locale as "en" | "ar"]}
               </option>
               {subCategories?.map((selectData: SubCategory) => (
@@ -530,9 +534,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
               {...register("brands")}
               defaultValue={updateAd?.brand}
             >
-              <option value={updateAd?.brand}>
-              {updateAd?.brand}
-              </option>
+              <option value={updateAd?.brand}>{updateAd?.brand}</option>
               {subBrands?.map((selectData: Brand) => (
                 <option
                   key={selectData._id}
@@ -554,9 +556,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               defaultValue={updateAd?.model}
             >
-              <option value={updateAd?.model}>
-              {updateAd?.model}
-              </option>
+              <option value={updateAd?.model}>{updateAd?.model}</option>
               {Models?.map((selectData: Model) => (
                 <option
                   key={selectData._id}
@@ -581,10 +581,10 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
             <select
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               {...register("conditions")}
-              defaultValue= {updateAd?.condition}
+              defaultValue={updateAd?.condition}
             >
               <option value={updateAd?.condition} disabled>
-              {updateAd?.condition}
+                {updateAd?.condition}
               </option>
               {ConditionList?.map((selectData: Model) => (
                 <option
@@ -611,7 +611,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
                 defaultValue={updateAd?.currency}
               >
                 <option value={updateAd?.currency} disabled>
-                {updateAd?.currency}
+                  {updateAd?.currency}
                 </option>
                 {Currency?.map((selectData: Currency) => (
                   <option
@@ -657,7 +657,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
               defaultValue={updateAd?.authenticity}
             >
               <option value={updateAd?.authenticity} disabled>
-              {updateAd?.authenticity}
+                {updateAd?.authenticity}
               </option>
               {Authenticity?.map((selectData: Model) => (
                 <option
@@ -716,6 +716,8 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
           <label className="text-grayscale900">{t("Options")}</label>
           <div className="flex gap-x-[20px] flex-wrap min-w-full">
             {Options?.map((option: Options, index: number) => {
+              
+              
               return (
                 <div className="flex flex-col" key={index}>
                   <label className="text-grayscale900">
@@ -724,9 +726,9 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
                   <select
                     {...register(`options.${index}`)}
                     className="min-w-[351px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
-                    defaultValue=""
+                    defaultValue="sdf"
                   >
-                    <option value="">Select</option>
+                    <option value="">{updateAd?.options.value}</option>
                     {option.values?.map(
                       (value: OptionValues, index: number) => (
                         <option

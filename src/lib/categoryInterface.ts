@@ -254,7 +254,7 @@ export interface UpdateAd {
       ar: string;
     };
   };
-  options?:{
+  options:{
     key?:string
     value?:string
     _key?:string
