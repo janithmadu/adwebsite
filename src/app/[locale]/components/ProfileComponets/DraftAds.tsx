@@ -35,7 +35,7 @@ const DraftAds: React.FC<MainProfileProps> = ({ UserAds, resultCount }) => {
       >
         {UserAds.length > 0 ? (
           UserAds.map((ad: PostAd, index: number) => {
-            console.log(ad.image[0].url);
+            
             
             return (
               <div key={index} >

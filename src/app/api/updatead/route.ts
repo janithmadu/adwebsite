@@ -4,7 +4,6 @@ import { NextResponse } from 'next/server';
 
 // Define the request handler for updating an ad
 export async function PATCH(request: Request) {
-    console.log(request);
 
       try {
         // Parse the incoming request body (ad data)
@@ -46,8 +45,7 @@ export async function PATCH(request: Request) {
           .set(updatedData)
           .commit();
 
-          console.log(updatedAd);
-          
+     
 
         // Return the updated document
         return NextResponse.json(
@@ -55,7 +53,7 @@ export async function PATCH(request: Request) {
           { status: 200 }
         );
       } catch (error) {
-        console.error('Error updating ad:', error);
+     
         return NextResponse.json(
           { status: 500 }
         );

@@ -461,7 +461,6 @@ export async function GetAdByUserPayementFalse(userID: string,page:number,Limit:
 
   const result = await client.fetch(query, params);
 
-  console.log(result);
   
 
   return result;

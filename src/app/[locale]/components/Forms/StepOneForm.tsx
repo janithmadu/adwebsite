@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 
 import { useFormState } from "react-dom";
-import { stepOpneFormAction } from "../../addform/step01/action";
 import { Authenticity, ConditionList, Currency } from "@/lib/statics";
 import { getSubCategoriesByID } from "../../actions/getSubCategories";
 import { getModelsById } from "../../actions/getModels";
@@ -411,7 +410,8 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
     }
   };
 
-  console.log(getValues());
+;
+  
 
   return (
     <div className=" flex flex-col gap-y-[20px] ">
@@ -858,10 +858,11 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
             </div>
 
             <div className="flex items-center gap-x-3">
-              <Checkbox name="negotiable" id="terms1" />
+              <input type="checkbox"   {...register("negotiable")}   />
               <label
                 htmlFor="terms1"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                
               >
                 {t("Negotiable")}
               </label>

@@ -33,7 +33,7 @@ const MyAds: React.FC<MainProfileProps> = ({ UserAds,resultCount }) => {
       >
         {UserAds.length > 0 ? (
           UserAds.map((ad: PostAd, index: number) => {
-            console.log(ad);
+     
             
             return (
               <div key={index} className="">

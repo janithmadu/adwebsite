@@ -6,6 +6,8 @@ import { NextResponse } from "next/server";
 export async function POST(reqest: Request) {
   const addata = await reqest.json();
 
+ 
+
   const {
     name,
     category,
@@ -23,7 +25,12 @@ export async function POST(reqest: Request) {
     images,
     featurs,
     model,
+    negotiable
   } = addata;
+
+
+
+ 
 
   const SchemaData: FormType = {
     name: name,
@@ -40,7 +47,7 @@ export async function POST(reqest: Request) {
     conditions: conditions,
     options: options,
     model: model,
-    negotiable: true,
+    negotiable: negotiable,
     image: images,
   };
 
@@ -90,7 +97,7 @@ export async function POST(reqest: Request) {
         authenticity: authenticity,
         options: parsedValuesArray,
         price: price,
-        negotiable: true,
+        negotiable: negotiable,
         description: description,
         features: featurs,
         image: resulet.data?.image,

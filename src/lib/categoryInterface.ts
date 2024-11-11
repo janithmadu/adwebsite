@@ -205,7 +205,7 @@ export interface PostAd {
   location: string | null;
   mapLocation: string | null;
   model: string;
-  negotiable: boolean;
+  negotiable: string;
   phoneNumber: string;
   photos: Array<{ asset?: { _id?: string; url?: string }; alt?: string }>; // Adjusted photos structure
   image:Array<

@@ -18,7 +18,7 @@ interface imagenew {
 }
 
 function ImageGallery(Images:Images) {
-  console.log();
+
   
   const [selectedImage, setSelectedImage] = useState("");
 

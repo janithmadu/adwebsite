@@ -31,7 +31,7 @@ export async function compressImage(file: File) {
     
     return compressedFile;
   } catch (error) {
-    console.error('Error compressing image:', error);
+
     return file;
   }
 }

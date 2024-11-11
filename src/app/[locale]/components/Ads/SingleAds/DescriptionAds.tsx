@@ -209,8 +209,7 @@ const DescriptionAds: React.FC<AdData> = ({
         <h2 className="text-grayscale900 text-heading03">{t("Options")}</h2>
         <ul className="grid grid-cols-2 gap-y-[16px] text-grayscale700 text-bodymedium">
           {Options?.map((GetOption: Option, index: number) => {
-            console.log();
-            
+      
             return (
               <li key={index} className={`${GetOption == null ? "hidden" : "flex gap-x-[12px] items-center"}`}>
                 {" "}
