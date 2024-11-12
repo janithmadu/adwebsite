@@ -14,6 +14,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
+    
+
+    
+
     const result = await client.patch(id.AdID).set({ payment: true }).commit();
 
     return NextResponse.json({

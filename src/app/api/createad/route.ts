@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export async function POST(reqest: Request) {
   const addata = await reqest.json();
 
- 
+
 
   const {
     name,
@@ -30,7 +30,7 @@ export async function POST(reqest: Request) {
 
 
 
- 
+
 
   const SchemaData: FormType = {
     name: name,
@@ -109,7 +109,7 @@ export async function POST(reqest: Request) {
       const response = await client.create(newAd);
 
       if (response) {
-        return NextResponse.json({ success: true,res:response });
+        return NextResponse.json({ success: true, res: response });
       }
     }
   } catch (error) {

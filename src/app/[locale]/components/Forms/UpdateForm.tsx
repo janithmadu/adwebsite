@@ -175,7 +175,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
   const [State, setState] = useState<State[]>([]);
   const [PageLoader, setPageLoader] = useState<string | null>(null);
   const router = useRouter();
-  const [features, setFeatures] = useState<string[]>([""]);
+  const [features, setFeatures] = useState<string[]>([]);
   const [AdPrice, setAdPrice] = useState<number>();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const t = useTranslations("TopNav");
@@ -350,6 +350,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
   const handleFeatureChange = (index: number, value: string) => {
     const newFeatures = [...features];
     newFeatures[index] = value;
+
     setFeatures(newFeatures);
   };
 
@@ -365,6 +366,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
     formState: { errors, isSubmitted },
     reset,
     getValues,
+    setValue,
   } = useForm({
     resolver: zodResolver(SchemaAdPostForm),
   });
@@ -380,8 +382,8 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
       return null;
     } else {
       const dataToSend = { ...data, images: ImagesArray, featurs: features };
-      const CreateAdRes = await fetch("/api/createad", {
-        method: "POST",
+      const CreateAdRes = await fetch("/api/updatead", {
+        method: "PATCH",
         body: JSON.stringify(dataToSend),
         headers: {
           "Content-Type": "application/json",
@@ -403,31 +405,64 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
         setPageLoader("Error");
         Swal.fire({
           title: "Congratulations!",
-          text: "Ad Posting Success!",
+          text: "Ad Update Success!",
           icon: "success",
-          confirmButtonText: `Pay ${AdPrice} USD`,
+          confirmButtonText: `Close`,
           allowOutsideClick: false,
           allowEscapeKey: true,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            router.push(`/${locale}/payments`); // Redirect to payments page on confirm
-          }
         });
-        localStorage.setItem("AdID", CreateAdData.res._id);
       }
     }
   };
 
   useEffect(() => {
     const getAd = async () => {
-      const UpdateAdDetails = await getAdById("usBAIdOsFBFLqIqm5LCdkp");
+      const UpdateAdDetails = await getAdById("usBAIdOsFBFLqIqm5KmfB6");
       setupdateAd(UpdateAdDetails);
     };
 
     getAd();
   }, []);
 
-  console.log(updateAd?.adName);
+  console.log(updateAd);
+
+  useEffect(() => {
+    if (updateAd) {
+      setValue("name", updateAd?.adName);
+      setValue("category", updateAd?.category._id);
+      setValue("subcategory", updateAd?.subcategory._id);
+      setValue("brands", updateAd?.brand);
+      setValue("model", updateAd?.model);
+      setValue("conditions", updateAd?.condition);
+      setValue("country", updateAd?.country);
+      setValue("description", updateAd?.description);
+      setValue("model", updateAd?.model);
+      setValue("negotiable", updateAd?.negotiable);
+      setValue("negotiable", updateAd?.negotiable);
+      setValue("price", updateAd?.price);
+      setValue("state", updateAd?.state);
+      setValue("Currency", updateAd?.currency);
+      setValue("authenticity", updateAd?.authenticity);
+      setValue("mobileNumbe", updateAd?.phoneNumber);
+      if (Array.isArray(updateAd?.options)) {
+        updateAd?.options?.forEach((option, index) => {
+          setValue(`options.${index}`, JSON.stringify(option)); // Store JSON string of the option object
+        });
+      }
+    }
+    if (updateAd?.image && Array.isArray(updateAd.image)) {
+      const imagesWithDefaultAltText = updateAd.image.map((image) => ({
+        ...image,
+        altText: image.altText || "", // Default to empty string if altText is undefined
+      }));
+      setImages(imagesWithDefaultAltText);
+    }
+
+    setSelectedCountry(updateAd?.country);
+    if (updateAd?.features) {
+      setFeatures(updateAd.features);
+    }
+  }, [updateAd, setValue]);
 
   return (
     <div className=" flex flex-col gap-y-[20px] ">
@@ -450,14 +485,13 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
 
         <div className="flex flex-col">
           <label className="text-grayscale900">{t("AdName")}</label>
-          <Input
+          <input
             {...register("name")}
             type="text"
-            name="name"
             className={`min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] `}
             placeholder={t("AdName")}
-            defaultValue={updateAd?.adName}
-          ></Input>
+            defaultValue={updateAd?.adName || ""}
+          />
 
           {errors.name && (
             <p className="text-red-600">{`${errors.name.message}`}</p>
@@ -476,9 +510,9 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               {...register("category")}
               onChange={(e) => handleInputChange(e.target.value)}
-              defaultValue={updateAd?.category._id}
+              defaultValue={updateAd?.category._id || ""}
             >
-              <option value={updateAd?.category.title[locale as "en" | "ar"]}>
+              <option value={updateAd?.category._id || ""} disabled>
                 {updateAd?.category.title[locale as "en" | "ar"]}
               </option>
               {categories?.map((selectData) => (
@@ -506,13 +540,16 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               {...register("subcategory")}
               onChange={(e) => handleSubCategoryChange(e.target.value)}
-              defaultValue={updateAd?.subcategory._id}
+              defaultValue={updateAd?.subcategory._id || ""}
             >
-              <option value={updateAd?.subcategory._id}>
+              <option value={updateAd?.subcategory._id || ""}>
                 {updateAd?.subcategory.title[locale as "en" | "ar"]}
               </option>
               {subCategories?.map((selectData: SubCategory) => (
-                <option key={selectData._id} value={selectData._id as string}>
+                <option
+                  key={selectData._id}
+                  value={(selectData._id as string) || ""}
+                >
                   {selectData?.title[locale as "en" | "ar"]}
                 </option>
               ))}
@@ -532,13 +569,13 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
             <select
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               {...register("brands")}
-              defaultValue={updateAd?.brand}
+              defaultValue={updateAd?.brand || ""}
             >
-              <option value={updateAd?.brand}>{updateAd?.brand}</option>
+              <option value={updateAd?.brand || ""}>{updateAd?.brand}</option>
               {subBrands?.map((selectData: Brand) => (
                 <option
                   key={selectData._id}
-                  value={selectData?.title[locale as "en" | "ar"]}
+                  value={selectData?.title[locale as "en" | "ar"] || ""}
                 >
                   {selectData?.title[locale as "en" | "ar"]}
                 </option>
@@ -554,13 +591,15 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
               {...register("model")}
               name="model"
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
-              defaultValue={updateAd?.model}
+              defaultValue={updateAd?.model || ""}
             >
-              <option value={updateAd?.model}>{updateAd?.model}</option>
+              <option value={updateAd?.model}>{updateAd?.model || ""}</option>
               {Models?.map((selectData: Model) => (
                 <option
                   key={selectData._id}
-                  value={selectData?.title[locale as "en" | "ar"] as string}
+                  value={
+                    (selectData?.title[locale as "en" | "ar"] as string) || ""
+                  }
                 >
                   {selectData?.title[locale as "en" | "ar"]}
                 </option>
@@ -581,15 +620,17 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
             <select
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
               {...register("conditions")}
-              defaultValue={updateAd?.condition}
+              defaultValue={updateAd?.condition || ""}
             >
-              <option value={updateAd?.condition} disabled>
+              <option value={updateAd?.condition || ""} disabled>
                 {updateAd?.condition}
               </option>
               {ConditionList?.map((selectData: Model) => (
                 <option
                   key={selectData?.title[locale as "en" | "ar"]}
-                  value={selectData?.value[locale as "en" | "ar"] as string}
+                  value={
+                    (selectData?.value[locale as "en" | "ar"] as string) || ""
+                  }
                 >
                   {selectData?.title[locale as "en" | "ar"]}
                 </option>
@@ -608,15 +649,17 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
               <select
                 className="max-w-[151px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
                 {...register("Currency")}
-                defaultValue={updateAd?.currency}
+                defaultValue={updateAd?.currency || ""}
               >
-                <option value={updateAd?.currency} disabled>
+                <option value={updateAd?.currency || ""} disabled>
                   {updateAd?.currency}
                 </option>
                 {Currency?.map((selectData: Currency) => (
                   <option
                     key={selectData?.title[locale as "en" | "ar"]}
-                    value={selectData?.title[locale as "en" | "ar"] as string}
+                    value={
+                      (selectData?.title[locale as "en" | "ar"] as string) || ""
+                    }
                   >
                     {selectData?.title[locale as "en" | "ar"]}
                   </option>
@@ -636,7 +679,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
                 name="price"
                 placeholder={t("Pickagoodprice-whatwouldyoupay?")}
                 className={` max-w-[180px] sm:min-w-[354px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] `}
-                defaultValue={updateAd?.price}
+                defaultValue={updateAd?.price || ""}
               ></Input>
               {errors.price && (
                 <p className="text-red-600">{`${errors.price.message}`}</p>
@@ -654,15 +697,17 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
             <select
               {...register("authenticity")}
               className="sm:min-w-[451px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
-              defaultValue={updateAd?.authenticity}
+              defaultValue={updateAd?.authenticity || ""}
             >
-              <option value={updateAd?.authenticity} disabled>
+              <option value={updateAd?.authenticity || ""} disabled>
                 {updateAd?.authenticity}
               </option>
               {Authenticity?.map((selectData: Model) => (
                 <option
                   key={selectData?.title[locale as "en" | "ar"]}
-                  value={selectData?.value[locale as "en" | "ar"] as string}
+                  value={
+                    (selectData?.value[locale as "en" | "ar"] as string) || ""
+                  }
                 >
                   {selectData?.title[locale as "en" | "ar"]}
                 </option>
@@ -682,7 +727,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
                 {...register("mobileNumbe")}
                 placeholder="Ex: +96*********"
                 className={`min-h-[48px] border bordr-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] sm:min-w-[451px]`}
-                defaultValue={updateAd?.phoneNumber}
+                defaultValue={updateAd?.phoneNumber || ""}
               ></Input>
               {errors.mobileNumbe && (
                 <p className="text-red-600">{`${errors.mobileNumbe.message}`}</p>
@@ -703,7 +748,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
             placeholder={t("Addescription")}
             className="border border-grayscale50 px-[18px] py-[12px] rounded-[5px]"
             {...register("description")}
-            defaultValue={updateAd?.description}
+            defaultValue={updateAd?.description || ""}
           />
           {errors.description && (
             <p className="text-red-600">{`${errors.description.message}`}</p>
@@ -716,8 +761,6 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
           <label className="text-grayscale900">{t("Options")}</label>
           <div className="flex gap-x-[20px] flex-wrap min-w-full">
             {Options?.map((option: Options, index: number) => {
-              
-              
               return (
                 <div className="flex flex-col" key={index}>
                   <label className="text-grayscale900">
@@ -726,7 +769,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
                   <select
                     {...register(`options.${index}`)}
                     className="min-w-[351px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
-                    defaultValue="sdf"
+                    defaultValue=""
                   >
                     <option value="">{updateAd?.options.value}</option>
                     {option.values?.map(
@@ -858,10 +901,10 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
                 {...register("state")}
                 name="state"
                 className="sm:min-w-[380px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
-                defaultValue={"DEFAULT"}
+                defaultValue={updateAd?.state || ""}
               >
-                <option value="DEFAULT" disabled>
-                  {t("SelectState")}
+                <option value={updateAd?.state || ""} disabled>
+                  {updateAd?.state}
                 </option>
                 {State?.map((state: State, index: number) => (
                   <option key={index} value={state.name}>
@@ -876,7 +919,11 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
             </div>
 
             <div className="flex items-center gap-x-3">
-              <input type="checkbox" {...register("negotiable")} />
+              <input
+                type="checkbox"
+                checked={updateAd?.negotiable || false}
+                {...register("negotiable")}
+              />
               <label
                 htmlFor="terms1"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -899,7 +946,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
                 onChange={(e) => handleFeatureChange(index, e.target.value)}
                 placeholder={`Feature ${index + 1}`}
                 className="min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
-                value={feature}
+                value={feature || ""}
               />
               <button
                 onClick={() => removeFeature(index)}
