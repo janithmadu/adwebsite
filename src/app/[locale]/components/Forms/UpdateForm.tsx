@@ -1,22 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
-import { useFormState } from "react-dom";
 import { Authenticity, ConditionList, Currency } from "@/lib/statics";
 import { getSubCategoriesByID } from "../../actions/getSubCategories";
 import { getModelsById } from "../../actions/getModels";
 import { getbrandsById } from "../../actions/getBrands";
 import { getOptionsByID } from "../../actions/getOptions";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import LoadingImage from "../../../../../public/system-regular-715-spinner-horizontal-dashed-circle-loop-jab.gif";
 import Image from "next/image";
 import Swal from "sweetalert2";

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import MyAds from "./MyAds";
 import MyMembership from "./MyMembership";
 import Favorites from "./Favorites";
-import Settings from "./Settings";
+// import Settings from "./Settings";
 import { PostAd } from "@/lib/categoryInterface";
 import {
   ClipboardText,
@@ -50,8 +50,8 @@ const MainProfile: React.FC<MainProfileProps> = ({
         return <DraftAds UserAds={UserAdsPaymentfalse} resultCount={resultCount} />;
       case "Favorites":
         return <Favorites UserAds={UserFavoriteAds} />;
-      case "Settings":
-        return <Settings />;
+      // case "Settings":
+      //   return <Settings />;
       default:
         return <div>Select a section</div>;
     }
