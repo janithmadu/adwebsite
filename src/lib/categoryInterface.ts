@@ -284,6 +284,10 @@ export interface UpdateAd {
   website: string | null;
   _id: string;
   _createdAt: string;
+
+  user:{
+    externalId:string
+  }
 }
 
 export interface AdFormState<T> {

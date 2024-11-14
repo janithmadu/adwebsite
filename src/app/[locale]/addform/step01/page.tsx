@@ -7,7 +7,7 @@ import { CheckUserLog } from "../../actions/ChekAuth";
 
 async function page() {
   const GetCategory = await getAllCategory();
-  // await CheckUserLog();
+  await CheckUserLog();
 
   return (
     <>

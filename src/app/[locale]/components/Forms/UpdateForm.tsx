@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import LoadingImage from "../../../../../public/system-regular-715-spinner-horizontal-dashed-circle-loop-jab.gif";
 import Image from "next/image";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import FormHeader from "../../../../../public/AdForm.png";
 import {
   FormStateNew,
@@ -29,6 +29,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { compressImage } from "../../actions/ImageComprestion";
 import { getAdById } from "../../actions/getAds";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -73,6 +74,7 @@ interface CountriesGet {
 
 interface StepOneFormProps {
   categories: CategoryNew[]; // Expecting an array of CategoryNew
+  params: string;
 }
 
 interface State {
@@ -146,7 +148,7 @@ interface Brand {
   }[];
 }
 
-const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
+const UpdateForm: React.FC<StepOneFormProps> = ({ categories, params }) => {
   const [CategoriesID, setCategoriesID] = useState<string | undefined>();
   const [subCategoriesID, setsubCategoriesID] = useState<string | undefined>();
   const [subCategories, setsubCategories] = useState<
@@ -176,8 +178,9 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
   const [ImageCountError, setImageCountError] = useState<boolean>(true);
   const [isCompressing, setIsCompressing] = useState(false);
   const [updateAd, setupdateAd] = useState<UpdateAd>();
-  //Get Category ID for retrive subcategories
+  const { user, getUser } = useKindeBrowserClient();
 
+  //Get Category ID for retrive subcategories
   useEffect(() => {
     setCategoriesID(updateAd?.category._id);
     setsubCategoriesID(updateAd?.subcategory._id);
@@ -394,8 +397,8 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
       } else {
         setPageLoader("Error");
         Swal.fire({
-          title: "Congratulations!",
-          text: "Ad Update Success!",
+          title: "Ad Update Success!",
+          text: "Your advertisement is being processed and will reflect the updates shortly.",
           icon: "success",
           confirmButtonText: `Close`,
           allowOutsideClick: false,
@@ -407,14 +410,15 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
 
   useEffect(() => {
     const getAd = async () => {
-      const UpdateAdDetails = await getAdById("usBAIdOsFBFLqIqm5KmfB6");
+      const UpdateAdDetails: UpdateAd = await getAdById(
+        params
+      );
+
       setupdateAd(UpdateAdDetails);
     };
 
     getAd();
-  }, []);
-
-  console.log(updateAd);
+  }, [params]);
 
   useEffect(() => {
     if (updateAd) {
@@ -758,10 +762,10 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories }) => {
                   </label>
                   <select
                     {...register(`options.${index}`)}
-                    className="min-w-[351px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px]"
+                    className="sm:min-w-[751px] min-h-[48px] border border-[#EDEFF5] rounded-[5px] px-[18px] py-[12px] "
                     defaultValue=""
                   >
-                    <option value="">{updateAd?.options.value}</option>
+                    <option value="">{updateAd?.options?.value}</option>
                     {option.values?.map(
                       (value: OptionValues, index: number) => (
                         <option

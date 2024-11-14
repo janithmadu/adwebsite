@@ -45,6 +45,7 @@ const MyAds: React.FC<MainProfileProps> = ({ UserAds,resultCount }) => {
                   image={ad?.image[0]?.url  || "/"}
                   timestamp={ad._createdAt}
                   delteActive={true}
+                  updateMount={true}
                 />
               </div>
             );

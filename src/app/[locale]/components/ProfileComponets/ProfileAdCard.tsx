@@ -8,9 +8,10 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { getRelativeTime } from "../../actions/relativeTime";
-import { Trash } from "@phosphor-icons/react/dist/ssr";
+import { ArrowClockwise, Trash } from "@phosphor-icons/react/dist/ssr";
 import Loading from "../../loading";
 import { useTranslations } from "next-intl";
+import { PencilSimpleLine } from "@phosphor-icons/react";
 
 export const revalidate = 1;
 
@@ -23,6 +24,7 @@ interface ProductCardProps {
   timestamp: string;
   id?: string;
   paymentPending?: boolean;
+  updateMount?: boolean;
   delteActive?: boolean;
   adprice?: number;
 }
@@ -41,6 +43,7 @@ export function ProfileAdCard({
   timestamp,
   id,
   paymentPending,
+  updateMount,
   adprice,
   delteActive,
 }: ProductCardProps) {
@@ -141,6 +144,16 @@ export function ProfileAdCard({
           >
             <Trash />
           </button>
+        ) : null}
+
+        {updateMount ? (
+           <Link
+           href={`${locale ? `/${locale}` : ""}/addform/${id}`}
+           className="cursor-pointer bg-warning500 p-[7px] rounded-full text-white transition duration-300 ease-in-out hover:bg-danger700 hover:shadow-lg"
+           
+         >
+           <PencilSimpleLine />
+         </Link>
         ) : null}
       </div>
 
