@@ -18,8 +18,6 @@ export default async function AdDetailsPage({
 }) {
   const GetAdByID = await getAdById(params.slug);
 
-
-
   const adTitile = GetAdByID?.adName;
   const AddCratedDate = GetAdByID?._createdAt;
   const Price = GetAdByID?.price;
@@ -44,6 +42,8 @@ export default async function AdDetailsPage({
   const UserID = user?.id;
   const AdID = GetAdByID?._id;
 
+  
+  
   return (
     <div className="container mx-auto  px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-10 flex space-x-6 flex-col lg:flex-row ">
       <div className="flex-1 lg:min-w-[572px] xl:min-w-[672px] 2xl:min-w-[872px] flex flex-col gap-x-[36px] ">
@@ -104,6 +104,7 @@ export default async function AdDetailsPage({
                 Username={UserName}
                 UserEmail={UserEmail}
                 UserAvatar={UserAvatar}
+                UserID={GetAdByID.user.externalId}
               />
             </div>
 

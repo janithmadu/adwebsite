@@ -27,6 +27,7 @@ interface ProductCardProps {
   updateMount?: boolean;
   delteActive?: boolean;
   adprice?: number;
+  timedate?:boolean
 }
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -46,6 +47,7 @@ export function ProfileAdCard({
   updateMount,
   adprice,
   delteActive,
+  timedate
 }: ProductCardProps) {
   const [locale, setLocale] = useState("en");
   const [loading, setloading] = useState(true);
@@ -194,12 +196,12 @@ export function ProfileAdCard({
                   <span className=" text-bodytiny sm:text-lg font-semibold text-green-600">
                     Rs {price.toLocaleString()}
                   </span>
-                  <Badge
+                 {timedate &&  <Badge
                     variant="secondary"
                     className=" text-[0.7rem] sm:text-xs font-normal"
                   >
                     {relativeTime}
-                  </Badge>
+                  </Badge>}
                 </div>
               </div>
             </div>

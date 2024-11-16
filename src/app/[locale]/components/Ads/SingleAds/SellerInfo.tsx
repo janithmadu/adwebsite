@@ -3,17 +3,24 @@ import React from "react";
 import { CircleWavyCheck, Envelope } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { cookies } from "next/headers";
 
 interface SellerInfo {
   Username: string;
   UserEmail?: string;
   UserAvatar: string;
+  UserID:string
 }
 const SellerInfo: React.FC<SellerInfo> = ({
   Username,
   UserEmail,
   UserAvatar,
+  UserID
 }) => {
+
+  
+  const cookieStore = cookies();
+  const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const t = useTranslations("TopNav");
   return (
     <div className="">
@@ -45,7 +52,7 @@ const SellerInfo: React.FC<SellerInfo> = ({
               </h1>
             </div>
           </div>
-          <Link className="text-primary500 text-bodysmall" href="#">
+          <Link className="text-primary500 text-bodysmall"  href={`/${locale}/profile/${UserID}?page=1`}>
             {t("ViewProfile")}
           </Link>
         </div>

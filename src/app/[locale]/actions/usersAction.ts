@@ -7,7 +7,6 @@ export const UserRegistration = async () => {
 
   const userID = user?.id;
 
-  
   if (!userID) {
     return null;
   }
@@ -25,8 +24,6 @@ export const UserRegistration = async () => {
   try {
     const userCheck = await client.fetch(query, params);
 
-
-    
     if (userCheck) {
       return null;
     } else {
@@ -44,10 +41,7 @@ export const UserRegistration = async () => {
       });
       return CreateUser;
     }
-
-
   } catch (err) {
-   
     return null;
   }
 };
@@ -64,18 +58,38 @@ export const GetFavoritesOfUsers = async (userId: string, adId: string) => {
 
   try {
     const result = await client.fetch(query, params);
-    
-    if (result.length > 0) {
 
+    if (result.length > 0) {
       return true; // Indicate that the ad is a favorite
     } else {
-     
       return false; // Indicate that the ad is not a favorite
     }
   } catch (error) {
-    
-    
     return error; // Return null in case of error
   }
 };
 
+export const GetUsers = async (userId: string) => {
+  const query = `*[_type == "user" && _id == $userId]{
+  verifiedSeller,
+  member,
+  name,
+  email,
+  avatarUrl,
+  _createdAt,
+  
+
+  }`;
+
+  const params = {
+    userId,
+  };
+
+  try {
+    const result = await client.fetch(query, params);
+
+    return result;
+  } catch (error) {
+    return error; // Return null in case of error
+  }
+};

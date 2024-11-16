@@ -46,7 +46,7 @@ const CategoryBar: React.FC<CurrentLocal> = async ({ CurrentLocal, t,categorytit
 
         <DropdownMenu>
           <DropdownMenuTrigger
-            className={`bg-grayscale50 text-bodysmall rounded-lg text-black gap-x-2 font-semibold px-1 justify-center py-2  flex items-center transition duration-300 ease-in-out hover:bg-grayscale200 hover:shadow-lg min-w-[140px]`}
+            className={`  md:text-bodysmall rounded-lg text-black gap-x-2  px-1 justify-center py-2  flex items-center transition duration-300 ease-in-out hover:bg-grayscale200 hover:shadow-lg min-w-[140px]`}
           >
             {t} <CaretDown />{" "}
           </DropdownMenuTrigger>

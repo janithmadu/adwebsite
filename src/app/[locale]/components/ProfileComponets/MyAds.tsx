@@ -8,7 +8,12 @@ import { useTranslations } from "next-intl";
 
 interface MainProfileProps {
   UserAds: PostAd[]; // Expecting an array of PostAd objects
-  resultCount:number
+  resultCount: number;
+  delteActive?: boolean;
+  updateMount?: boolean;
+  title?: boolean;
+  timedate?:boolean
+  colcount:number
 }
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -16,7 +21,15 @@ function getCookie(name: string) {
   if (parts.length === 2) return parts.pop()?.split(";").shift();
 }
 
-const MyAds: React.FC<MainProfileProps> = ({ UserAds,resultCount }) => {
+const MyAds: React.FC<MainProfileProps> = ({
+  UserAds,
+  resultCount,
+  delteActive,
+  updateMount,
+  title,
+  timedate,
+  colcount
+}) => {
   const [locale, setLocale] = useState("en");
   useEffect(() => {
     const cookieLocale = getCookie("NEXT_LOCALE") || "en";
@@ -27,25 +40,24 @@ const MyAds: React.FC<MainProfileProps> = ({ UserAds,resultCount }) => {
   const PageSize = 10;
   return (
     <>
-      <h1 className="text-grayscale900 font-bold text-bodyxl mb-3">{t("MyAds")}</h1>
+      {title && <h2 className="text-grayscale900 font-bold text-bodyxl mb-3">{t("MyAds")}</h2>}
       <div
-        className={` ${UserAds?.length > 0 ? "min-w-full  grid grid-cols-1 xl:grid-cols-2 gap-3 " : "grid grid-cols-1"}`}
+        className={` ${UserAds?.length > 0 ? `min-w-full  grid grid-cols-1 xl:grid-cols-${colcount} gap-3` : "grid grid-cols-1"}`}
       >
         {UserAds.length > 0 ? (
           UserAds.map((ad: PostAd, index: number) => {
-     
-            
             return (
               <div key={index} className="">
                 <ProfileAdCard
-                id={ad._id}
+                  id={ad._id}
                   title={ad.adName}
                   category={ad?.category?.title[locale as "en" | "ar"]}
                   price={ad.price}
-                  image={ad?.image[0]?.url  || "/"}
+                  image={ad?.image[0]?.url || "/"}
                   timestamp={ad._createdAt}
-                  delteActive={true}
-                  updateMount={true}
+                  delteActive={delteActive}
+                  updateMount={updateMount}
+                  timedate={timedate}
                 />
               </div>
             );

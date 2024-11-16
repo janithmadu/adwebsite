@@ -1,8 +1,7 @@
 import { client } from "@/lib/sanity";
 
-
 const GetFavoritesAds = async (userId: string) => {
-    const query = `*[_type == "user" && _id == $Userid ] {
+  const query = `*[_type == "user" && _id == $Userid ] {
         favoriteAds[]->{
        adName,
        category->{
@@ -38,25 +37,22 @@ const GetFavoritesAds = async (userId: string) => {
       location,
       mapLocation,
       Currency,
-      _createdAt
-
+      _createdAt,
+image
       }
       }`;
 
-    const params = {
-        Userid: userId,
-    };
+  const params = {
+    Userid: userId,
+  };
 
-    try {
-        const result = await client.fetch(query, params);
-       
+  try {
+    const result = await client.fetch(query, params);
 
-        return result[0].favoriteAds
-    } catch (error) {
-        
-        
-        return error;
-    }
-}
+    return result[0].favoriteAds;
+  } catch (error) {
+    return error;
+  }
+};
 
-export default GetFavoritesAds
+export default GetFavoritesAds;

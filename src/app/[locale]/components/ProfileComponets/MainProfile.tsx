@@ -26,14 +26,18 @@ interface MainProfileProps {
   UserAds: PostAd[];
   UserAdsPaymentfalse: PostAd[]; // Expecting an array of PostAd objects
   UserFavoriteAds: PostAd[];
-  resultCount:number
+  resultCount:number,
+  verifiedSeller:boolean,
+  member:boolean,
 }
 
 const MainProfile: React.FC<MainProfileProps> = ({
   UserAds,
   UserAdsPaymentfalse,
   UserFavoriteAds,
-  resultCount
+  resultCount,
+  verifiedSeller,
+  member
 }) => {
   const [activeSection, setActiveSection] = useState("MyAds");
   const t = useTranslations("TopNav");
@@ -43,11 +47,11 @@ const MainProfile: React.FC<MainProfileProps> = ({
   const renderActiveSection = () => {
     switch (activeSection) {
       case "MyAds":
-        return <MyAds UserAds={UserAds} resultCount={resultCount} />;
+        return <MyAds colcount={2} delteActive={true} updateMount={true} UserAds={UserAds} resultCount={resultCount} title={true}  timedate={true}/>;
       case "MyMembership":
-        return <MyMembership />;
+        return <MyMembership member={member} verifiedSeller={verifiedSeller} />;
       case "DraftAds":
-        return <DraftAds UserAds={UserAdsPaymentfalse} resultCount={resultCount} />;
+        return <DraftAds UserAds={UserAdsPaymentfalse} resultCount={resultCount}  />;
       case "Favorites":
         return <Favorites UserAds={UserFavoriteAds} />;
       // case "Settings":
@@ -119,18 +123,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                         </span>
                       </a>
                     </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        onClick={() => setActiveSection("Settings")}
-                      >
-                        <Gear size={24} color="gray" />
-                        <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                        {t("Settings")}
-                        </span>
-                      </a>
-                    </li>
+                   
                   </ul>
                   <div
                     id="dropdown-cta"
@@ -207,18 +200,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                 </span>
               </a>
             </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                onClick={() => setActiveSection("Settings")}
-              >
-                <Gear size={24} color="gray" />
-                <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                {t("Settings")}
-                </span>
-              </a>
-            </li>
+            
           </ul>
           <div
             id="dropdown-cta"
