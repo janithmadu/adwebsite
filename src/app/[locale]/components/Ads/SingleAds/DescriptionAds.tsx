@@ -24,6 +24,12 @@ import { CircleWavyCheck } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
+function getCookie(name: string) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift();
+}
+
 interface AdData {
   Options?: Option[];
   Description?: string;
@@ -39,10 +45,10 @@ interface AdData {
   Authenticity?: string;
   State?: string;
   PhoneNumber?: string;
-
   Username?: string;
   UserEmail?: string;
   UserAvatar?: string;
+  ClientUserID: string;
 }
 
 interface Option {
@@ -72,9 +78,16 @@ const DescriptionAds: React.FC<AdData> = ({
   Username,
   UserEmail,
   UserAvatar,
+  ClientUserID,
 }) => {
   const [NegotiableCheck, setNegotiableCheck] = useState<boolean>();
   const t = useTranslations("TopNav");
+  const [locale, setLocale] = useState("en");
+  useEffect(() => {
+    const cookieLocale = getCookie("NEXT_LOCALE") || "en";
+    setLocale(cookieLocale);
+  }, []);
+
   useEffect(() => {
     if (Negotiable) {
       setNegotiableCheck(true);
@@ -209,9 +222,11 @@ const DescriptionAds: React.FC<AdData> = ({
         <h2 className="text-grayscale900 text-heading03">{t("Options")}</h2>
         <ul className="grid grid-cols-2 gap-y-[16px] text-grayscale700 text-bodymedium">
           {Options?.map((GetOption: Option, index: number) => {
-      
             return (
-              <li key={index} className={`${GetOption == null ? "hidden" : "flex gap-x-[12px] items-center"}`}>
+              <li
+                key={index}
+                className={`${GetOption == null ? "hidden" : "flex gap-x-[12px] items-center"}`}
+              >
                 {" "}
                 <Check
                   width={24}
@@ -268,7 +283,10 @@ const DescriptionAds: React.FC<AdData> = ({
                   </h1>
                 </div>
               </div>
-              <Link className="text-primary500 text-bodysmall" href="#">
+              <Link
+                className="text-primary500 text-bodysmall"
+                href={`/${locale}/profile/${ClientUserID}?page=1`}
+              >
                 View Profile
               </Link>
             </div>

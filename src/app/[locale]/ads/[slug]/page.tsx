@@ -74,6 +74,7 @@ export default async function AdDetailsPage({
           Username={UserName}
           UserEmail={UserEmail}
           UserAvatar={UserAvatar}
+          ClientUserID={GetAdByID.user.externalId}
         />
       </div>
 

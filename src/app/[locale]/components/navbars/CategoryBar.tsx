@@ -21,7 +21,7 @@ export const revalidate = 1;
 interface CurrentLocal {
   CurrentLocal: string;
   t: string;
-  categorytitle:string;
+  categorytitle: string;
 }
 
 interface Category {
@@ -32,7 +32,11 @@ interface Category {
   price?: number;
 }
 
-const CategoryBar: React.FC<CurrentLocal> = async ({ CurrentLocal, t,categorytitle }) => {
+const CategoryBar: React.FC<CurrentLocal> = async ({
+  CurrentLocal,
+  t,
+  categorytitle,
+}) => {
   //get category that limit to 7
   const getLimitedCate = await getlimitedCategory();
   //get all category
