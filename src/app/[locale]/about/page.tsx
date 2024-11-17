@@ -26,19 +26,20 @@ export default function AboutPage() {
             <h2 className="text-3xl font-bold">Know more about Arzaq</h2>
             <p className="text-muted-foreground">
               Arzaq is your go-to platform for buying and selling almost
-              anything. Whether it’s within your city or your neighborhood, the
-              best deals are made locally. With Arzaq, it’s simple to connect
-              with buyers and sellers near you. Just select your region, and
-              you’re ready to explore! Posting an ad on Arzaq is quick and
-              hassle-free, taking less than 2 minutes. Sign up for a free
+              anything. Whether it&apos;s within your city or your neighborhood,
+              the best deals are made locally. With Arzaq, it&apos;s simple to
+              connect with buyers and sellers near you. Just select your region,
+              and you&apos;re ready to explore! Posting an ad on Arzaq is quick
+              and hassle-free, taking less than 2 minutes. Sign up for a free
               account to easily manage your ads anytime.
             </p>
             <p className="text-muted-foreground">
               Arzaq offers the widest range of popular new and second-hand items
-              across Kuwait. Whatever you're looking for, Arzaq makes it easy to
-              find and connect.
+              across Kuwait. Whatever you&apos;re looking for, Arzaq makes it
+              easy to find and connect.
             </p>
           </div>
+
           <div className="relative aspect-video rounded-3xl overflow-hidden bg-muted">
             <div className="absolute inset-0 flex items-center justify-center"></div>
             <img

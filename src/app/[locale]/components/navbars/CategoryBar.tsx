@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { CaretDown } from "@phosphor-icons/react/dist/ssr";
-import { useTranslations } from "next-intl";
 
 export const revalidate = 1;
 
@@ -48,7 +47,7 @@ const CategoryBar: React.FC<CurrentLocal> = async ({
       <div className="flex items-center rtl:gap-[24px]  space-x-[34px]">
         {/* Select category section */}
 
-        <DropdownMenu >
+        <DropdownMenu>
           <DropdownMenuTrigger
             className={` text-[8px] md:text-bodysmall rounded-lg text-black gap-x-2  px-1 justify-center py-2  flex items-center transition duration-300 ease-in-out hover:bg-grayscale200 hover:shadow-lg min-w-[90px] md:min-w-[140px] `}
           >

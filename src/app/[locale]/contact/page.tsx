@@ -14,9 +14,8 @@ function page() {
             <h1 className="text-4xl font-bold">Contact</h1>
             <div className="flex items-center gap-2 text-sm">
               <p className="text-center">
-                {" "}
-                Have questions? We're here to help. Reach out to us through any
-                of the following channels.
+                Have questions? We&apos;re here to help. Reach out to us through
+                any of the following channels.
               </p>
             </div>
           </div>
