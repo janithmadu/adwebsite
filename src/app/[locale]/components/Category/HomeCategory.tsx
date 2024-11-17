@@ -7,11 +7,11 @@ import React from "react";
 
 export const revalidate = 1;
 
-interface getCategory{
-  getCategory:Category[]
+interface getCategory {
+  getCategory: Category[];
 }
 
-const HomeCategory:React.FC<getCategory> = ({getCategory})=>{
+const HomeCategory: React.FC<getCategory> = ({ getCategory }) => {
   const cookieStore = cookies();
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const t = useTranslations("TopNav");
@@ -40,7 +40,6 @@ const HomeCategory:React.FC<getCategory> = ({getCategory})=>{
                 <Image
                   width={80}
                   height={80}
-                
                   alt={data.title?.[locale as "en" | "ar"]}
                   src={data.imageUrl || "/defultimage.png"}
                   className="transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-150 w-[50px] md:w-[80px]"
@@ -56,6 +55,6 @@ const HomeCategory:React.FC<getCategory> = ({getCategory})=>{
       {/* Main Grid End */}
     </div>
   );
-}
+};
 
 export default HomeCategory;

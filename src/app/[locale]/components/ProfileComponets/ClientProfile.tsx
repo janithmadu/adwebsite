@@ -15,7 +15,6 @@ interface ClientUserAds {
 }
 const ClientProfile: React.FC<ClientUserAds> = ({
   UserAds,
-  ResultCount,
   verifiedSeller,
   member,
   name,
@@ -32,30 +31,32 @@ const ClientProfile: React.FC<ClientUserAds> = ({
   });
 
   return (
-    <div className=" container mx-auto flex flex-col px-5  lg:px-5 xl:px-20 md:px-10 gap-y-4  ">
-      <div className=" bg-white p-6 rounded-lg shadow-md flex justify-between items-center gap-y-3 ">
+    <div className=" container mx-auto flex flex-col px-5  lg:px-5 xl:px-20 md:px-10 gap-y-4  mt-3">
+      <div className=" bg-white p-6 rounded-lg shadow-md flex flex-col md:flex-row md:justify-between items-center gap-y-3 ">
         <div className="flex items-center space-x-6">
           <Image
             width={300}
             height={300}
-            className=" w-24 h-24 md:w-32 md:h-32 rounded-full border-2 border-gray-200"
+            className=" w-14 h-14 md:w-32 md:h-32 rounded-full border-2 border-gray-200"
             src={seller.avatarUrl || "/"}
             alt={seller.name}
           />
           <div className="flex flex-col gap-y-1">
             <h1 className="text-3xl font-bold text-gray-800">{seller.name}</h1>
-            <p className="text-gray-500">{seller.email}</p>
-            <p className=" text-gray-700 text-bodysmall">
+            <p className="text-gray-500 text-[8px] md:text-bodysmall">
+              {seller.email}
+            </p>
+            <p className=" text-gray-700 md:text-bodysmall text-[8px]">
               Member since {createdAt}
             </p>
           </div>
         </div>
 
         <div className="flex gap-x-3">
-          <div className="px-[12px] min-w-[76px] min-h-[24px] rounded-[100px] bg-danger100 flex justify-center items-center text-danger800 text-[13px]">
+          <div className="px-[12px] min-w-[76px] min-h-[24px] rounded-[100px] bg-danger100 flex justify-center items-center text-danger800 text-[8px] md:text-[13px]">
             {member ? <>Member</> : <>Not a Member</>}
           </div>
-          <div className=" px-[12px] min-w-[76px] min-h-[24px] rounded-[100px] bg-success50 flex justify-center items-center text-success800 text-[13px]">
+          <div className=" px-[12px] min-w-[76px] min-h-[24px] rounded-[100px] bg-success50 flex justify-center items-center text-success800 text-[8px] md:text-[13px]">
             {verifiedSeller ? <>Verified Seller</> : <>Not Verified Seller</>}
           </div>
         </div>
