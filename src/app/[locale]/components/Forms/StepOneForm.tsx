@@ -765,10 +765,10 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
                       onClick={() => open()}
                       className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
                     >
-                      Upload Images
+                      {t("ImageUpload")}
                     </button>
                     <p className="mt-1 text-xs text-gray-400">
-                      Max 5 images, 10MB each
+                    {t("ImageUploadWarning")}
                     </p>
                   </div>
                 );

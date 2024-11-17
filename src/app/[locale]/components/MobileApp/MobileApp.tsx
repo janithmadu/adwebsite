@@ -17,7 +17,7 @@ function MobileApp() {
           <p className=" lg:text-start text-center  text-bodylarge text-gray-500 text-wrap ">
           {t("DownloadAPPDis")}
           </p>
-          <div className="flex justify-center lg:justify-normal space-x-[16px]">
+          <div className="flex justify-center lg:justify-normal items-center gap-y-3 md:gap-y-0 flex-col md:flex-row  md:space-x-[16px]">
             <Image alt="Apstore" src={AppStore1} />
             <Image alt="Apstore" src={AppStore} />
           </div>

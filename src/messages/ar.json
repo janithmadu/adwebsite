@@ -37,8 +37,8 @@
     "Authenticity": "الاصالة",
     "State": "الولاية",
     "Viewed": "تم العرض",
-
     "PostYourAd": "نشر إعلانك",
+    "UpdateYourAd": "تحديث إعلانك",
     "AdName": "اسم الإعلان",
     "Category": "الفئة",
     "Subcategory": "الفئة الفرعية",
@@ -61,7 +61,10 @@
     "SelectState": "اختر الولاية",
     "AdFeatures": "ميزات الإعلان",
     "SubmitAd": "إرسال الإعلان",
+    "UpdateAd": "تحديث الإعلان",
     "Remove": "إزالة",
+    "ImageUpload":"رفع الصور",
+    "ImageUploadWarning":"بحد أقصى 5 صور، 10 ميجابايت لكل صورة",
 
     "MyMembership": "عضويتي",
     "DraftAds": "الإعلانات المسودة",

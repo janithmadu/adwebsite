@@ -10,9 +10,9 @@ async function page() {
   await CheckUserLog();
 
   return (
-    <>
+    <div >
       <StepOneForm categories={GetCategory} />
-    </>
+    </div>
   );
 }
 

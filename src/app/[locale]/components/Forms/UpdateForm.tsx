@@ -467,7 +467,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories, params }) => {
           className="rounded-xl min-h-[100px] min-w-full object-cover"
         />
         <div className="absolute inset-0 flex items-center justify-center text-white">
-          <h1 className="text-[32px]">{t("PostYourAd")}</h1>
+          <h1 className="text-[32px]">{t("UpdateYourAd")}</h1>
         </div>
       </div>
 
@@ -820,10 +820,12 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories, params }) => {
                       onClick={() => open()}
                       className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
                     >
-                      Upload Images
+                      {t("ImageUpload")}
                     </button>
                     <p className="mt-1 text-xs text-gray-400">
-                      Max 5 images, 10MB each
+                      
+                      {t("ImageUploadWarning")}
+                      
                     </p>
                   </div>
                 );
@@ -965,7 +967,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories, params }) => {
             className={`min-w-[193px] min-h-[58px] bg-primary500 text-white rounded-[6px] flex justify-center items-center gap-x-[12px]}`}
             type="submit"
           >
-            <span>{t("SubmitAd")}</span>
+            <span>{t("UpdateAd")}</span>
           </button>
         </div>
       </form>

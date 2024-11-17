@@ -9,6 +9,13 @@ export async function getlimitedCategory() {
   return data;
 }
 
+export async function getlimitedCategoryFooter() {
+  const quary = `*[_type == "category"][0...4]`;
+  const data = await client.fetch(quary);
+
+  return data;
+}
+
 export async function getAllCategory() {
   const quary = `*[_type == "category"] {
   "id": _id,

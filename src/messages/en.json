@@ -38,6 +38,7 @@
     "State": "State",
     "Viewed": "Viewed",
     "PostYourAd": "Post Your Ad",
+    "UpdateYourAd": "Update Your Ad",
     "AdName": "Ad Name",
     "Category": "Category",
     "Subcategory": "Subcategory",
@@ -60,7 +61,10 @@
     "SelectState": "Select State",
     "AdFeatures": "Ad Features",
     "SubmitAd": "Submit Ad",
+    "UpdateAd": "Update Ad",
     "Remove": "Remove",
+    "ImageUpload":"Upload Images",
+    "ImageUploadWarning":"Max 5 images, 10MB each",
 
 
     "MyMembership": "My Membership",

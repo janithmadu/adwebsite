@@ -17,7 +17,7 @@ const HomeCategory:React.FC<getCategory> = ({getCategory})=>{
   const t = useTranslations("TopNav");
 
   return (
-    <div className="container mx-auto flex flex-col space-y-[50px] px-5  lg:px-5 xl:px-20 md:px-10">
+    <div className="container mx-auto flex flex-col space-y-[50px] px-2  lg:px-5 xl:px-20 md:px-10 ">
       {/* Heading */}
       <div>
         <h1 className=" text-heading03 md:text-heading01 font-bold text-center">
@@ -36,7 +36,7 @@ const HomeCategory:React.FC<getCategory> = ({getCategory})=>{
               key={index}
               href={`${locale}/ads?page=1&category=${data?.slug?.current}`}
             >
-              <div className=" min-w-[110px] min-h-[140px] md:min-w-[170px] md:min-h-[170px] bg-[#f7f8fa] rounded-lg flex justify-center items-center flex-col space-y-3 ">
+              <div className=" min-w-[90px] min-h-[140px] md:min-w-[170px] md:min-h-[170px] bg-[#f7f8fa] rounded-lg flex justify-center items-center flex-col space-y-3 ">
                 <Image
                   width={80}
                   height={80}

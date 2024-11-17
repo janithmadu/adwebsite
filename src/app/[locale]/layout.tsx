@@ -43,10 +43,10 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <html lang={locale} dir={dir}>
-      <body className={`${inter.className}`}>
+      <body className={`${inter.className} bg-gray-100`}>
         {" "}
         <NextIntlClientProvider messages={messages}>
-          <div className="">
+          <div className="bg-white ">
             <Topnavbar user={users} />
           </div>
           {children}

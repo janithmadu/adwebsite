@@ -50,7 +50,7 @@ const CategoryBar: React.FC<CurrentLocal> = async ({
 
         <DropdownMenu>
           <DropdownMenuTrigger
-            className={`  md:text-bodysmall rounded-lg text-black gap-x-2  px-1 justify-center py-2  flex items-center transition duration-300 ease-in-out hover:bg-grayscale200 hover:shadow-lg min-w-[140px]`}
+            className={`  md:text-bodysmall rounded-lg text-black gap-x-2  px-1 justify-center py-2  flex items-center transition duration-300 ease-in-out hover:bg-grayscale200 hover:shadow-lg min-w-[140px] `}
           >
             {t} <CaretDown />{" "}
           </DropdownMenuTrigger>
@@ -78,7 +78,7 @@ const CategoryBar: React.FC<CurrentLocal> = async ({
 
         {/* Category Bar section */}
 
-        <div className="border-l hidden   lg:flex-wrap  rtl:border-r rtl:border-l-0 rtl:gap-[24px]  xl:flex items-center space-x-[24px] px-[24px]">
+        <div className="border-l hidden   lg:flex-wrap  rtl:border-r rtl:border-l-0 rtl:gap-[24px]  xl:flex items-center space-x-[24px] px-[24px] ">
           {getLimitedCate.length === 0 ? (
             <div className="text-grayscale600  text-heading04 hover:text-grayscale800 hover:font-bold">
               {" "}

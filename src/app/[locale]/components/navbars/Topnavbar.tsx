@@ -40,7 +40,7 @@ const Topnavbar: React.FC<User> = ({ user }) => {
 
   return (
     <>
-      <div className="min-w-full flex flex-col justify-start border-b-[#EBEEF7] border">
+      <div className="min-w-full flex flex-col justify-start border-b-[#EBEEF7] border bg-white">
         {/* Top Nav Start */}
         <div className=" container mx-auto px-5 lg:px-5 xl:px-20 md:px-10 min-h-[100px] flex md:gap-10 items-center justify-between ">
           {/* Logo */}
