@@ -79,9 +79,9 @@ const Searchbar = () => {
             <p className="p-2 text-gray-500">No results found</p>
           )}
           {results.map((item: any) => (
-            <Link href={`/${locale}/ads/${item._id}`}>
+            <Link key={item._id} href={`/${locale}/ads/${item._id}`}>
               <div
-                key={item._id}
+                
                 className="p-3 border-b cursor-pointer hover:bg-gray-100 flex gap-x-3"
               >
                 <Image
