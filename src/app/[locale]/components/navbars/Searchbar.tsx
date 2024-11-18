@@ -74,7 +74,7 @@ const Searchbar = () => {
 
       {query && (
         <div className="absolute z-10 bg-white shadow-md rounded-lg mt-16 w-full xl:min-w-[536px] lg:min-w-[536px] max-h-60 overflow-auto">
-          {loading && <p className="p-2 text-gray-500">Loading...</p>}
+          {loading && <p className="p-2 text-gray-500">Loading.....</p>}
           {!loading && results.length === 0 && (
             <p className="p-2 text-gray-500">No results found</p>
           )}
