@@ -10,12 +10,16 @@ interface SellerInfo {
   UserEmail?: string;
   UserAvatar: string;
   UserID:string
+  VerifiedSeller:boolean
+  Member:boolean
 }
 const SellerInfo: React.FC<SellerInfo> = ({
   Username,
   UserEmail,
   UserAvatar,
-  UserID
+  UserID,
+  VerifiedSeller,
+  Member
 }) => {
 
   
@@ -44,11 +48,17 @@ const SellerInfo: React.FC<SellerInfo> = ({
               <h1 className="text-grayscale500 text-bodysmall">{t("Addby")}:</h1>
               <h1 className="text-grayscale900 text-bodymedium flex gap-x-[4px] items-center">
                 <span> {Username}</span>
-                <CircleWavyCheck
+               {
+                VerifiedSeller && Member ?(
+                  <CircleWavyCheck
                   width={20}
                   height={20}
                   className="text-success500"
                 />
+                ):(
+                  <></>
+                )
+               }
               </h1>
             </div>
           </div>

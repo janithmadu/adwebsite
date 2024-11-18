@@ -49,6 +49,8 @@ interface AdData {
   UserEmail?: string;
   UserAvatar?: string;
   ClientUserID: string;
+  VerifiedSeller:boolean
+  Member:boolean
 }
 
 interface Option {
@@ -79,6 +81,8 @@ const DescriptionAds: React.FC<AdData> = ({
   UserEmail,
   UserAvatar,
   ClientUserID,
+  VerifiedSeller,
+  Member
 }) => {
   const [NegotiableCheck, setNegotiableCheck] = useState<boolean>();
   const t = useTranslations("TopNav");
@@ -278,11 +282,17 @@ const DescriptionAds: React.FC<AdData> = ({
                   </h1>
                   <h1 className="text-grayscale900 text-bodymedium flex gap-x-[4px] items-center">
                     <span> {Username}</span>
-                    <CircleWavyCheck
-                      width={20}
-                      height={20}
-                      className="text-success500"
-                    />
+                    {
+                VerifiedSeller && Member ?(
+                  <CircleWavyCheck
+                  width={20}
+                  height={20}
+                  className="text-success500"
+                />
+                ):(
+                  <></>
+                )
+               }
                   </h1>
                 </div>
               </div>

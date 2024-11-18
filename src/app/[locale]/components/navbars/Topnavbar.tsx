@@ -56,7 +56,7 @@ const Topnavbar: React.FC<User> = ({ user }) => {
           </Link>
 
           {/* Search Box */}
-          <Searchbar/>
+          <Searchbar searchStyle="hidden"/>
 
           {/* Top Nav Button Section */}
           <div className=" flex md:min-w-[243px] space-x-[20px] rtl:gap-[20px]">
@@ -101,16 +101,7 @@ const Topnavbar: React.FC<User> = ({ user }) => {
         </div>
 
         <div className="sm:hidden relative min-w-full flex justify-center mb-2 rounded-full px-2  ">
-          <Image
-            alt="Search Icon"
-            src={Logo}
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-          />
-          <input
-            type="text"
-            className="  px-10  min-w-full min-h-[52px] border-primary700 border rounded-full"
-            placeholder={t("SearchBarPlaceHolder")}
-          />
+        <Searchbar searchStyle="px-10min-h-[52px] border-primary700 border rounded-full"/>
         </div>
       </div>
       {/* Top Nav End */}

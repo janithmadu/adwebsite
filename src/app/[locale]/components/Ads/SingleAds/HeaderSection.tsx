@@ -9,6 +9,7 @@ interface HeaderSection {
   CreatedDate: string;
   VerifiedSeller: boolean;
   Member: boolean;
+  ViewCount:number
 }
 
 const HeaderSection: React.FC<HeaderSection> = ({
@@ -16,6 +17,7 @@ const HeaderSection: React.FC<HeaderSection> = ({
   CreatedDate,
   VerifiedSeller,
   Member,
+  ViewCount
 }) => {
   const [isVerified, setisVerified] = React.useState<string>();
   const [isMember, setisMember] = React.useState<string>();
@@ -23,8 +25,6 @@ const HeaderSection: React.FC<HeaderSection> = ({
     getRelativeTime(CreatedDate)
   );
   const t = useTranslations("TopNav");
-
-  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -61,10 +61,10 @@ const HeaderSection: React.FC<HeaderSection> = ({
             {isVerified}
           </div>
         </div>
-        <h1 className="text-grayscale900 text-bodylarge text-center md:text-start  lg:text-heading02">
+        <h1 className="text-grayscale900 text-bodylarge text-start md:text-start  lg:text-heading02">
           {Titile}
         </h1>
-        <div className="flex justify-between  md:gap-x-[32px] ">
+        <div className="flex  gap-x-3">
           <div className="flex gap-x-[6px] items-center ">
             <Clock width={24} height={24} className="text-grayscale500" />
             <h1 className="text-grayscale500 text-bodytiny  md:text-bodymedium">
@@ -75,7 +75,7 @@ const HeaderSection: React.FC<HeaderSection> = ({
           <div className="flex gap-x-[6px] items-center ">
             <Eye width={24} height={24} className="text-grayscale500" />
             <h1 className="text-grayscale500 text-bodytiny  md:text-bodymedium">
-              69,656 {t("Viewed")}
+              {ViewCount} {t("Viewed")}
             </h1>
           </div>
         </div>

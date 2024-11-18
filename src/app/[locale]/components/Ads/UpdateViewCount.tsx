@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 
 export default function UpdateViewCount({ adId }: { adId: string }) {
-console.log(adId);
+
 
   useEffect(() => {
     const updateViewCount = async () => {

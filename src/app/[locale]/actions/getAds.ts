@@ -1,7 +1,6 @@
 import { PostAd } from "@/lib/categoryInterface";
 import { client } from "@/sanity/lib/client";
 
-
 export interface Params {
   subcategoryId: {
     category?: string;
@@ -11,11 +10,9 @@ export interface Params {
     maxPrice?: number;
     page: number;
     limit: number;
-    resultcount?: number
+    resultcount?: number;
   };
-
 }
-
 
 export interface Result {
   result: PostAd[]; // Adjust the type based on your actual data structure
@@ -69,7 +66,6 @@ export async function getPostAds(data: Params): Promise<Result> {
 
   const result = await client.fetch(query);
 
-
   const resultCount = await client.fetch(queryCount); // Change this to match 'resultCount'
 
   return {
@@ -78,13 +74,7 @@ export async function getPostAds(data: Params): Promise<Result> {
   };
 }
 
-
 export async function getAdsBySub({ subcategoryId }: Params) {
-
-
-
-
-
   if (!subcategoryId) {
     throw new Error("subcategoryId is required");
   }
@@ -95,8 +85,12 @@ export async function getAdsBySub({ subcategoryId }: Params) {
   let queryCount = ``;
 
   // Ensure subcategoryId values are parsed for price ranges
-  const parsedMinPrice = subcategoryId.minPrice ? subcategoryId.minPrice || 0 : undefined;
-  const parsedMaxPrice = subcategoryId.maxPrice ? subcategoryId.maxPrice || Number.MAX_SAFE_INTEGER : undefined;
+  const parsedMinPrice = subcategoryId.minPrice
+    ? subcategoryId.minPrice || 0
+    : undefined;
+  const parsedMaxPrice = subcategoryId.maxPrice
+    ? subcategoryId.maxPrice || Number.MAX_SAFE_INTEGER
+    : undefined;
 
   if (
     parsedMinPrice !== undefined &&
@@ -140,11 +134,7 @@ export async function getAdsBySub({ subcategoryId }: Params) {
       categorySlug: subcategoryId.category,
       options: subcategoryId.subOptions,
     };
-  }
-
-  else if (subcategoryId.category) {
-
-
+  } else if (subcategoryId.category) {
     query = `*[_type == "postAd" && payment == true && category->slug.current == $categorySlug] | order(_createdAt desc) [${start}...${start + subcategoryId.limit}] {
       _id,
       adName,
@@ -191,9 +181,7 @@ export async function getAdsBySub({ subcategoryId }: Params) {
     params = {
       categorySlug: subcategoryId.category, // Only slug parameter
     };
-  }
-
-  else if (subcategoryId.subcategories) {
+  } else if (subcategoryId.subcategories) {
     query = `*[_type == "postAd" && payment == true && subcategory._ref == $subcategoryId] | order(_createdAt desc) [${start}...${start + subcategoryId.limit}] {
       _id, adName, category->{_id, title}, subcategory->{_id, title}, brand, model, condition, authenticity, tags, price, negotiable, description, features, photos[]{asset->{_id, url}}, phoneNumber, backupPhoneNumber, email, website, country, city, state, location, mapLocation, Currency, _createdAt,image
     }`;
@@ -227,9 +215,7 @@ export async function getAdsBySub({ subcategoryId }: Params) {
       resultCount,
     };
   } catch (error) {
-
-
-    return error
+    return error;
   }
 }
 
@@ -286,13 +272,13 @@ export async function getAdById(id: string) {
 
       },
       image,
+      viewCount
     }
   `;
 
   const params = { id };
 
   const result = await client.fetch(query, params);
-
 
   return result;
 }
@@ -403,16 +389,19 @@ export async function GetAdByUser(userID: string, page: number, Limit: number) {
   const params = { userExternalId: userID };
 
   const result = await client.fetch(query, params);
-  const resultCount = await client.fetch(queryCount, params)
+  const resultCount = await client.fetch(queryCount, params);
 
   return {
     resultCount,
-    result
-  }
+    result,
+  };
 }
 
-export async function GetAdByUserPayementFalse(userID: string, page: number, Limit: number) {
-
+export async function GetAdByUserPayementFalse(
+  userID: string,
+  page: number,
+  Limit: number
+) {
   const start = (page - 1) * Limit;
   const query = `*[_type == "postAd" &&  payment == false && user->externalId == $userExternalId]  | order(_createdAt desc) [${start}...${start + Limit}] {
    _id,
@@ -461,8 +450,5 @@ export async function GetAdByUserPayementFalse(userID: string, page: number, Lim
 
   const result = await client.fetch(query, params);
 
-
-
   return result;
 }
-

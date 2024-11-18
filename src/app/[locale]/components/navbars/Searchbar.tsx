@@ -12,7 +12,13 @@ function getCookie(name: string) {
   if (parts.length === 2) return parts.pop()?.split(";").shift();
 }
 
-const Searchbar = () => {
+interface SearchStyle{
+  searchStyle:string
+}
+
+const Searchbar = (searchStyle:SearchStyle) => {
+ 
+  
   const t = useTranslations("TopNav");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -42,7 +48,7 @@ const Searchbar = () => {
         body: JSON.stringify({ searchText }),
       });
 
-      console.log(response);
+   
 
       if (response.ok) {
         const data = await response.json();
@@ -67,7 +73,7 @@ const Searchbar = () => {
           type="text"
           value={query}
           onChange={handleSearch}
-          className="hidden sm:inline px-10 xl:min-w-[536px] lg:min-w-[536px] min-h-[52px] border-[#EBEEF7] border rounded-[5px]"
+          className= {`${searchStyle.searchStyle} px-10 min-w-full  xl:min-w-[536px] lg:min-w-[536px] min-h-[52px] border-[#EBEEF7] border rounded-[5px]`}
           placeholder={t("SearchBarPlaceHolder")}
         />
       </div>

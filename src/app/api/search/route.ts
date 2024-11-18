@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     const results = await client.fetch(query, { searchText: `${searchText}*` });
 
 
-    console.log(results);
+
     
 
     // Respond with search results
