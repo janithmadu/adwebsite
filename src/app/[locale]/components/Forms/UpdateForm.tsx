@@ -318,7 +318,7 @@ const UpdateForm: React.FC<StepOneFormProps> = ({ categories, params }) => {
         body: JSON.stringify({ id }),
       });
     } catch (error) {
-      console.error("Error deleting image from Cloudinary:", error);
+
     }
   };
 

@@ -1,37 +1,25 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
-import { useFormState } from "react-dom";
 import { Authenticity, ConditionList, Currency } from "@/lib/statics";
 import { getSubCategoriesByID } from "../../actions/getSubCategories";
 import { getModelsById } from "../../actions/getModels";
 import { getbrandsById } from "../../actions/getBrands";
 import { getOptionsByID } from "../../actions/getOptions";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import LoadingImage from "../../../../../public/system-regular-715-spinner-horizontal-dashed-circle-loop-jab.gif";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import FormHeader from "../../../../../public/AdForm.png";
-import { FormStateNew, Option, Subcategory } from "@/lib/categoryInterface";
-
-import { parseWithZod } from "@conform-to/zod";
-import { FormType, SchemaAdPostForm } from "@/lib/schemas";
+import { Option, Subcategory } from "@/lib/categoryInterface";
+import { SchemaAdPostForm } from "@/lib/schemas";
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { compressImage } from "../../actions/ImageComprestion";
+
 
 function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -311,7 +299,7 @@ const StepOneForm: React.FC<StepOneFormProps> = ({ categories }) => {
         body: JSON.stringify({ id }),
       });
     } catch (error) {
-      console.error("Error deleting image from Cloudinary:", error);
+  
     }
   };
 

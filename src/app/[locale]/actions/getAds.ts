@@ -69,7 +69,7 @@ export async function getPostAds(data: Params): Promise<Result> {
 
   const result = await client.fetch(query);
 
-  
+
   const resultCount = await client.fetch(queryCount); // Change this to match 'resultCount'
 
   return {
@@ -81,7 +81,7 @@ export async function getPostAds(data: Params): Promise<Result> {
 
 export async function getAdsBySub({ subcategoryId }: Params) {
 
- 
+
 
 
 
@@ -143,7 +143,7 @@ export async function getAdsBySub({ subcategoryId }: Params) {
   }
 
   else if (subcategoryId.category) {
-    
+
 
     query = `*[_type == "postAd" && payment == true && category->slug.current == $categorySlug] | order(_createdAt desc) [${start}...${start + subcategoryId.limit}] {
       _id,
@@ -228,7 +228,7 @@ export async function getAdsBySub({ subcategoryId }: Params) {
     };
   } catch (error) {
 
-    
+
     return error
   }
 }
@@ -292,7 +292,7 @@ export async function getAdById(id: string) {
   const params = { id };
 
   const result = await client.fetch(query, params);
-  
+
 
   return result;
 }
@@ -354,11 +354,11 @@ export async function getAdByIdForPayment(id: string) {
   return result;
 }
 
-export async function GetAdByUser(userID: string,page:number,Limit:number) {
+export async function GetAdByUser(userID: string, page: number, Limit: number) {
   const start = (page - 1) * Limit;
 
   const queryCount = `count(*[_type == "postAd" && payment == true  && user->externalId == $userExternalId])`;
-  
+
   const query = `*[_type == "postAd" &&  payment == true && user->externalId == $userExternalId]  | order(_createdAt desc) [${start}...${start + Limit}] {
    _id,
       adName,
@@ -403,7 +403,7 @@ export async function GetAdByUser(userID: string,page:number,Limit:number) {
   const params = { userExternalId: userID };
 
   const result = await client.fetch(query, params);
-  const resultCount = await client.fetch(queryCount,params)
+  const resultCount = await client.fetch(queryCount, params)
 
   return {
     resultCount,
@@ -411,8 +411,8 @@ export async function GetAdByUser(userID: string,page:number,Limit:number) {
   }
 }
 
-export async function GetAdByUserPayementFalse(userID: string,page:number,Limit:number) {
-  
+export async function GetAdByUserPayementFalse(userID: string, page: number, Limit: number) {
+
   const start = (page - 1) * Limit;
   const query = `*[_type == "postAd" &&  payment == false && user->externalId == $userExternalId]  | order(_createdAt desc) [${start}...${start + Limit}] {
    _id,
@@ -461,7 +461,7 @@ export async function GetAdByUserPayementFalse(userID: string,page:number,Limit:
 
   const result = await client.fetch(query, params);
 
-  
+
 
   return result;
 }

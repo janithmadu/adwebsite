@@ -42,6 +42,7 @@ const HomePageAdds: React.FC<Ads> = ({ Ads }) => {
               id={item._id}
               key={item._id}
               timestamp={item._createdAt}
+              timedate={true}
             />
           </div>
         ))}

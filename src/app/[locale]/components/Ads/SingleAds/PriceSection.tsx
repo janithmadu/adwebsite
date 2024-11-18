@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import GetFavoritesOfUsers from "@/app/[locale]/actions/GetFavoritesOfUsers";
 import { useTranslations } from "next-intl";
+import Loading from "@/app/[locale]/loading";
 
 export const revalidate = 1;
 
@@ -24,10 +25,11 @@ const PriceSection: React.FC<Price> = ({
   AdID,
 }) => {
   const [NegotiableCheck, setNegotiableCheck] = useState<boolean>();
-  const [FevoriteCheck, setFevoriteCheck] = useState<boolean>();
+  const [FevoriteCheck, setFevoriteCheck] = useState<boolean>(false);
+  const [PageLoader, setPageLoader] = useState<string | null>(null);
   const t = useTranslations("TopNav");
-  
-  
+
+
 
   const router = useRouter();
 
@@ -48,7 +50,10 @@ const PriceSection: React.FC<Price> = ({
     CheckFaExsisting();
   }, []);
 
+
+
   const AddTofaverite = async () => {
+    setPageLoader("Loading")
     const response = await fetch("/api/updateFaverite", {
       method: "POST",
       headers: {
@@ -58,6 +63,7 @@ const PriceSection: React.FC<Price> = ({
     });
 
     if (response.status === 200) {
+      setPageLoader("Error")
       Swal.fire({
         title: "Favorite Added!",
         text: `You've Favorited This Ad!`,
@@ -70,6 +76,7 @@ const PriceSection: React.FC<Price> = ({
         }
       });
     } else if (response.status === 401) {
+      setPageLoader("Error")
       Swal.fire({
         title: "Unauthorized",
         text: `Unauthorized Access - Log In Required`,
@@ -99,10 +106,10 @@ const PriceSection: React.FC<Price> = ({
 
             <div className="min-w-[48px] flex items-center justify-center min-h-[48px] rounded-[4px] ">
               {/* Reminder:- Need to Create This after the User Functions  are done */}
-              <button disabled={FevoriteCheck}>
+              <button disabled={FevoriteCheck == true ? true : false}>
                 <Heart
                   onClick={AddTofaverite}
-                  className={`${FevoriteCheck ? "text-red-600" : "text-primary500"} cursor-pointer`}
+                  className={`${FevoriteCheck == true ? "text-red-600" : "text-primary500"} cursor-pointer`}
                   width={24}
                   height={24}
                 />
@@ -113,11 +120,20 @@ const PriceSection: React.FC<Price> = ({
             <div className="flex gap-x-4 items-center">
               {" "}
               <Star className="text-blue-500" />
-              <h1 className="text-grayscale900 text-bodysmall">{t("Negotiable")}</h1>
+              <h1 className="text-grayscale900 text-bodysmall">
+                {t("Negotiable")}
+              </h1>
             </div>
           )}
         </div>
       </div>
+      <>
+        {PageLoader === "Loading" ? (
+          <Loading/>
+        ) : (
+          <></>
+        )}
+      </>
     </div>
   );
 };

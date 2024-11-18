@@ -101,6 +101,7 @@ export default function FilterBySubs() {
                 price={ad.price}
                 timestamp={ad._createdAt}
                 id={ad._id}
+                timedate={true}
               />
             </div>
           ))}

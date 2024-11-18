@@ -20,6 +20,7 @@ import {
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import UserSetting from "./UserSetting";
 import { User } from "@phosphor-icons/react";
+import Searchbar from "./Searchbar";
 
 export interface User {
   user: {
@@ -55,18 +56,7 @@ const Topnavbar: React.FC<User> = ({ user }) => {
           </Link>
 
           {/* Search Box */}
-          <div className="relative">
-            <Image
-              alt="Search Icon"
-              src={Logo}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-            />
-            <input
-              type="text"
-              className="hidden sm:inline px-10 xl:min-w-[536px] lg:min-w-[536px] min-h-[52px] border-[#EBEEF7] border rounded-[5px]"
-              placeholder={t("SearchBarPlaceHolder")}
-            />
-          </div>
+          <Searchbar/>
 
           {/* Top Nav Button Section */}
           <div className=" flex md:min-w-[243px] space-x-[20px] rtl:gap-[20px]">
