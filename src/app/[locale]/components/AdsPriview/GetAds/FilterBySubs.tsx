@@ -85,7 +85,7 @@ export default function FilterBySubs() {
   return (
     <>
       {adsLoader ? (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 min-w-full">
           <div className="text-center">
             <Image alt="Loading" src={LoadingImage} width={70} height={70} />
           </div>
@@ -93,7 +93,7 @@ export default function FilterBySubs() {
       ) : ads.length > 0 ? (
         <div className="grid grid-cols-1 xl:ml-14 md:gap-x-36 gap-x-32 lg:gap-y-1 xl:gap-y-0 lg:grid-cols-1  2xl:grid-cols-2 xl:gap-x-32 place-items-center place-content-center rtl:gap-x-[194px] ">
           {ads.map((ad: PostAd, index: number) => (
-            <div className="min-w-full" key={index}>
+            <div className="min-w-full " key={index}>
               <ProfileAdCard
                 title={ad.adName}
                 category={ad.category.title[(locale as "en") || "ar"]}
@@ -107,7 +107,7 @@ export default function FilterBySubs() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center min-h-[400px] w-full text-center text-gray-500 space-y-4">
+        <div className="flex flex-col items-center justify-center min-h-[400px] w-full text-center text-gray-500 space-y-4 ">
           <Image src={NoItem} alt="No Ads Available" width={160} height={160} />
           <h2 className="text-2xl font-semibold text-gray-700">
             Oops! No ads match your search.
