@@ -8,6 +8,7 @@ import { getAdById } from "../../actions/getAds";
 import PriceSection from "../../components/Ads/SingleAds/PriceSection";
 import ProductOverwiew from "../../components/Ads/SingleAds/ProductOverwiew";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import UpdateViewCount from "../../components/Ads/UpdateViewCount";
 
 export const revalidate = 1;
 
@@ -41,9 +42,22 @@ export default async function AdDetailsPage({
   const user = await getUser();
   const UserID = user?.id;
   const AdID = GetAdByID?._id;
+  
+  const {
+    _id: AdIDNew,
+   
+  } = GetAdByID || {};
+  
+  
+   
+  
+  
 
   return (
+    <>
+     {AdID && <UpdateViewCount adId={AdIDNew} />}
     <div className="min-w-full min-h-full bg-white">
+      
       <div className="container mx-auto  px-5 rtl:gap-20  lg:px-5 xl:px-20 md:px-10 flex space-x-6 flex-col lg:flex-row ">
       <div className="flex-1 lg:min-w-[572px] xl:min-w-[672px] 2xl:min-w-[872px] flex flex-col gap-x-[36px] mt-3">
         <HeaderSection
@@ -51,7 +65,7 @@ export default async function AdDetailsPage({
           CreatedDate={AddCratedDate}
           VerifiedSeller={VerifiedSeller}
           Member={Member}
-        />
+          />
 
         <ImageGallery images={GetAdByID.image} />
 
@@ -74,7 +88,7 @@ export default async function AdDetailsPage({
           UserEmail={UserEmail}
           UserAvatar={UserAvatar}
           ClientUserID={GetAdByID.user.externalId}
-        />
+          />
       </div>
 
       <div className="flex-1  min-w-[424px] hidden lg:inline">
@@ -85,14 +99,14 @@ export default async function AdDetailsPage({
             Negotiable={Negotiable}
             UserID={UserID}
             AdID={AdID}
-          />
+            />
           <ProductOverwiew
             Model={Model}
             State={State}
             Condition={Condition}
             Brand={Brand}
             Authenticity={Authenticity}
-          />
+            />
           <div className="px-[32px] mt-[32px]">
             {/* Contact Buttons */}
             <ContactSection Email={UserEmail} PhoneNumber={PhoneNumber} />
@@ -105,7 +119,7 @@ export default async function AdDetailsPage({
                 UserEmail={UserEmail}
                 UserAvatar={UserAvatar}
                 UserID={GetAdByID.user.externalId}
-              />
+                />
             </div>
 
             <div className="px-[32px] py-[32px] flex flex-col gap-y-[18px]">
@@ -116,5 +130,6 @@ export default async function AdDetailsPage({
       </div>
     </div>
     </div>
+                </>
   );
 }

@@ -8,6 +8,7 @@ import model from './model'
 import options from './options'
 import subcategory from './subcategory'
 import users from './users'
+import adview from './adview'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [ads,brand,category,hero,heroimages,model,options,subcategory,users],

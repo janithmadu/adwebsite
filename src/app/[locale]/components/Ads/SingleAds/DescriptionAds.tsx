@@ -83,6 +83,9 @@ const DescriptionAds: React.FC<AdData> = ({
   const [NegotiableCheck, setNegotiableCheck] = useState<boolean>();
   const t = useTranslations("TopNav");
   const [locale, setLocale] = useState("en");
+
+
+
   useEffect(() => {
     const cookieLocale = getCookie("NEXT_LOCALE") || "en";
     setLocale(cookieLocale);

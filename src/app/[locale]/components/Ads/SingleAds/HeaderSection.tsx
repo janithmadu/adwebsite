@@ -24,6 +24,8 @@ const HeaderSection: React.FC<HeaderSection> = ({
   );
   const t = useTranslations("TopNav");
 
+  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setRelativeTime(getRelativeTime(CreatedDate));

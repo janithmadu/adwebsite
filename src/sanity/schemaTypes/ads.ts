@@ -392,6 +392,12 @@ export default {
         },
       ],
     },
+    {
+      name: 'viewCount',
+      title: 'View Count',
+      type: 'number',
+      initialValue: 0,
+    },
 
 
   ],
