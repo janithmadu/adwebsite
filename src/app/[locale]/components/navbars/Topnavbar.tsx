@@ -56,7 +56,7 @@ const Topnavbar: React.FC<User> = ({ user }) => {
           </Link>
 
           {/* Search Box */}
-          <Searchbar searchStyle="hidden"/>
+          <Searchbar searchStyle="hidden md:inline"/>
 
           {/* Top Nav Button Section */}
           <div className=" flex md:min-w-[243px] space-x-[20px] rtl:gap-[20px]">
