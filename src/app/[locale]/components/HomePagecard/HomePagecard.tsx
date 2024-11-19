@@ -1,14 +1,6 @@
 import React from "react";
 import { getAllCategory } from "../../actions/getCategories";
 
-interface HomePagecardInterface {
-  imageUrl: string;
-  title: string;
-  location: string;
-  specs: string;
-  price: number;
-  duration: string;
-}
 
 import {
   Carousel,
@@ -17,74 +9,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { CarCard } from "./CarCard";
 import { cookies } from "next/headers";
 import { Category } from "@/lib/categoryInterface";
 import HomePageAdContainer from "./HomePageAdContainer";
 import {
   GetAdByCategory,
-  getAllPostAds,
-  getPostAds,
 } from "../../actions/getAds";
 
-const cars = [
-  {
-    image:
-      "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&fit=crop&w=800",
-    location: "Mubarak Al-Kabeer",
-    name: "كامارو موديل ٢٠١٦ LE١ لون احمر",
-    year: 2016,
-    km: 146,
-    color: "Red",
-    price: "4,600 KWD",
-    duration: "3 Day",
-    featured: true,
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1558383817-6a5d00b668ce?auto=format&fit=crop&w=800",
-    location: "Hawalli",
-    name: "سييرا دينالي HD SLE وايت ٢٥٠٠",
-    year: 2017,
-    km: 30,
-    color: "Black",
-    price: "9,000 KWD",
-    duration: "3 Day",
-    featured: true,
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1594502184342-2e12f877aa73?auto=format&fit=crop&w=800",
-    location: "West Abu Ftrah",
-    name: "باترول VTC سفاري",
-    year: 2016,
-    km: 145,
-    color: "Black",
-    price: "5,400 KWD",
-    duration: "12 Hour",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800",
-    location: "Mubarak Al-Kabeer",
-    name: "نيسان باترول سفاري",
-    year: 2009,
-    km: 390,
-    color: "White",
-    price: "3,300 KWD",
-    duration: "1 Month",
-    featured: true,
-  },
-];
-
-export default async function HomePagecard({
-  imageUrl,
-  title,
-  location,
-  specs,
-  price,
-  duration,
-}: HomePagecardInterface) {
+export default async function HomePagecard() {
   const category = await getAllCategory();
   const cookieStore = cookies();
   const locale: string = cookieStore.get("NEXT_LOCALE")?.value || "en";
