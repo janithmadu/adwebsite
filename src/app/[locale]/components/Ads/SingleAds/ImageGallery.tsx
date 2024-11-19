@@ -28,7 +28,7 @@ function ImageGallery(Images: Images) {
           width={500}
           height={700}
           loading="lazy"
-          src={selectedImage || Images.images[0].url || "/"}
+          src={selectedImage || Images?.images[0]?.url || "/"}
           alt="Main Product Image"
           className="rounded-lg shadow-lg  min-w-10 max-h-[600px] min-h-[400px]"
         />

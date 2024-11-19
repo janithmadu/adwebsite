@@ -1,0 +1,39 @@
+{
+    "mutations": [
+      {
+        "create": {
+          "_type": "postAd",
+          "adName": "Sample Ad",
+          "category": { "_ref": "391061fe-50f0-4ba7-84bd-8ed9d579f1ac" },
+          "subcategory": { "_ref": "e33e9820-c65a-4de2-9244-f33dc4f6f27f" },
+          "brand": "Brand Name",
+          "model": "Model X",
+          "condition": "new",
+          "Currency": "USD",
+          "authenticity": "original",
+          "options": [
+            { "key": "Option 1", "value": "Value 1" },
+            { "key": "Option 2", "value": "Value 2" }
+          ],
+          "price": 100,
+          "negotiable": true,
+          "description": "This is a sample ad description",
+          "features": ["Feature 1", "Feature 2"],
+          "photos": [
+            {
+              "url": "https://res.cloudinary.com/dsyiarmrd/image/upload/v1731913832/yrszhnccnacu4im4xrzc.jpg",
+              "altText": "Image 1"
+            }
+          ],
+          "phoneNumber": "1234567890",
+          "country": "Afghanistan",
+          "state": "Kabul",
+          "location": "Kabul",
+          "user": { "_ref": "kp_52d41e1c41ef4fc7bd070e4791a9810a" },
+          "payment": true,
+          "viewCount": 0
+        }
+      }
+    ]
+  }
+  

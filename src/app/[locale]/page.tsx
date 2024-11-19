@@ -8,6 +8,9 @@ import Details from "./components/Details/Details";
 import MobileApp from "./components/MobileApp/MobileApp";
 import { UserRegistration } from "./actions/usersAction";
 
+import { CarCard } from "./components/HomePagecard/CarCard";
+import HomePagecard from "./components/HomePagecard/HomePagecard";
+
 export const revalidate = 1;
 
 interface GetPostD {
@@ -17,10 +20,11 @@ interface GetPostD {
   };
 }
 
+
 export default async function Home() {
   const HeroImages = await getHeroImages();
   const GetCategory = await getAllCategory();
-  await UserRegistration()
+  await UserRegistration();
 
   const GetPostData: GetPostD = {
     subcategoryId: {
@@ -45,6 +49,10 @@ export default async function Home() {
       {/* Fresh recommended ads Section */}
       <section>
         <HomePageAdds Ads={getPost.result} />
+      </section>
+
+      <section >
+        <HomePagecard/>
       </section>
 
       {/* Details Section */}

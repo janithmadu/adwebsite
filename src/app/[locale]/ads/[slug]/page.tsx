@@ -42,7 +42,7 @@ export default async function AdDetailsPage({
   const user = await getUser();
   const UserID = user?.id;
   const AdID = GetAdByID?._id;
-  const ViewCount = GetAdByID.viewCount;
+  const ViewCount = GetAdByID?.viewCount;
 
   const { _id: AdIDNew } = GetAdByID || {};
 
@@ -60,7 +60,7 @@ export default async function AdDetailsPage({
               ViewCount={ViewCount}
             />
 
-            <ImageGallery images={GetAdByID.image} />
+            <ImageGallery images={GetAdByID?.image} />
 
             <DescriptionAds
               Options={Options}
@@ -80,7 +80,7 @@ export default async function AdDetailsPage({
               Username={UserName}
               UserEmail={UserEmail}
               UserAvatar={UserAvatar}
-              ClientUserID={GetAdByID.user.externalId}
+              ClientUserID={GetAdByID?.user?.externalId}
               VerifiedSeller={VerifiedSeller}
               Member={Member}
             />
@@ -113,7 +113,7 @@ export default async function AdDetailsPage({
                     Username={UserName}
                     UserEmail={UserEmail}
                     UserAvatar={UserAvatar}
-                    UserID={GetAdByID.user.externalId}
+                    UserID={GetAdByID?.user?.externalId}
                     Member={Member}
                     VerifiedSeller={VerifiedSeller}
                   />

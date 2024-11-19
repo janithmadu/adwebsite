@@ -74,6 +74,60 @@ export async function getPostAds(data: Params): Promise<Result> {
   };
 }
 
+export async function getAllPostAds() {
+
+
+  const query = `*[_type == "postAd" && payment == true] | order(_createdAt desc) {
+      _id,
+      adName,
+      category->{
+        _id,
+        title
+      },
+      subcategory->{
+        _id,
+        title
+      },
+      brand,
+      model,
+      condition,
+      authenticity,
+      tags,
+      price,
+      negotiable,
+      description,
+      features,
+      photos[] {
+        asset->{
+          _id,
+          url
+        }
+      },
+      phoneNumber,
+      backupPhoneNumber,
+      email,
+      website,
+      country,
+      city,
+      state,
+      location,
+      mapLocation,
+      Currency,
+      _createdAt,
+      image,
+    }`;
+
+  
+
+  const result = await client.fetch(query);
+
+
+  return {
+    result,
+
+  };
+}
+
 export async function getAdsBySub({ subcategoryId }: Params) {
   if (!subcategoryId) {
     throw new Error("subcategoryId is required");
@@ -452,3 +506,64 @@ export async function GetAdByUserPayementFalse(
 
   return result;
 }
+
+interface CateID {
+  cateid: any;
+}
+
+export async function GetAdByCategory(cateid:any ) {
+
+
+  const query = `
+    *[_type == "postAd" && category._ref == $cateid &&  payment == true] {
+      _id,
+      adName,
+      category->{
+        _id,
+        title
+      },
+      subcategory->{
+        _id,
+        title
+      },
+      brand,
+      model,
+      condition,
+      Currency,
+      authenticity,
+      options,
+      price,
+      negotiable,
+      description,
+      features,
+      photos[]{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      },
+      phoneNumber,
+      country,
+      state,
+      location,
+      mapLocation,
+      user->{
+        _id,
+        name
+      },
+      payment,
+      image[],
+      viewCount,
+      _createdAt,
+    }
+  `;
+  const params = { cateid };
+  const result = await client.fetch(query, params);
+ 
+  
+  return result
+}
+
+
+

@@ -169,7 +169,7 @@ export interface FormStateNew {
 }
 
 export interface PostAd {
-  currency: string;
+  Currency: string;
   adName: string;
   authenticity: string;
   backupPhoneNumber: string | null;

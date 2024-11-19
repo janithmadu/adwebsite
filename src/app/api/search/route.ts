@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     // Define GROQ query for Sanity
     const query = `
-      *[_type == "postAd" && (adName match $searchText || description match $searchText)] {
+      *[_type == "postAd" && (adName match $searchText || description match $searchText) && payment == true] {
         _id,
         adName,
         description,

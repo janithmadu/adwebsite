@@ -78,6 +78,19 @@
   min-width: 0;
 }
 
+.embla__container_HomePage {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-left: calc(var(1rem) * -1);
+}
+
+.embla__slide_Homepage {
+  transform: translate3d(0, 0, 0);
+  flex: 0 0 45%;
+  min-width: 0;
+  padding-left: 1rem;
+}
+
 .background {
   background-image: url('/src/app/public/Fun_Fact.png');
   background-size: cover;
@@ -85,3 +98,5 @@
   min-width: 100px;
   min-height: 100px;
 }
+
+

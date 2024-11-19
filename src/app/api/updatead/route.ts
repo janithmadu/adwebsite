@@ -110,6 +110,8 @@ export async function PATCH(request: Request) {
       }
     }
   } catch (error) {
+    console.log(error);
+    
     return NextResponse.json({ status: error });
   }
 }

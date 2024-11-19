@@ -49,5 +49,13 @@ export default {
       type: 'number',
       validation: (Rule: Rule) => Rule.required().min(0),
     },
+    {
+      name: 'adCount',
+      title: 'Ad Count',
+      type: 'number',
+      description: 'Number of ads associated with this category',
+      validation: (Rule: Rule) => Rule.min(0),
+      initialValue: 0, // Set default value to 0
+    },
   ],
 };
