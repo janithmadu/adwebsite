@@ -29,9 +29,9 @@ interface MainProfileProps {
   UserAds: PostAd[];
   UserAdsPaymentfalse: PostAd[]; // Expecting an array of PostAd objects
   UserFavoriteAds: PostAd[];
-  resultCount:number,
-  verifiedSeller:boolean,
-  member:boolean,
+  resultCount: number;
+  verifiedSeller: boolean;
+  member: boolean;
 }
 
 const MainProfile: React.FC<MainProfileProps> = ({
@@ -40,7 +40,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
   UserFavoriteAds,
   resultCount,
   verifiedSeller,
-  member
+  member,
 }) => {
   const [activeSection, setActiveSection] = useState("MyAds");
   const t = useTranslations("TopNav");
@@ -48,17 +48,27 @@ const MainProfile: React.FC<MainProfileProps> = ({
   const { user, getUser } = useKindeBrowserClient();
   const currentUser = getUser();
 
-
-
   // Function to render the component based on the active section
   const renderActiveSection = () => {
     switch (activeSection) {
       case "MyAds":
-        return <MyAds colcount={2} delteActive={true} updateMount={true} UserAds={UserAds} resultCount={resultCount} title={true}  timedate={true}/>;
+        return (
+          <MyAds
+            colcount={2}
+            delteActive={true}
+            updateMount={true}
+            UserAds={UserAds}
+            resultCount={resultCount}
+            title={true}
+            timedate={true}
+          />
+        );
       case "MyMembership":
         return <MyMembership member={member} verifiedSeller={verifiedSeller} />;
       case "DraftAds":
-        return <DraftAds UserAds={UserAdsPaymentfalse} resultCount={resultCount}  />;
+        return (
+          <DraftAds UserAds={UserAdsPaymentfalse} resultCount={resultCount} />
+        );
       case "Favorites":
         return <Favorites UserAds={UserFavoriteAds} />;
       case "Settings":
@@ -102,7 +112,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                       >
                         <Shield size={24} color="gray" />
                         <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                        {t("MyMembership")}
+                          {t("MyMembership")}
                         </span>
                       </a>
                     </li>
@@ -114,7 +124,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
                       >
                         <ClipboardText size={24} color="gray" />
                         <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                        {t("DraftAds")}
+                          {t("DraftAds")}
                         </span>
                       </a>
                     </li>
@@ -126,21 +136,32 @@ const MainProfile: React.FC<MainProfileProps> = ({
                       >
                         <Heart size={24} color="gray" />
                         <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                        {t("Favorites")}
+                          {t("Favorites")}
                         </span>
                       </a>
                     </li>
-                   
+
+                    <li>
+                      <a
+                        href="#"
+                        className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        onClick={() => setActiveSection("Settings")}
+                      >
+                        <Gear size={24} color="gray" />
+                        <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
+                          {t("Settings")}
+                        </span>
+                      </a>
+                    </li>
                   </ul>
                   <div
                     id="dropdown-cta"
                     className="   p-4 mt-6 rounded-lg bg-blue-50 dark:bg-blue-900"
                     role="alert"
                   >
-                    
                     <p className="mb-3 text-sm text-blue-800 dark:text-blue-400">
-                    {t("profilenavdis")}
-            </p>
+                      {t("profilenavdis")}
+                    </p>
                     <a
                       className="text-sm text-blue-800 underline font-medium hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
                       href="#"
@@ -179,7 +200,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
               >
                 <Shield size={24} color="gray" />
                 <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                {t("MyMembership")}
+                  {t("MyMembership")}
                 </span>
               </a>
             </li>
@@ -191,7 +212,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
               >
                 <ClipboardText size={24} color="gray" />
                 <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                {t("DraftAds")}
+                  {t("DraftAds")}
                 </span>
               </a>
             </li>
@@ -203,7 +224,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
               >
                 <Heart size={24} color="gray" />
                 <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                {t("Favorites")}
+                  {t("Favorites")}
                 </span>
               </a>
             </li>
@@ -216,11 +237,10 @@ const MainProfile: React.FC<MainProfileProps> = ({
               >
                 <Gear size={24} color="gray" />
                 <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
-                {t("Settings")}
+                  {t("Settings")}
                 </span>
               </a>
             </li>
-            
           </ul>
           <div
             id="dropdown-cta"
@@ -228,7 +248,7 @@ const MainProfile: React.FC<MainProfileProps> = ({
             role="alert"
           >
             <p className="mb-3 text-sm text-blue-800 dark:text-blue-400">
-            {t("profilenavdis")}
+              {t("profilenavdis")}
             </p>
           </div>
         </div>
