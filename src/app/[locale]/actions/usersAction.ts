@@ -77,6 +77,7 @@ export const GetUsers = async (userId: string) => {
   email,
   avatarUrl,
   _createdAt,
+  bio
   
 
   }`;
@@ -87,9 +88,10 @@ export const GetUsers = async (userId: string) => {
 
   try {
     const result = await client.fetch(query, params);
+ 
 
-    return result;
+    return result;  
   } catch (error) {
-    return error; // Return null in case of error
+    return error;
   }
 };

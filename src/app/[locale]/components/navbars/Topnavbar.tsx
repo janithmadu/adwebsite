@@ -39,6 +39,7 @@ const Topnavbar: React.FC<User> = ({ user }) => {
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const t = useTranslations("TopNav");
 
+
   return (
     <>
       <div className="min-w-full flex flex-col justify-start border-b-[#EBEEF7] border bg-white">

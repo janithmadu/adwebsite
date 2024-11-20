@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MyAds from "./MyAds";
 import MyMembership from "./MyMembership";
 import Favorites from "./Favorites";
@@ -21,6 +21,9 @@ import {
 } from "@/components/ui/sheet";
 import { ListBullets } from "@phosphor-icons/react";
 import { useTranslations } from "next-intl";
+import Settings from "./Settings";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { GetUsers } from "../../actions/usersAction";
 
 interface MainProfileProps {
   UserAds: PostAd[];
@@ -42,6 +45,10 @@ const MainProfile: React.FC<MainProfileProps> = ({
   const [activeSection, setActiveSection] = useState("MyAds");
   const t = useTranslations("TopNav");
 
+  const { user, getUser } = useKindeBrowserClient();
+  const currentUser = getUser();
+
+
 
   // Function to render the component based on the active section
   const renderActiveSection = () => {
@@ -54,8 +61,8 @@ const MainProfile: React.FC<MainProfileProps> = ({
         return <DraftAds UserAds={UserAdsPaymentfalse} resultCount={resultCount}  />;
       case "Favorites":
         return <Favorites UserAds={UserFavoriteAds} />;
-      // case "Settings":
-      //   return <Settings />;
+      case "Settings":
+        return <Settings />;
       default:
         return <div>Select a section</div>;
     }
@@ -197,6 +204,19 @@ const MainProfile: React.FC<MainProfileProps> = ({
                 <Heart size={24} color="gray" />
                 <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
                 {t("Favorites")}
+                </span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                onClick={() => setActiveSection("Settings")}
+              >
+                <Gear size={24} color="gray" />
+                <span className=" md:inline flex-1 ms-3 whitespace-nowrap">
+                {t("Settings")}
                 </span>
               </a>
             </li>

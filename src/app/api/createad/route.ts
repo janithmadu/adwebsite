@@ -6,8 +6,6 @@ import { NextResponse } from "next/server";
 export async function POST(reqest: Request) {
   const addata = await reqest.json();
 
-  console.log(addata);
-  
 
   const {
     name,
@@ -108,8 +106,6 @@ export async function POST(reqest: Request) {
         payment: false,
       };
       const response = await client.create(newAd);
-
-      console.log(response);
       
 
       if (response) {

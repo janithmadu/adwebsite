@@ -156,8 +156,8 @@ async function Fotter() {
           <span className="text-grayscalewhite">Infinite Open</span>
         </h1>
         <div className="flex text-grayscale500 space-x-[29px]">
-          <Link href="">Privacy Policy</Link>
-          <Link href="">Terms & Condition</Link>
+          <Link href={`/${locale}/privacy`}>Privacy Policy</Link>
+          <Link href={`/${locale}/terms`}>Terms & Condition</Link>
         </div>
       </div>
     </div>

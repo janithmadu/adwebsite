@@ -32,5 +32,11 @@ export default {
         },
       ],
     },
+
+    {
+      name: "bio",
+      title: "bio",
+      type: "text",
+    },
   ],
 };

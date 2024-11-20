@@ -1,7 +1,6 @@
 import React from "react";
 import { getAllCategory } from "../../actions/getCategories";
 
-
 import {
   Carousel,
   CarouselContent,
@@ -12,9 +11,7 @@ import {
 import { cookies } from "next/headers";
 import { Category } from "@/lib/categoryInterface";
 import HomePageAdContainer from "./HomePageAdContainer";
-import {
-  GetAdByCategory,
-} from "../../actions/getAds";
+import { GetAdByCategory } from "../../actions/getAds";
 
 export default async function HomePagecard() {
   const category = await getAllCategory();
@@ -49,9 +46,10 @@ export default async function HomePagecard() {
             <Carousel>
               <CarouselContent className="-ml-4">
                 <HomePageAdContainer cateid={data.id} />
+               
               </CarouselContent>
-              <CarouselPrevious className="bg-primary600 text-white   "/>
-              <CarouselNext className="bg-primary600 text-white " />
+              <CarouselPrevious className="bg-primary600 text-white hidden md:flex   " />
+              <CarouselNext className="bg-primary600 text-white hidden md:flex" />
             </Carousel>
           </div>
         </div>
