@@ -67,7 +67,7 @@ const Page = () => {
           <div className="bg-amber-50 p-6 rounded-lg border border-amber-100">
             <h3 className="font-medium text-gray-900 mb-3">Important Notice</h3>
             <p className="text-gray-600 text-sm leading-relaxed">
-              Our services are provided "as is" without any warranties, expressed or implied. We do not guarantee that our services will be uninterrupted, timely, secure, or error-free. Your use of our services is at your sole risk.
+              Our services are provided &quot;as is&quot; without any warranties, expressed or implied. We do not guarantee that our services will be uninterrupted, timely, secure, or error-free. Your use of our services is at your sole risk.
             </p>
           </div>
         </Section>
